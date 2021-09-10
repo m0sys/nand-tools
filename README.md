@@ -12,6 +12,8 @@
 
 > Civilization advances by extending the number of important operations which we can perform without thinking about them. - Whitehead (COD 2017)
 
+> Less is more. - Robert Browning (COD 2017)
+
 ## Author
 
 👤 **moe**
