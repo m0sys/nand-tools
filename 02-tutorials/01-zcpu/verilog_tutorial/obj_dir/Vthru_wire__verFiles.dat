@@ -1,0 +1,12 @@
+# DESCRIPTION: Verilator output: Timestamp data for --skip-identical.  Delete at will.
+C "-Wall -cc verilog_tutorial.srcs/sources_1/new/thru_wire.v"
+S   7484256    16897  1631877797   469795780  1581264640           0 "/usr/bin/verilator_bin"
+T      4957  1838909  1631884072   858472306  1631884072   858472306 "obj_dir/Vthru_wire.cpp"
+T      2203  1838908  1631884072   858472306  1631884072   858472306 "obj_dir/Vthru_wire.h"
+T      1484  1838911  1631884072   858472306  1631884072   858472306 "obj_dir/Vthru_wire.mk"
+T       559  1838905  1631884072   858472306  1631884072   858472306 "obj_dir/Vthru_wire__Syms.cpp"
+T       809  1838907  1631884072   858472306  1631884072   858472306 "obj_dir/Vthru_wire__Syms.h"
+T       276  1838912  1631884072   858472306  1631884072   858472306 "obj_dir/Vthru_wire__ver.d"
+T         0        0  1631884072   858472306  1631884072   858472306 "obj_dir/Vthru_wire__verFiles.dat"
+T      1253  1838910  1631884072   858472306  1631884072   858472306 "obj_dir/Vthru_wire_classes.mk"
+S       585  1838869  1631881199   643587613  1631881199   639587509 "verilog_tutorial.srcs/sources_1/new/thru_wire.v"
