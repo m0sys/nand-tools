@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2021.1 (64-bit)
+# SW Build 3247384 on Thu Jun 10 19:36:07 MDT 2021
+# IP Build 3246043 on Fri Jun 11 00:30:35 MDT 2021
+# Start of session at: Tue Sep 28 13:04:50 2021
+# Process ID: 1200698
+# Current directory: /home/mo/Desktop/Github/ce-road-to-mastery/02-tutorials/03-fpga-projects/00_hello_world/00_hello_world.runs/impl_1
+# Command line: vivado -log AND_Gate.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source AND_Gate.tcl -notrace
+# Log file: /home/mo/Desktop/Github/ce-road-to-mastery/02-tutorials/03-fpga-projects/00_hello_world/00_hello_world.runs/impl_1/AND_Gate.vdi
+# Journal file: /home/mo/Desktop/Github/ce-road-to-mastery/02-tutorials/03-fpga-projects/00_hello_world/00_hello_world.runs/impl_1/vivado.jou
+#-----------------------------------------------------------
+source AND_Gate.tcl -notrace
