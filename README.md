@@ -14,6 +14,15 @@
 
 > Less is more. - Robert Browning (COD 2017)
 
+
+
+## GOAL (For the 3 Months) [2021/9/28]
+
+- BUILD MY FIRST MICROPROCESSOR! (SINGLE CORE FIRST then MULTI-CORE) 
+- HOW DOES ONE DESIGN AND BUILD A MICROPROCESSOR?
+
+
+
 ## Author
 
 👤 **moe**
