@@ -2,8 +2,8 @@
 # Webtalk v2021.1 (64-bit)
 # SW Build 3247384 on Thu Jun 10 19:36:07 MDT 2021
 # IP Build 3246043 on Fri Jun 11 00:30:35 MDT 2021
-# Start of session at: Tue Sep 28 13:02:35 2021
-# Process ID: 1200213
+# Start of session at: Tue Sep 28 14:29:25 2021
+# Process ID: 1239040
 # Current directory: /home/mo/Desktop/Github/ce-road-to-mastery/02-tutorials/03-fpga-projects/00_hello_world/00_hello_world.sim/sim_1/behav/xsim
 # Command line: wbtcv -mode batch -source /home/mo/Desktop/Github/ce-road-to-mastery/02-tutorials/03-fpga-projects/00_hello_world/00_hello_world.sim/sim_1/behav/xsim/xsim.dir/AND_Gate_Testbench_behav/webtalk/xsim_webtalk.tcl -notrace
 # Log file: /home/mo/Desktop/Github/ce-road-to-mastery/02-tutorials/03-fpga-projects/00_hello_world/00_hello_world.sim/sim_1/behav/xsim/webtalk.log

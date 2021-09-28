@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2021.1 (64-bit)
+# SW Build 3247384 on Thu Jun 10 19:36:07 MDT 2021
+# IP Build 3246043 on Fri Jun 11 00:30:35 MDT 2021
+# Start of session at: Tue Sep 28 15:38:32 2021
+# Process ID: 1257986
+# Current directory: /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/02_comb_logic/02_comb_logic.runs/synth_1
+# Command line: vivado -log inv.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source inv.tcl
+# Log file: /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/02_comb_logic/02_comb_logic.runs/synth_1/inv.vds
+# Journal file: /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/02_comb_logic/02_comb_logic.runs/synth_1/vivado.jou
+#-----------------------------------------------------------
+source inv.tcl -notrace
