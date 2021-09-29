@@ -3,5 +3,8 @@
 Jun 10 2021
 19:45:28
 /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/01_intro/01_intro.sim/sim_1/behav/xsim/glbl.v,1623370582,verilog,,,,glbl,,uvm,,,,,,
+/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/01_intro/01_intro.srcs/sim_1/new/silly_func_self_smart_tb.sv,1632937774,systemVerilog,,,,silly_func_self_smart_tb,,uvm,,,,,,
+/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/01_intro/01_intro.srcs/sim_1/new/silly_func_self_tb.sv,1632934266,systemVerilog,,,,silly_func_self_tb,,uvm,,,,,,
+/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/01_intro/01_intro.srcs/sim_1/new/silly_func_tb.sv,1632933549,systemVerilog,,,,silly_func_tb,,uvm,,,,,,
 /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/01_intro/01_intro.srcs/sim_1/new/silly_func_testbench.sv,1632854614,systemVerilog,,,,silly_func_testbench,,uvm,,,,,,
-/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/01_intro/01_intro.srcs/sources_1/new/silly_func.sv,1632835883,systemVerilog,,/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/01_intro/01_intro.srcs/sim_1/new/silly_func_testbench.sv,,silly_func,,uvm,,,,,,
+/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/01_intro/01_intro.srcs/sources_1/new/silly_func.sv,1632835883,systemVerilog,,/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/01_intro/01_intro.srcs/sim_1/new/silly_func_self_smart_tb.sv,,silly_func,,uvm,,,,,,
