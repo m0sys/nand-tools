@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<Runs Version="1" Minor="0">
-	<Run Id="synth_1" LaunchDir="/home/mo/Desktop/Github/ce-road-to-mastery/02-tutorials/03-fpga-projects/00_hello_world/00_hello_world.runs/synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
-	<Parameters>
-		<Parameter Name="runs.monitorLSFJobs" Val="true" Type="bool"/>
-		<Parameter Name="runs.enableClusterConf" Val="true" Type="bool"/>
-	</Parameters>
-</Runs>
-
