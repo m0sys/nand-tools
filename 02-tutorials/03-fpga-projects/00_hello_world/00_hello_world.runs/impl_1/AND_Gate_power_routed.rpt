@@ -1,7 +1,7 @@
 Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2021.1 (lin64) Build 3247384 Thu Jun 10 19:36:07 MDT 2021
-| Date             : Tue Sep 28 13:05:35 2021
+| Date             : Tue Sep 28 19:09:18 2021
 | Host             : mo-XPS-15-9560 running 64-bit Ubuntu 20.04.3 LTS
 | Command          : report_power -file AND_Gate_power_routed.rpt -pb AND_Gate_power_summary_routed.pb -rpx AND_Gate_power_routed.rpx
 | Design           : AND_Gate
@@ -30,14 +30,14 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.310        |
+| Total On-Chip Power (W)  | 0.774        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.239        |
-| Device Static (W)        | 0.071        |
+| Dynamic (W)              | 0.700        |
+| Device Static (W)        | 0.073        |
 | Effective TJA (C/W)      | 5.0          |
-| Max Ambient (C)          | 83.5         |
-| Junction Temperature (C) | 26.5         |
+| Max Ambient (C)          | 81.1         |
+| Junction Temperature (C) | 28.9         |
 | Confidence Level         | Low          |
 | Setting File             | ---          |
 | Simulation Activity File | ---          |
@@ -54,10 +54,10 @@ Table of Contents
 +----------------+-----------+----------+-----------+-----------------+
 | Slice Logic    |     0.001 |        1 |       --- |             --- |
 |   LUT as Logic |     0.001 |        1 |     20800 |           <0.01 |
-| Signals        |     0.007 |        3 |       --- |             --- |
-| I/O            |     0.231 |        3 |       106 |            2.83 |
-| Static Power   |     0.071 |          |           |                 |
-| Total          |     0.310 |          |           |                 |
+| Signals        |     0.008 |        3 |       --- |             --- |
+| I/O            |     0.691 |        3 |       106 |            2.83 |
+| Static Power   |     0.073 |          |           |                 |
+| Total          |     0.774 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -67,11 +67,11 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.026 |       0.016 |      0.010 |       NA    | Unspecified | NA         |
-| Vccaux    |       1.800 |     0.031 |       0.018 |      0.013 |       NA    | Unspecified | NA         |
-| Vcco33    |       3.300 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.028 |       0.017 |      0.011 |       NA    | Unspecified | NA         |
+| Vccaux    |       1.800 |     0.038 |       0.025 |      0.013 |       NA    | Unspecified | NA         |
+| Vcco33    |       3.300 |     0.194 |       0.193 |      0.001 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
-| Vcco18    |       1.800 |     0.106 |       0.105 |      0.001 |       NA    | Unspecified | NA         |
+| Vcco18    |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco15    |       1.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco135   |       1.350 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco12    |       1.200 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -134,7 +134,7 @@ Table of Contents
 +----------+-----------+
 | Name     | Power (W) |
 +----------+-----------+
-| AND_Gate |     0.239 |
+| AND_Gate |     0.700 |
 +----------+-----------+
 
 

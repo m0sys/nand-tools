@@ -115,6 +115,8 @@ proc step_failed { step } {
 OPTRACE "impl_1" END { }
 }
 
+set_msg_config -id {Synth 8-256} -limit 10000
+set_msg_config -id {Synth 8-638} -limit 10000
 
 OPTRACE "impl_1" START { ROLLUP_1 }
 OPTRACE "Phase: Write Bitstream" START { ROLLUP_AUTO }
@@ -124,6 +126,8 @@ set ACTIVE_STEP write_bitstream
 set rc [catch {
   create_msg_db write_bitstream.pb
   set_param chipscope.maxJobs 2
+  set_param checkpoint.writeSynthRtdsInDcp 1
+  set_param synth.incrementalSynthesisCache ./.Xil/Vivado-1151250-mo-XPS-15-9560/incrSyn
   open_checkpoint AND_Gate_routed.dcp
   set_property webtalk.parent_dir /home/mo/Desktop/Github/ce-road-to-mastery/02-tutorials/03-fpga-projects/00_hello_world/00_hello_world.cache/wt [current_project]
 set_property TOP AND_Gate [current_fileset]
