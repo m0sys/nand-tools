@@ -14,6 +14,10 @@
 
 > Less is more. - Robert Browning (COD 2017)
 
+> I learned very early the difference between knowing the name of something and knowing something. - Feynman
+
+> Study hard what interests you the most in the most undisciplined, irreverent and original manner possible. - Feynman
+
 
 
 ## GOAL (For the 3 Months) [2021/9/28]
