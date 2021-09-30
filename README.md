@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to ce-road-to-mastery 👋</h1>
+<h1 align="center">Welcome to ce-road-to-mastery 👋😎</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.1-blue.svg?cacheSeconds=2592000" />
   <a href="https://opensource.org/licenses/MIT" target="_blank">
@@ -6,14 +6,35 @@
   </a>
 </p>
 
-> My personal road to mastering Computer Engineering Fundamental Principles!
+
+> My personal road to mastering Computer Engineering Fundamental Principles - and thus become the Architect of the Future!
 
 
 
 <h2 align="center">There's Plenty of Room at the Bottom 🔥🔥🔥</h2> 
 <p>
 <a href="https://en.wikipedia.org/wiki/There%27s_Plenty_of_Room_at_the_Bottom" target="_blank">There's Plenty of Room at the Bottom: An Invitation to Enter a New Field of Physics - Richard Feynman</a>
+<ul>
+    <li>Moore's Law is Not Dead - Jim Keller</li>
+    <li>New opportunties onces we have mastered control over the 7 atoms</li>
+    <li><a href="https://www.youtube.com/watch?v=oIG9ztQw2Gc" target="_blank">Multiple S-curves</a></li>
+    <li>Design for 2x improvement</li>
+</ul>
 </p>
+
+
+
+<h2 align="center">There's Plenty of Room at the Top 🌑🌑🌑</h2> 
+<p>
+<a href="https://www.science.org/doi/10.1126/science.aam9744" target="_blank">There’s plenty of room at the Top: What will drive computer performance after Moore’s law?</a>
+<ul>
+    <li>Moore's Law is Dead - Patterson/Brooks</li>
+    <li>New opportunities for specific hardware design - and an escape from herd computer architecture design</li>
+    <li><a href="https://www.youtube.com/watch?v=3LVeEjsn8Ts&list=PLn0nrSd4xjjYCkOxtYqozyDuwt-4sC2L6&index=2" target="_blank">A New Golden Age for Computer Architecture</a> / <a href="https://www.youtube.com/watch?v=4HgShra-KnY" target="_blank">A New Golden Age for Compilers</a></li>
+    <li>Design the New Architecture of the Future</li>
+</ul>
+</p>
+<h2 align="center">Hardware + Software - Alan Kay ☀️🌕</h2>
 
 ---
 
