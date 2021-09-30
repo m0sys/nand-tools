@@ -8,6 +8,17 @@
 
 > My personal road to mastering Computer Engineering Fundamental Principles!
 
+
+
+<h2 align="center">There's Plenty of Room at the Bottom 🔥🔥🔥</h2> 
+<p>
+<a href="https://en.wikipedia.org/wiki/There%27s_Plenty_of_Room_at_the_Bottom">There's Plenty of Room at the Bottom: An Invitation to Enter a New Field of Physics - Richard Feynman</a>
+</p>
+
+---
+
+
+
 ## Valuable Quotes
 
 > Civilization advances by extending the number of important operations which we can perform without thinking about them. - Whitehead (COD 2017)
