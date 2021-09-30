@@ -23,7 +23,6 @@
 </p>
 
 
-
 <h2 align="center">There's Plenty of Room at the Top 🌑🌑🌑</h2> 
 <p>
 <a href="https://www.science.org/doi/10.1126/science.aam9744" target="_blank">There’s plenty of room at the Top: What will drive computer performance after Moore’s law?</a>
@@ -34,7 +33,14 @@
     <li>Design the New Architecture of the Future</li>
 </ul>
 </p>
+
+
+
 <h2 align="center">Hardware + Software - Alan Kay ☀️🌕</h2>
+<h2 align="center">Think Apple 🌟</h2>
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=GEPhLqwKo6g" target="_blank">Think Different - Steve Jobs</a>  
+</p>
 
 ---
 
