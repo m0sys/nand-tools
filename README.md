@@ -35,6 +35,8 @@
     <li>Design the New Architecture of the Future</li>
 </ul>
 </p>
+<p align="center"><a href="https://en.wikipedia.org/wiki/The_Structure_of_Scientific_Revolutions" target="_blank">No dominant theory of progress. No clear consensus in the field of Computer Architecture - thus the revolution is coming!</a></p>
+
 
 
 
