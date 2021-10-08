@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="impl_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1633689506">
+  <File Type="RCFI_FILE" Name="exercise3.rcfi"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-RPX" Name="exercise3_methodology_drc_routed.rpx"/>
+  <File Type="ROUTE-DRC-RPX" Name="exercise3_drc_routed.rpx"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-PB" Name="exercise3_methodology_drc_routed.pb"/>
+  <File Type="ROUTE-METHODOLOGY-DRC" Name="exercise3_methodology_drc_routed.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="exercise3_postroute_physopt_bb.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-DCP" Name="exercise3_postroute_physopt.dcp"/>
+  <File Type="PHYSOPT-DCP" Name="exercise3_physopt.dcp"/>
+  <File Type="POSTPLACE-PWROPT-DCP" Name="exercise3_postplace_pwropt.dcp"/>
+  <File Type="PWROPT-DCP" Name="exercise3_pwropt.dcp"/>
+  <File Type="PLACE-DCP" Name="exercise3_placed.dcp"/>
+  <File Type="OPT-DCP" Name="exercise3_opt.dcp"/>
+  <File Type="ROUTE-BUS-SKEW" Name="exercise3_bus_skew_routed.rpt"/>
+  <File Type="ROUTE-CLK" Name="exercise3_clock_utilization_routed.rpt"/>
+  <File Type="ROUTE-TIMING-RPX" Name="exercise3_timing_summary_routed.rpx"/>
+  <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
+  <File Type="BITSTR-LTX" Name="exercise3.ltx"/>
+  <File Type="BITSTR-SYSDEF" Name="exercise3.sysdef"/>
+  <File Type="BITSTR-MMI" Name="exercise3.mmi"/>
+  <File Type="BITSTR-BMM" Name="exercise3_bd.bmm"/>
+  <File Type="BITSTR-NKY" Name="exercise3.nky"/>
+  <File Type="BITSTR-RBT" Name="exercise3.rbt"/>
+  <File Type="ROUTE-BUS-SKEW-RPX" Name="exercise3_bus_skew_routed.rpx"/>
+  <File Type="REPORTS-TCL" Name="exercise3_reports.tcl"/>
+  <File Type="RBD_FILE" Name="exercise3.rbd"/>
+  <File Type="BITSTR-MSK" Name="exercise3.msk"/>
+  <File Type="ROUTE-BUS-SKEW-PB" Name="exercise3_bus_skew_routed.pb"/>
+  <File Type="PA-TCL" Name="exercise3.tcl"/>
+  <File Type="ROUTE-TIMING-PB" Name="exercise3_timing_summary_routed.pb"/>
+  <File Type="OPT-DRC" Name="exercise3_drc_opted.rpt"/>
+  <File Type="NPI_FILE" Name="exercise3.npi"/>
+  <File Type="BG-BIN" Name="exercise3.bin"/>
+  <File Type="ROUTE-TIMINGSUMMARY" Name="exercise3_timing_summary_routed.rpt"/>
+  <File Type="RNPI_FILE" Name="exercise3.rnpi"/>
+  <File Type="BG-BGN" Name="exercise3.bgn"/>
+  <File Type="ROUTE-BLACKBOX-DCP" Name="exercise3_routed_bb.dcp"/>
+  <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
+  <File Type="RDI-RDI" Name="exercise3.vdi"/>
+  <File Type="CFI_FILE" Name="exercise3.cfi"/>
+  <File Type="BG-DRC" Name="exercise3.drc"/>
+  <File Type="ROUTE-ERROR-DCP" Name="exercise3_routed_error.dcp"/>
+  <File Type="PDI-FILE" Name="exercise3.pdi"/>
+  <File Type="BG-BIT" Name="exercise3.bit"/>
+  <File Type="ROUTE-STATUS-PB" Name="exercise3_route_status.pb"/>
+  <File Type="OPT-HWDEF" Name="exercise3.hwdef"/>
+  <File Type="PLACE-IO" Name="exercise3_io_placed.rpt"/>
+  <File Type="PLACE-UTIL" Name="exercise3_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL-PB" Name="exercise3_utilization_placed.pb"/>
+  <File Type="PLACE-CTRL" Name="exercise3_control_sets_placed.rpt"/>
+  <File Type="PLACE-PRE-SIMILARITY" Name="exercise3_incremental_reuse_pre_placed.rpt"/>
+  <File Type="ROUTE-DRC" Name="exercise3_drc_routed.rpt"/>
+  <File Type="ROUTE-DRC-PB" Name="exercise3_drc_routed.pb"/>
+  <File Type="ROUTE-PWR" Name="exercise3_power_routed.rpt"/>
+  <File Type="ROUTE-PWR-SUM" Name="exercise3_power_summary_routed.pb"/>
+  <File Type="ROUTE-PWR-RPX" Name="exercise3_power_routed.rpx"/>
+  <File Type="ROUTE-STATUS" Name="exercise3_route_status.rpt"/>
+  <File Type="ROUTE-DCP" Name="exercise3_routed.dcp"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/new/exercise3.sv">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/exercise1.sv">
+      <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="exercise3"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <File Path="$PSRCDIR/constrs_1/new/exercise1.xdc">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/constrs_1/new/exercise3.xdc">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="utils" Type="Utils" RelSrcDir="$PSRCDIR/utils_1">
+    <Filter Type="Utils"/>
+    <Config>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
+    <Step Id="init_design"/>
+    <Step Id="opt_design"/>
+    <Step Id="power_opt_design"/>
+    <Step Id="place_design"/>
+    <Step Id="post_place_power_opt_design"/>
+    <Step Id="phys_opt_design"/>
+    <Step Id="route_design"/>
+    <Step Id="post_route_phys_opt_design"/>
+    <Step Id="write_bitstream"/>
+    <Step Id="write_device_image"/>
+  </Strategy>
+</GenRun>

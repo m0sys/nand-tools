@@ -23,8 +23,9 @@
 module AND_Gate(
     input A,
     input B,
+    input C,
     output logic outAND
     );
 
-    assign outAND = A & B;
+    assign outAND = A & B & C;
 endmodule
