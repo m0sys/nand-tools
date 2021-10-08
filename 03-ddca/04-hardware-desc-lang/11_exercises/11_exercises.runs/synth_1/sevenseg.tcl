@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.runs/synth_1/exercise3.tcl"
+  variable script "/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.runs/synth_1/sevenseg.tcl"
   variable category "vivado_synth"
 }
 
@@ -71,7 +71,11 @@ proc create_report { reportName command } {
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
 set_param chipscope.maxJobs 2
+set_param checkpoint.writeSynthRtdsInDcp 1
 set_param xicom.use_bs_reader 1
+set_param synth.incrementalSynthesisCache ./.Xil/Vivado-173494-mo-XPS-15-9560/incrSyn
+set_msg_config -id {Synth 8-256} -limit 10000
+set_msg_config -id {Synth 8-638} -limit 10000
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a35tcpg236-1
 
@@ -86,7 +90,7 @@ set_property ip_output_repo /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/0
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
-read_verilog -library xil_defaultlib -sv /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/sources_1/new/exercise3.sv
+read_verilog -library xil_defaultlib -sv /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/sources_1/new/sevenseg.sv
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the
@@ -102,11 +106,17 @@ set_property used_in_implementation false [get_files /home/mo/Desktop/Github/ce-
 read_xdc /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/exercise3.xdc
 set_property used_in_implementation false [get_files /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/exercise3.xdc]
 
+read_xdc /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/minority.xdc
+set_property used_in_implementation false [get_files /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/minority.xdc]
+
+read_xdc /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/sevenseg.xdc
+set_property used_in_implementation false [get_files /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/sevenseg.xdc]
+
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]
 
 OPTRACE "synth_design" START { }
-synth_design -top exercise3 -part xc7a35tcpg236-1
+synth_design -top sevenseg -part xc7a35tcpg236-1
 OPTRACE "synth_design" END { }
 if { [get_msg_config -count -severity {CRITICAL WARNING}] > 0 } {
  send_msg_id runtcl-6 info "Synthesis results are not added to the cache due to CRITICAL_WARNING"
@@ -116,10 +126,10 @@ if { [get_msg_config -count -severity {CRITICAL WARNING}] > 0 } {
 OPTRACE "write_checkpoint" START { CHECKPOINT }
 # disable binary constraint mode for synth run checkpoints
 set_param constraints.enableBinaryConstraints false
-write_checkpoint -force -noxdef exercise3.dcp
+write_checkpoint -force -noxdef sevenseg.dcp
 OPTRACE "write_checkpoint" END { }
 OPTRACE "synth reports" START { REPORT }
-create_report "synth_1_synth_report_utilization_0" "report_utilization -file exercise3_utilization_synth.rpt -pb exercise3_utilization_synth.pb"
+create_report "synth_1_synth_report_utilization_0" "report_utilization -file sevenseg_utilization_synth.rpt -pb sevenseg_utilization_synth.pb"
 OPTRACE "synth reports" END { }
 file delete __synthesis_is_running__
 close [open __synthesis_is_complete__ w]
