@@ -1,7 +1,7 @@
 # compile verilog/system verilog design source files
 sv xil_defaultlib  \
-"../../../../11_exercises.srcs/sources_1/new/exercise3.sv" \
-"../../../../11_exercises.srcs/sim_1/new/exercise3_tb.sv" \
+"../../../../11_exercises.srcs/sources_1/new/sevenseg.sv" \
+"../../../../11_exercises.srcs/sim_1/new/sevenseg_tb.sv" \
 
 # compile glbl module
 verilog xil_defaultlib "glbl.v"
