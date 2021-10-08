@@ -59,7 +59,7 @@
 
 > [I think that everything is possible as long as you put your mind to it and you put the work and time into it. I think your mind really controls everything. - Michael Phelps](https://www.youtube.com/watch?v=ct8HQTNYfIs)
 
-
+> If we hear, we forget. If we see, we remember. If we do, we understand. - Proverb
 
 ## GOAL (For the 3 Months) [2021/9/28]
 
