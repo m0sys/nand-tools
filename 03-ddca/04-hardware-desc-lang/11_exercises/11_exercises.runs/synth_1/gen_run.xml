@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1633705849">
-  <File Type="VDS-TIMING-PB" Name="sevenseg_timing_summary_synth.pb"/>
-  <File Type="VDS-TIMINGSUMMARY" Name="sevenseg_timing_summary_synth.rpt"/>
-  <File Type="RDS-DCP" Name="sevenseg.dcp"/>
-  <File Type="RDS-UTIL-PB" Name="sevenseg_utilization_synth.pb"/>
-  <File Type="RDS-UTIL" Name="sevenseg_utilization_synth.rpt"/>
-  <File Type="RDS-PROPCONSTRS" Name="sevenseg_drc_synth.rpt"/>
-  <File Type="RDS-RDS" Name="sevenseg.vds"/>
-  <File Type="REPORTS-TCL" Name="sevenseg_reports.tcl"/>
-  <File Type="PA-TCL" Name="sevenseg.tcl"/>
+<GenRun Id="synth_1" LaunchPart="xc7a35tcpg236-1" LaunchTime="1633783377">
+  <File Type="VDS-TIMING-PB" Name="fsm1_timing_summary_synth.pb"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="fsm1_timing_summary_synth.rpt"/>
+  <File Type="RDS-DCP" Name="fsm1.dcp"/>
+  <File Type="RDS-UTIL-PB" Name="fsm1_utilization_synth.pb"/>
+  <File Type="RDS-UTIL" Name="fsm1_utilization_synth.rpt"/>
+  <File Type="RDS-PROPCONSTRS" Name="fsm1_drc_synth.rpt"/>
+  <File Type="RDS-RDS" Name="fsm1.vds"/>
+  <File Type="REPORTS-TCL" Name="fsm1_reports.tcl"/>
+  <File Type="PA-TCL" Name="fsm1.tcl"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
     <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/new/fsm1.sv">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/mux8.sv">
+      <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
     <File Path="$PSRCDIR/sources_1/new/sevenseg.sv">
       <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -42,9 +58,17 @@
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
+    <File Path="$PSRCDIR/sources_1/new/exercise9.sv">
+      <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
     <Config>
       <Option Name="DesignMode" Val="RTL"/>
-      <Option Name="TopModule" Val="sevenseg"/>
+      <Option Name="TopModule" Val="fsm1"/>
     </Config>
   </FileSet>
   <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
