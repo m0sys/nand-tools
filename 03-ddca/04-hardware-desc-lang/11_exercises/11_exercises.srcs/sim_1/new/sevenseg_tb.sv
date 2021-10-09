@@ -24,13 +24,12 @@ module sevenseg_tb(
     );
     logic clk, reset;
     logic [3:0]a;
-    logic [1:0]select;
+    logic [1:0]select = 2'b00;
     logic [6:0] y, yexp; 
     logic [3:0] digits;
     logic [31:0] vectornum, errors;
     logic [10:0] testvectors[10000:0];
 
-    assign select = 0;
 
     // Init device under test (dut).
     sevenseg dut(a, select,  digits, y);
@@ -52,20 +51,21 @@ module sevenseg_tb(
     // Apply test vectors on rising edge clk.
     always @(posedge clk)
     begin
-        #1; {a[3:0], yexp[6:0]} = testvectors[vectornum];
+        #1; {a, yexp} = testvectors[vectornum];
     end
 
     // Check result on falling edge of clk.
     always @(negedge clk)
         if (~reset) begin // skip during reset
             if (y !== yexp) begin 
-                $display("Error: testvector used = %b", testvectors[vectornum][10:0]);
-                $display("Error: inputs = %b", a[3:0]);
-                $display(" outputs = %b (%b expected)", y[6:0], yexp[6:0]);
+                $display("Error: testvector used = %b", testvectors[vectornum]);
+                $display("Error: inputs = %b", a);
+                $display(" outputs = %b (%b expected)", y, yexp);
                 errors=errors+1;
             end
             vectornum=vectornum+1;
-            if (testvectors[vectornum] === 4'bx) begin
+            if (testvectors[vectornum] === 11'bx) 
+            begin
                 $display("%d tests completed with %d errors", vectornum, errors);
                 $finish;
             end
