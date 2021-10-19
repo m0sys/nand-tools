@@ -61,12 +61,14 @@
 
 > If we hear, we forget. If we see, we remember. If we do, we understand. - Proverb
 
-> **The GE bill for $1000 (Yale Patt 2005):**
+> **The GE bill for $1000 (Patt & Patel 2005):**
 >
 > | Incident                                      |  $$$   |
 > | :-------------------------------------------- | :----: |
 > | Turning a screw 35 degrees counterclockwise   |  0.75  |
 > | *Knowing which screw to turn and by how much* | 999.25 |
+
+> As you approach your study and practice of computing, we urge you to take the opposite approach - that hardware and software are names for components of two parts of a computing system that work best when they are designed by someone who took into account the capabilities and limitations of both. - Patt & Patel (2005)
 
 
 
