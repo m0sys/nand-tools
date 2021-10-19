@@ -61,6 +61,15 @@
 
 > If we hear, we forget. If we see, we remember. If we do, we understand. - Proverb
 
+> **The GE bill for $1000 (Yale Patt 2005):**
+>
+> | Incident                                      |  $$$   |
+> | :-------------------------------------------- | :----: |
+> | Turning a screw 35 degrees counterclockwise   |  0.75  |
+> | *Knowing which screw to turn and by how much* | 999.25 |
+
+
+
 ## GOAL (For the 3 Months) [2021/9/28]
 
 - BUILD MY FIRST MICROPROCESSOR! (SINGLE CORE FIRST then MULTI-CORE) 
