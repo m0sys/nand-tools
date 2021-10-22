@@ -20,7 +20,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.runs/synth_1'
+HD_PWD='/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/05-digital-building-blocks/02_arithmetic_circuits/02_arithmetic_circuits.runs/synth_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log
@@ -36,4 +36,4 @@ EAStep()
      fi
 }
 
-EAStep vivado -log sevenseg.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source sevenseg.tcl
+EAStep vivado -log adder.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source adder.tcl

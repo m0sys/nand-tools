@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.runs/synth_1/fsm1.tcl"
+  variable script "/home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/05-digital-building-blocks/02_arithmetic_circuits/02_arithmetic_circuits.runs/synth_1/adder.tcl"
   variable category "vivado_synth"
 }
 
@@ -73,7 +73,6 @@ OPTRACE "synth_1" START { ROLLUP_AUTO }
 set_param chipscope.maxJobs 2
 set_param checkpoint.writeSynthRtdsInDcp 1
 set_param xicom.use_bs_reader 1
-set_param synth.incrementalSynthesisCache ./.Xil/Vivado-173494-mo-XPS-15-9560/incrSyn
 set_msg_config -id {Synth 8-256} -limit 10000
 set_msg_config -id {Synth 8-638} -limit 10000
 OPTRACE "Creating in-memory project" START { }
@@ -82,15 +81,15 @@ create_project -in_memory -part xc7a35tcpg236-1
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
-set_property webtalk.parent_dir /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.cache/wt [current_project]
-set_property parent.project_path /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.xpr [current_project]
+set_property webtalk.parent_dir /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/05-digital-building-blocks/02_arithmetic_circuits/02_arithmetic_circuits.cache/wt [current_project]
+set_property parent.project_path /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/05-digital-building-blocks/02_arithmetic_circuits/02_arithmetic_circuits.xpr [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
-set_property ip_output_repo /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.cache/ip [current_project]
+set_property ip_output_repo /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/05-digital-building-blocks/02_arithmetic_circuits/02_arithmetic_circuits.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
-read_verilog -library xil_defaultlib -sv /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/sources_1/new/fsm1.sv
+read_verilog -library xil_defaultlib -sv /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/05-digital-building-blocks/02_arithmetic_circuits/02_arithmetic_circuits.srcs/sources_1/new/adder.sv
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the
@@ -100,23 +99,11 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/exercise1.xdc
-set_property used_in_implementation false [get_files /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/exercise1.xdc]
-
-read_xdc /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/exercise3.xdc
-set_property used_in_implementation false [get_files /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/exercise3.xdc]
-
-read_xdc /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/minority.xdc
-set_property used_in_implementation false [get_files /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/minority.xdc]
-
-read_xdc /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/sevenseg.xdc
-set_property used_in_implementation false [get_files /home/mo/Desktop/Github/ce-road-to-mastery/03-ddca/04-hardware-desc-lang/11_exercises/11_exercises.srcs/constrs_1/new/sevenseg.xdc]
-
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]
 
 OPTRACE "synth_design" START { }
-synth_design -top fsm1 -part xc7a35tcpg236-1
+synth_design -top adder -part xc7a35tcpg236-1
 OPTRACE "synth_design" END { }
 if { [get_msg_config -count -severity {CRITICAL WARNING}] > 0 } {
  send_msg_id runtcl-6 info "Synthesis results are not added to the cache due to CRITICAL_WARNING"
@@ -126,10 +113,10 @@ if { [get_msg_config -count -severity {CRITICAL WARNING}] > 0 } {
 OPTRACE "write_checkpoint" START { CHECKPOINT }
 # disable binary constraint mode for synth run checkpoints
 set_param constraints.enableBinaryConstraints false
-write_checkpoint -force -noxdef fsm1.dcp
+write_checkpoint -force -noxdef adder.dcp
 OPTRACE "write_checkpoint" END { }
 OPTRACE "synth reports" START { REPORT }
-create_report "synth_1_synth_report_utilization_0" "report_utilization -file fsm1_utilization_synth.rpt -pb fsm1_utilization_synth.pb"
+create_report "synth_1_synth_report_utilization_0" "report_utilization -file adder_utilization_synth.rpt -pb adder_utilization_synth.pb"
 OPTRACE "synth reports" END { }
 file delete __synthesis_is_running__
 close [open __synthesis_is_complete__ w]
