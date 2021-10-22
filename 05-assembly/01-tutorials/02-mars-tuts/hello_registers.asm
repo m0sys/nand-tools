@@ -20,7 +20,8 @@
 		addi $sp, $sp, -8
 		sw $s0, 0($sp)
 		# NOTE: to deal with nested functions we need to store the caller addr
-		# 		in the stack.
+		# 		in the stack to be able to restore it after the inner called
+		# 		func returns.
 
 		sw $ra, 4($sp)
 
