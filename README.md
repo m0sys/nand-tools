@@ -5,7 +5,7 @@
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
 </p>
-
+<div id="top"></div>
 
 > My personal road to mastering Computer Engineering Fundamental Principles - and thus become the Architect of the Future!
 
@@ -45,7 +45,30 @@
 <p align="center">
   <a href="https://www.youtube.com/watch?v=GEPhLqwKo6g" target="_blank">Think Different - Steve Jobs</a>  
 </p>
+---
 
+
+
+<!-- TABLE OF CONTENTS -->
+
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#valuable-quotes">Valuable Quotes</a>
+    </li>
+    <li><a href="#goal">Goal</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#resources">Resources</a></li>
+    <li><a href="#research-papers">Research Papers</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#license">License</a></li>
+  </ol>
+</details>
+
+
+
+<!-- VALUABLE QUOTES -->
 
 ## Valuable Quotes
 
@@ -72,6 +95,8 @@
 
 
 
+<!-- GOAL -->
+
 ## GOAL (For the 3 Months) [2021/9/28]
 
 - BUILD MY FIRST MICROPROCESSOR! (SINGLE CORE FIRST then MULTI-CORE) 
@@ -79,15 +104,80 @@
 
 
 
-## Author
+<!-- ROADMAP -->
+
+## Roadmap 
+
+- [ ] Digital Design and Computer Architecture
+- [ ] Computer Organization 
+- [ ] Advanced Computer Architecture
+- [ ] Performance Engineering of Software Systems
+- [ ] Seminar in Computer Architecture
+- [ ] ML Accelerators 
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+---
+
+
+
+<!-- RESOURCES -->
+
+## Resources
+
+### Digital Design
+
+- Textbooks
+- Lectures/Courses
+- Talks/Seminars
+
+### Computer Organization
+
+- Textbooks
+- Lectures/Courses
+- Talks/Seminars
+
+### Computer Architecture
+
+- Textbooks
+- Lectures/Courses
+- Talks/Seminars
+
+
+
+<!-- RESEARCH PAPERS -->
+
+## Research Papers
+
+### Landmarks
+
+### ML Accelerators
+
+### Genetic Engineering Compute
+
+### Parallel Compute 
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- CONTACT -->
+
+## Contact
 
 👤 **moe**
 
 * Github: [@mhd53](https://github.com/mhd53)
 
+
+
 ## Show your support
 
 Give a ⭐️ if this project helped you!
+
+
+
+<!-- LICENSE -->
 
 ## 📝 License
 
