@@ -45,10 +45,6 @@
 <p align="center">
   <a href="https://www.youtube.com/watch?v=GEPhLqwKo6g" target="_blank">Think Different - Steve Jobs</a>  
 </p>
----
-
-
-
 <!-- TABLE OF CONTENTS -->
 
 <details>
@@ -65,9 +61,6 @@
     <li><a href="#license">License</a></li>
   </ol>
 </details>
-
-
-
 <!-- VALUABLE QUOTES -->
 
 ## Valuable Quotes
@@ -93,16 +86,12 @@
 
 > As you approach your study and practice of computing, we urge you to take the opposite approach - that hardware and software are names for components of two parts of a computing system that work best when they are designed by someone who took into account the capabilities and limitations of both. - Patt & Patel (2005)
 
-
-
 <!-- GOAL -->
 
 ## GOAL (For the 3 Months) [2021/9/28]
 
 - BUILD MY FIRST MICROPROCESSOR! (SINGLE CORE FIRST then MULTI-CORE) 
 - HOW DOES ONE DESIGN AND BUILD A MICROPROCESSOR?
-
-
 
 <!-- ROADMAP -->
 
@@ -118,8 +107,6 @@
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ---
-
-
 
 <!-- RESOURCES -->
 
@@ -143,8 +130,6 @@
 - Lectures/Courses
 - Talks/Seminars
 
-
-
 <!-- RESEARCH PAPERS -->
 
 ## Research Papers
@@ -159,8 +144,6 @@
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- CONTACT -->
 
 ## Contact
@@ -169,13 +152,9 @@
 
 * Github: [@mhd53](https://github.com/mhd53)
 
-
-
 ## Show your support
 
 Give a ⭐️ if this project helped you!
-
-
 
 <!-- LICENSE -->
 
