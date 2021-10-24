@@ -97,12 +97,12 @@
 
 ## Roadmap 
 
-- [ ] Digital Design and Computer Architecture
-- [ ] Computer Organization 
-- [ ] Advanced Computer Architecture
-- [ ] Performance Engineering of Software Systems
-- [ ] Seminar in Computer Architecture
-- [ ] ML Accelerators 
+- [ ] ![80%](https://progress-bar.dev/80) Digital Design and Computer Architecture 
+- [ ] ![0%](https://progress-bar.dev/0) Computer Organization 
+- [ ] ![0%](https://progress-bar.dev/0) Advanced Computer Architecture
+- [ ] ![0%](https://progress-bar.dev/0) Performance Engineering of Software Systems
+- [ ] ![0%](https://progress-bar.dev/0) Seminar in Computer Architecture
+- [ ] ![0%](https://progress-bar.dev/0) ML Accelerators 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -115,24 +115,24 @@
 ### Digital Design & Electronics
 
 - Textbooks
-  - [Digital Design and Computer Architecture - Harris & Harris](https://www.amazon.com/Digital-Design-Computer-Architecture-Harris/dp/0123944244)
-  - [Digital Design: With an Introduction to the Verilog HDL - Mano & Ciletti](https://www.amazon.com/Digital-Design-5th-Morris-Mano/dp/0132774208)
+  - :triangular_flag_on_post: [Digital Design and Computer Architecture - Harris & Harris](https://www.amazon.com/Digital-Design-Computer-Architecture-Harris/dp/0123944244)
+  - :white_check_mark: [Digital Design: With an Introduction to the Verilog HDL - Mano & Ciletti](https://www.amazon.com/Digital-Design-5th-Morris-Mano/dp/0132774208)
 - Lectures/Courses
 - Talks/Seminars
 
 ### Computer Organization
 
 - Textbooks
-  - [Computer Organization and Design Risc-V Edition - Patterson & Hennessy](https://www.amazon.com/Computer-Organization-Design-RISC-V-Architecture/dp/0128122757)
-  - [Computer Systems: A Programmer's Perspective 3rd Edition - Bryant & O'Hallaron](https://www.amazon.com/Computer-Systems-Programmers-Perspective-3rd/dp/013409266X)
+  - :heavy_check_mark: [Computer Organization and Design Risc-V Edition - Patterson & Hennessy](https://www.amazon.com/Computer-Organization-Design-RISC-V-Architecture/dp/0128122757)
+  - :white_check_mark: [Computer Systems: A Programmer's Perspective 3rd Edition - Bryant & O'Hallaron](https://www.amazon.com/Computer-Systems-Programmers-Perspective-3rd/dp/013409266X)
 - Lectures/Courses
 - Talks/Seminars
 
 ### Computer Architecture
 
 - Textbooks
-  - [Introduction to Computing Systems: From Bits and Gates to C and Beyond - Patt & Patel](https://www.amazon.com/Introduction-Computing-Systems-Gates-Beyond/dp/0072467509/)
-  - [Computer Architecture: A Quantitative Approach 6th Edition - Hennessy & Patterson](https://www.amazon.com/Computer-Architecture-Quantitative-Approach-Kaufmann/dp/0128119055)
+  - :white_check_mark: [Introduction to Computing Systems: From Bits and Gates to C and Beyond - Patt & Patel](https://www.amazon.com/Introduction-Computing-Systems-Gates-Beyond/dp/0072467509/)
+  - :white_check_mark: [Computer Architecture: A Quantitative Approach 6th Edition - Hennessy & Patterson](https://www.amazon.com/Computer-Architecture-Quantitative-Approach-Kaufmann/dp/0128119055)
 - Lectures/Courses
 - Talks/Seminars
 
