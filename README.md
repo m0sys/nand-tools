@@ -110,7 +110,7 @@
 
 <!-- RESOURCES -->
 
-## Resources
+## :books: Resources 
 
 ### Digital Design & Electronics
 
@@ -138,7 +138,7 @@
 
 <!-- RESEARCH PAPERS -->
 
-## Research Papers
+## :page_with_curl: Research Papers
 
 ### Landmarks
 
