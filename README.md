@@ -86,6 +86,8 @@
 
 > As you approach your study and practice of computing, we urge you to take the opposite approach - that hardware and software are names for components of two parts of a computing system that work best when they are designed by someone who took into account the capabilities and limitations of both. - Patt & Patel (2005)
 
+> Code that is never runs serves no purpose. It is utter garbage. To code for the sake of the code itself is therefore pointless. The goal is to write the code which runs as expected. That is what makes you the programmer. - Moe
+
 <!-- GOAL -->
 
 ## GOAL (For the 3 Months) [2021/9/28]
