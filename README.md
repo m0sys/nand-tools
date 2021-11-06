@@ -95,6 +95,10 @@
 - BUILD MY FIRST MICROPROCESSOR! (SINGLE CORE FIRST then MULTI-CORE) 
 - HOW DOES ONE DESIGN AND BUILD A MICROPROCESSOR?
 
+## TODO
+
+1. Write a readme for each individual microarchitecture with good diagrams to depict the datapath + controller. 
+
 <!-- ROADMAP -->
 
 ## Roadmap 
