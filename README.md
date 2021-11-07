@@ -88,6 +88,12 @@
 
 > Code that is never runs serves no purpose. It is utter garbage. To code for the sake of the code itself is therefore pointless. The goal is to write the code which runs as expected. That is what makes you the programmer. - Moe
 
+> The best way to predict the Future is to invent it. - Alan Kay
+
+> The Hand that drew the hand was one and the same. - Moe
+
+> I imagine 99% of your thought process is protecting your self-conception, and 98% of that is wrong. Now you got the math right. - Jim Keller
+
 <!-- GOAL -->
 
 ## GOAL (For the 3 Months) [2021/9/28]
