@@ -94,6 +94,8 @@
 
 > I imagine 99% of your thought process is protecting your self-conception, and 98% of that is wrong. Now you got the math right. - Jim Keller
 
+> Never waste time. - American Proverb (COD 2017)
+
 <!-- GOAL -->
 
 ## GOAL (For the 3 Months) [2021/9/28]
