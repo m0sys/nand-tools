@@ -1,7 +1,0 @@
-0.7
-2020.2
-Jun 10 2021
-19:45:28
-/home/mo/Desktop/Github/ce-road-to-mastery/02-tutorials/03-fpga-projects/00_hello_world/00_hello_world.sim/sim_1/behav/xsim/glbl.v,1623370582,verilog,,,,glbl,,uvm,,,,,,
-/home/mo/Desktop/Github/ce-road-to-mastery/02-tutorials/03-fpga-projects/00_hello_world/00_hello_world.srcs/sim_1/new/AND_Gate_Testbench.sv,1632848408,systemVerilog,,,,AND_Gate_Testbench,,uvm,,,,,,
-/home/mo/Desktop/Github/ce-road-to-mastery/02-tutorials/03-fpga-projects/00_hello_world/00_hello_world.srcs/sources_1/new/AND_Gate.sv,1632847863,systemVerilog,,/home/mo/Desktop/Github/ce-road-to-mastery/02-tutorials/03-fpga-projects/00_hello_world/00_hello_world.srcs/sim_1/new/AND_Gate_Testbench.sv,,AND_Gate,,uvm,,,,,,
