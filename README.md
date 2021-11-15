@@ -54,6 +54,7 @@
       <a href="#valuable-quotes">Valuable Quotes</a>
     </li>
     <li><a href="#goal">Goal</a></li>
+    <li><a href="#cap">Computer Architecture Principles</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#resources">Resources</a></li>
     <li><a href="#research-papers">Research Papers</a></li>
@@ -61,6 +62,7 @@
     <li><a href="#license">License</a></li>
   </ol>
 </details>
+
 <!-- VALUABLE QUOTES -->
 
 ## Valuable Quotes
@@ -97,6 +99,14 @@
 > Never waste time. - American Proverb (COD 2017)
 
 > You know what's overrated? Compute Science/Software Engineering. You know what's so underrated? Compute Engineering/Hardware Engineering. - Moe (2021/11/13) 
+
+> Supercomputer: Any machine still on the drawing board. - Stan Kelly-Bootle, 1981 (COD 2017)
+
+
+
+<!-- CAP -->
+
+## Computer Architecture Principles
 
 <!-- GOAL -->
 
@@ -157,6 +167,9 @@
 ## :page_with_curl: Research Papers
 
 ### Landmarks
+
+- [The Microarchitecture of Superscalar Processors; Smith, 1995](https://ieeexplore.ieee.org/document/476078)
+- [The Alpha 21264 Microprocessor; 1988](https://www.cis.upenn.edu/~milom/cis501-Fall05/papers/Alpha21264.pdf)
 
 ### ML Accelerators
 
