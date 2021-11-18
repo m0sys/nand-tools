@@ -67,6 +67,8 @@
 
 ## Valuable Quotes
 
+ ![Build your own X](feynman.png)
+
 > Civilization advances by extending the number of important operations which we can perform without thinking about them. - Whitehead (COD 2017)
 
 > Less is more. - Robert Browning (COD 2017)
@@ -104,7 +106,7 @@
 
 > What I hear, I forget; What I see, I remember; What I do, I understand. - Confucius (551 - 479 B.C.E)
 
-
+> The only kind of learning which significantly influences behaviour is self-discovered or self-appropriated - truth that has been assimilated in experience. - Carl Rogers (ECS, Second Edition) 
 
 <!-- CAP -->
 
