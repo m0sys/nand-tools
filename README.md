@@ -102,6 +102,8 @@
 
 > Supercomputer: Any machine still on the drawing board. - Stan Kelly-Bootle, 1981 (COD 2017)
 
+> What I hear, I forget; What I see, I remember; What I do, I understand. - Confucius (551 - 479 B.C.E)
+
 
 
 <!-- CAP -->
