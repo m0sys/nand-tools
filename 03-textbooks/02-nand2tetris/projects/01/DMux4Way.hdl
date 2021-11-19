@@ -14,7 +14,20 @@
 CHIP DMux4Way {
     IN in, sel[2];
     OUT a, b, c, d;
+    
+    // NOTE: you might be able to reduce the number of gates if you use DMux.
 
     PARTS:
-    // Put your code here:
+    Not (in=sel[1], out=not-sel1);
+    Not (in=sel[0], out=not-sel0);
+
+    And (a=not-sel1, b=not-sel0, out=asel);
+    And (a=not-sel1, b=sel[0], out=bsel);
+    And (a=sel[1], b=not-sel0, out=csel);
+    And (a=sel[1], b=sel[0], out=dsel);
+
+    And (a=asel, b=in, out=a);
+    And (a=bsel, b=in, out=b);
+    And (a=csel, b=in, out=c);
+    And (a=dsel, b=in, out=d);
 }
