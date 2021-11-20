@@ -42,5 +42,37 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+    /* Zeros of x & y. */
+    And16 (a=x, out=xz);
+    And16 (a=y, out=yz);
+
+    /* Select x & y. */
+    Mux16 (a=x, b=xz, sel=zx, out=sel-xz);
+    Mux16 (a=y, b=yz, sel=zy, out=sel-yz);
+
+    /* Negations of x & y. */
+    Not16 (in=sel-xz, out=xn);
+    Not16 (in=sel-yz, out=yn);
+
+    /* Select x & y. */
+    Mux16 (a=sel-xz, b=xn, sel=nx, out=sel-x);
+    Mux16 (a=sel-yz, b=yn, sel=ny, out=sel-y);
+
+    /* Compute logic + add. */
+    Add16 (a=sel-x, b=sel-y, out=add-xy);
+    And16 (a=sel-x, b=sel-y, out=and-xy);
+
+    /* Select output op. */
+    Mux16 (a=and-xy, b=add-xy, sel=f, out=out1);
+
+    /* Bitwise not */
+    Not16 (in=out1, out=nout);
+    Mux16 (a=out1, b=nout, sel=no, out=out, out[15]=ng, out[0..7]=z1, out[8..15]=z2);
+
+    /* Compute zr, ng */
+    Or8Way (in=z1, out=o1);
+    Or8Way (in=z2, out=o2);
+
+    Or (a=o1, b=o2, out=z3);
+    Not (in=z3, out=zr);
 }
