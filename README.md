@@ -108,6 +108,8 @@
 
 > The only kind of learning which significantly influences behaviour is self-discovered or self-appropriated - truth that has been assimilated in experience. - Carl Rogers (ECS, Second Edition) 
 
+> If Elon can build Starship I can build Robochip. - M0 (2021/11/19)
+
 <!-- CAP -->
 
 ## Computer Architecture Principles
