@@ -20,7 +20,7 @@
     <li>Moore's Law is Not Dead - Jim Keller</li>
     <li><a href="https://www.youtube.com/watch?v=4eRCygdW--c" target="_blank">New opportunties onces we have mastered control over the 7 atoms</a></li>
     <li><a href="https://www.youtube.com/watch?v=oIG9ztQw2Gc" target="_blank">Multiple S-curves</a></li>
-    <li>Design for 2x improvement</li>
+    <li>Design for 2x improvement over two years timespan</li>
 </ul>
 </p>
 
