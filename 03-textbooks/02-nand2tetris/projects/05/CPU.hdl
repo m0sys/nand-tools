@@ -78,7 +78,8 @@ CHIP CPU {
     Mux16 (a=aout, b=inM, sel=instruction[12], out=srcb);
 
     /* D register */
-    DRegister (in=aluout, load=instruction[4], out=srca);
+    And (a=ctype, b=instruction[4], out=dload);
+    DRegister (in=aluout, load=dload, out=srca);
 
     /* ALU logic */
     ALU (x=srca, y=srcb, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=aluout, out=outM, zr=zr, ng=ng);
