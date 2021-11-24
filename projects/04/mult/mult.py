@@ -12,3 +12,4 @@ while (True):
     counter += 1
     res += r1
 print("Res: ", res)
+print("Res: 2", res)
