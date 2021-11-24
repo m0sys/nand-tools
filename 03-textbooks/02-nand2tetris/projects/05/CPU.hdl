@@ -38,6 +38,111 @@ CHIP CPU {
         addressM[15],    // Address in data memory (of M)
         pc[15];          // address of next instruction
 
+    /*
+     * NOTE: when instruction[15] == 1 then C-Type: 1xxaccccccdddjjj
+     *                                              0000001111101100
+     *                                       online 0000001111101011
+     *                                       t5     0000001111101011 
+     *                                       t6     1110001100001000
+     *                                       t28    1110001100000101
+     *                                       t29    1110001100000110
+     *       else                      then A-Type: 0vvvvvvvvvvvvvvv
+     *
+     *       A-Type: load instruction into A register.
+     *
+     *       C-Type: 
+     *          - a-bit determines whether ALU srcb input comes from A register
+     *            or from incoming M value (inM).
+     *          - cccccc-bits determine the ALU controls.
+     *          - ddd-bits determine which register to store ALUOut in.
+     *          - jjj-bits determine which instruction to fetch next.
+     *          - branching spec: if jump PC=A else PC=PC++.
+     *            when PC load bit is asserted the value stored in A register
+     *            is loaded instead of PC++.
+     */
+
     PARTS:
-    // Put your code here:
+    /* A register input Mux */
+    /* Determine whether to load A register from ALUOut or instruction */
+    And (a=instruction[15], b=instruction[5], out=aluload);
+    Mux16 (a=instruction, b=aluout, sel=aluload, out=adata);
+    
+    /* A register */
+    Not (in=instruction[15], out=atype);
+    Not (in=atype, out=ctype);
+
+    Or (a=aluload, b=atype, out=aload);
+    ARegister (in=adata, load=aload, out=aout, out[0..14]=addressM);
+
+    /* ALUSrcB Mux */
+    Mux16 (a=aout, b=inM, sel=instruction[12], out=srcb);
+
+    /* D register */
+    And (a=ctype, b=instruction[4], out=dload);
+    DRegister (in=aluout, load=dload, out=srca);
+
+    /* ALU logic */
+    ALU (x=srca, y=srcb, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=aluout, out=outM, zr=zr, ng=ng);
+
+    /* PC logic */
+    Not (in=instruction[2], out=nj2);
+    Not (in=instruction[1], out=nj1);
+    Not (in=instruction[0], out=nj0);
+
+    /* null case 000 */
+    And (a=nj2, b=nj1, out=noj1);
+    And (a=noj1, b=nj0, out=noj);
+
+    /* jgt case 001 */
+    And (a=noj1, b=instruction[0], out=jgt);
+
+    /* jeq case 010 */
+    And (a=nj2, b=instruction[1], out=noj2); 
+    And (a=noj2, b=nj0, out=jeq);
+
+    /* jge case 011 */
+    And (a=noj2, b=instruction[0], out=jge); 
+
+    /* jlt case 100 */
+    And (a=instruction[2], b=nj1, out=noj3); 
+    And (a=noj3, b=nj0, out=jlt);
+
+    /* jne case 101 */
+    And (a=noj3, b=instruction[0], out=jne); 
+
+    /* FIXME: issue at t28+ */
+    /* jle case 110 -- here */
+    And (a=instruction[2], b=instruction[1], out=noj4); 
+    And (a=noj4, b=nj0, out=jle);
+
+    /* jmp case 111 */
+    And (a=noj4, b=instruction[0], out=jmp); 
+
+    /* comp sign result */
+    Not (in=ng, out=pos);
+    Not (in=zr, out=nzr);
+
+    And (a=pos, b=nzr, out=gtres);
+    Or (a=pos, b=zr, out=geres);
+    And (a=ng, b=nzr, out=ltres);
+    Or (a=ng, b=zr, out=leres);
+
+    And (a=jgt, b=gtres, out=dojgt);
+    And (a=jeq, b=zr, out=dojeq);
+    And (a=jge, b=geres, out=dojge);
+    And (a=jlt, b=ltres, out=dojlt);
+    And (a=jne, b=nzr, out=dojne);
+    And (a=jle, b=leres, out=dojle);
+
+    Or8Way (in[7]=dojgt, in[6]=dojeq, in[5]=dojge, in[4]=dojlt, in[3]=dojne, in[2]=dojle, in[1]=jmp, out=jload);
+
+    And (a=jload, b=ctype, out=jump);
+
+    Not (in=jump, out=njump);
+    Or (a=njump, b=noj, out=pcinc);
+
+    PC (in=aout, load=jump, inc=pcinc, reset=reset, out[0..14]=pc);
+
+    /* Assign writeM to instruction[3] in a hacky way */
+    And (a=instruction[3], b=ctype, out=writeM);
 }
