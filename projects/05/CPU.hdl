@@ -40,6 +40,12 @@ CHIP CPU {
 
     /*
      * NOTE: when instruction[15] == 1 then C-Type: 1xxaccccccdddjjj
+     *                                              0000001111101100
+     *                                       online 0000001111101011
+     *                                       t5     0000001111101011 
+     *                                       t6     1110001100001000
+     *                                       t28    1110001100000101
+     *                                       t29    1110001100000110
      *       else                      then A-Type: 0vvvvvvvvvvvvvvv
      *
      *       A-Type: load instruction into A register.
@@ -103,7 +109,8 @@ CHIP CPU {
     /* jne case 101 */
     And (a=noj3, b=instruction[0], out=jne); 
 
-    /* jle case 110 */
+    /* FIXME: issue at t28+ */
+    /* jle case 110 -- here */
     And (a=instruction[2], b=instruction[1], out=noj4); 
     And (a=noj4, b=nj0, out=jle);
 
@@ -115,9 +122,9 @@ CHIP CPU {
     Not (in=zr, out=nzr);
 
     And (a=pos, b=nzr, out=gtres);
-    And (a=pos, b=zr, out=geres);
+    Or (a=pos, b=zr, out=geres);
     And (a=ng, b=nzr, out=ltres);
-    And (a=ng, b=zr, out=leres);
+    Or (a=ng, b=zr, out=leres);
 
     And (a=jgt, b=gtres, out=dojgt);
     And (a=jeq, b=zr, out=dojeq);
@@ -128,10 +135,12 @@ CHIP CPU {
 
     Or8Way (in[7]=dojgt, in[6]=dojeq, in[5]=dojge, in[4]=dojlt, in[3]=dojne, in[2]=dojle, in[1]=jmp, out=jload);
 
-    Not (in=jload, out=njload);
-    Or (a=njload, b=noj, out=pcinc);
+    And (a=jload, b=ctype, out=jump);
 
-    PC (in=aout, load=jload, inc=pcinc, reset=reset, out[0..14]=pc);
+    Not (in=jump, out=njump);
+    Or (a=njump, b=noj, out=pcinc);
+
+    PC (in=aout, load=jump, inc=pcinc, reset=reset, out[0..14]=pc);
 
     /* Assign writeM to instruction[3] in a hacky way */
     And (a=instruction[3], b=ctype, out=writeM);
