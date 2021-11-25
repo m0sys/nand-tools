@@ -83,3 +83,5 @@ std::string Parser::dst()
 std::string Parser::comp() { return "todo"; }
 
 std::string Parser::jump() { return "todo"; }
+
+unsigned Parser::num_instrs() { return instrs.size(); }

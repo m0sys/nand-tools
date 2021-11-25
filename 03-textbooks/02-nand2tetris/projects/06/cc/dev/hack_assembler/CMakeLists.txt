@@ -24,7 +24,8 @@ add_library(${PROJECT_NAME} STATIC ${source_files})
 # GoogleTest setup.
 enable_testing()
 target_link_libraries(
-    ${PROJECT_NAME}_test
+    ${PROJECT_NAME}_test PUBLIC
+    ${PROJECT_NAME}
     gtest_main
 )
 
