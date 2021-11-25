@@ -1,0 +1,5 @@
+if(EXISTS "/home/mo/Desktop/Github/ce-road-to-mastery/03-textbooks/02-nand2tetris/projects/06/cc/dev/hack_assembler/build/hack_assembler_test[1]_tests.cmake")
+  include("/home/mo/Desktop/Github/ce-road-to-mastery/03-textbooks/02-nand2tetris/projects/06/cc/dev/hack_assembler/build/hack_assembler_test[1]_tests.cmake")
+else()
+  add_test(hack_assembler_test_NOT_BUILT hack_assembler_test_NOT_BUILT)
+endif()
