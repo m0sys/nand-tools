@@ -2,7 +2,6 @@
 
 std::string Encoder::encode_dst(std::string asm_dst)
 {
-    //
     std::string res = "000";
     if (asm_dst.find('M') != std::string::npos)
         res.at(2) = '1';
@@ -18,17 +17,14 @@ std::string Encoder::encode_dst(std::string asm_dst)
 
 std::string Encoder::encode_comp(std::string asm_comp)
 {
-    //
-
-    // TODO: replace with hashmap.
     auto cm = create_comp_map();
     return cm.at(asm_comp);
 }
 
 std::string Encoder::encode_jump(std::string asm_jump)
 {
-    //
-    return "todo";
+    auto cj = create_jump_map();
+    return cj.at(asm_jump);
 }
 
 std::map<std::string, std::string> create_comp_map()
@@ -63,5 +59,19 @@ std::map<std::string, std::string> create_comp_map()
         { "M-D", "1000111" },
         { "D&M", "1000000" },
         { "D|M", "1010101" },
+    };
+}
+
+std::map<std::string, std::string> create_jump_map()
+{
+    return std::map<std::string, std::string> {
+        { "null", "000" },
+        { "JGT", "001" },
+        { "JEQ", "010" },
+        { "JGE", "011" },
+        { "JLT", "100" },
+        { "JNE", "101" },
+        { "JLE", "110" },
+        { "JMP", "111" },
     };
 }
