@@ -22,7 +22,7 @@ TEST_F(EncoderTestAddAsm, TestParserNumInstrs)
     ASSERT_EQ(parser->num_instrs(), 6) << "Parsed file is not 6 instructions";
 }
 
-TEST_F(EncoderTestAddAsm, CTypeEncodeDstL01)
+TEST_F(EncoderTestAddAsm, CTypeEncodeDst)
 {
     // Testing second instruction in Add.asm
     parser->advance();
@@ -46,6 +46,34 @@ TEST_F(EncoderTestAddAsm, CTypeEncodeDstL01)
     auto enc_dst3 = Encoder::encode_dst(dst3);
     EXPECT_EQ(enc_dst3.size(), 3);
     EXPECT_EQ(enc_dst3, "001");
+
+    // TODO: add null dst test case.
+}
+
+TEST_F(EncoderTestAddAsm, CTypeEncodeComp)
+{
+    // Testing second instruction in Add.asm
+    parser->advance();
+    auto comp = parser->comp();
+    auto enc_comp = Encoder::encode_comp(comp);
+    EXPECT_EQ(enc_comp.size(), 7);
+    EXPECT_EQ(enc_comp, "0110000");
+
+    // Testing forth instruction in Add.asm
+    parser->advance();
+    parser->advance();
+    auto comp2 = parser->comp();
+    auto enc_comp2 = Encoder::encode_comp(comp2);
+    EXPECT_EQ(enc_comp2.size(), 7);
+    EXPECT_EQ(enc_comp2, "0000010");
+
+    // Testing sixth instruction in Add.asm
+    parser->advance();
+    parser->advance();
+    auto comp3 = parser->comp();
+    auto enc_comp3 = Encoder::encode_comp(comp3);
+    EXPECT_EQ(enc_comp3.size(), 7);
+    EXPECT_EQ(enc_comp3, "0001100");
 
     // TODO: add null dst test case.
 }
