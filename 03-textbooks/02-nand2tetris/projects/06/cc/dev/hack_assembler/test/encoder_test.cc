@@ -191,4 +191,41 @@ TEST(EncoderTestFullSet, AllComps)
     auto c27 = Encoder::encode_comp("D|M");
     EXPECT_EQ(c27.size(), 7);
     EXPECT_EQ(c27, "1010101");
+
+    EXPECT_ANY_THROW(Encoder::encode_comp(""));
+}
+
+TEST(EncoderTestFullSet, AllJumps)
+{
+    auto j0 = Encoder::encode_jump("null");
+    EXPECT_EQ(j0.size(), 3);
+    EXPECT_EQ(j0, "000");
+
+    auto j1 = Encoder::encode_jump("JGT");
+    EXPECT_EQ(j1.size(), 3);
+    EXPECT_EQ(j1, "001");
+
+    auto j2 = Encoder::encode_jump("JEQ");
+    EXPECT_EQ(j2.size(), 3);
+    EXPECT_EQ(j2, "010");
+
+    auto j3 = Encoder::encode_jump("JGE");
+    EXPECT_EQ(j3.size(), 3);
+    EXPECT_EQ(j3, "011");
+
+    auto j4 = Encoder::encode_jump("JLT");
+    EXPECT_EQ(j4.size(), 3);
+    EXPECT_EQ(j4, "100");
+
+    auto j5 = Encoder::encode_jump("JNE");
+    EXPECT_EQ(j5.size(), 3);
+    EXPECT_EQ(j5, "101");
+
+    auto j6 = Encoder::encode_jump("JLE");
+    EXPECT_EQ(j6.size(), 3);
+    EXPECT_EQ(j6, "110");
+
+    auto j7 = Encoder::encode_jump("JMP");
+    EXPECT_EQ(j7.size(), 3);
+    EXPECT_EQ(j7, "111");
 }
