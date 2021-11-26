@@ -12,41 +12,46 @@ Parser::Parser(std::string fname)
 {
     std::ifstream infile(fname);
     std::string line;
-    int i = 0;
     std::string asm_line;
-    // std::cout << "reading file with name: " << fname << "\n";
-    while (std::getline(infile, line)) {
-        if (line.substr(0, 2) == "//" || std::all_of(line.begin(), line.end(), isspace))
-            continue;
-        // Remove '\r'.
-        line.erase(line.size() - 1);
-        instrs.push_back(line);
-        i++;
-    }
 
-    // std::cout << "\n\nInstructions found: \n";
-    i = 0;
-    for (auto instr : instrs) {
-        // std::cout << i << ": " << instr << "\n";
-        i++;
+    while (std::getline(infile, line)) {
+        if (is_comment(line) || is_white_space(line))
+            continue;
+
+        remove_backslash_r(line);
+        instrs.push_back(line);
     }
 
     curr_instr_idx = 0;
-    // std::cout << "done reading file with " << i << " lines read\n";
     infile.close();
 }
 
+bool Parser::is_comment(std::string line) { return line.substr(0, 2) == "//"; }
+
+bool Parser::is_white_space(std::string line)
+{
+    //
+    return std::all_of(line.begin(), line.end(), isspace);
+}
+
+void Parser::remove_backslash_r(std::string& line) { line.erase(line.size() - 1); }
+
 void Parser::advance()
 {
-    if (curr_instr_idx < instrs.size())
+    if (has_more_lines())
         curr_instr_idx++;
     else
         throw std::out_of_range("Current index is at last instruction");
 }
+bool Parser::has_more_lines()
+{
+    //
+    return curr_instr_idx < instrs.size();
+}
 
 InstrType Parser::instr_type()
 {
-    switch (instrs[curr_instr_idx][0]) {
+    switch (curr_instr()[0]) {
     case '(':
         return InstrType::L_TYPE;
         break;
@@ -59,39 +64,50 @@ InstrType Parser::instr_type()
     }
 }
 
+const std::string& Parser::curr_instr() { return instrs[curr_instr_idx]; }
+
 std::string Parser::symbol()
 {
-    auto it = instr_type();
-    if (it == InstrType::C_TYPE)
+    if (is_ctype_instr())
         throw std::logic_error("Cannot parse symbol for C_TYPE instructions");
 
     int npos = 0;
-    auto cur_instr = instrs[curr_instr_idx];
-    if (it == InstrType::L_TYPE)
+    auto cur_instr = curr_instr();
+    if (is_ltype_instr())
         npos = cur_instr.length() - 2;
     else
         npos = cur_instr.length() - 1;
     return instrs[curr_instr_idx].substr(1, npos);
 }
 
-std::string Parser::dst()
+bool Parser::is_ctype_instr()
 {
     auto it = instr_type();
-    if (it != InstrType::C_TYPE)
+    return it == InstrType::C_TYPE;
+}
+
+bool Parser::is_ltype_instr()
+{
+    auto it = instr_type();
+    return it == InstrType::L_TYPE;
+}
+
+std::string Parser::dst()
+{
+    if (!is_ctype_instr())
         throw std::logic_error("Cannot parse dst for non C_TYPE instructions");
 
-    auto cur_instr = instrs[curr_instr_idx];
+    auto cur_instr = curr_instr();
     std::size_t pos = cur_instr.find('=');
     return cur_instr.substr(0, pos);
 }
 
 std::string Parser::comp()
 {
-    auto it = instr_type();
-    if (it != InstrType::C_TYPE)
+    if (!is_ctype_instr())
         throw std::logic_error("Cannot parse comp for non C_TYPE instructions");
 
-    auto cur_instr = instrs[curr_instr_idx];
+    auto cur_instr = curr_instr();
     std::size_t eq_nxt_pos = cur_instr.find('=') + 1;
     unsigned npos = 0;
     while (npos + eq_nxt_pos < cur_instr.size() && cur_instr.at(npos + eq_nxt_pos) != ';')
@@ -101,11 +117,10 @@ std::string Parser::comp()
 
 std::string Parser::jump()
 {
-    auto it = instr_type();
-    if (it != InstrType::C_TYPE)
+    if (!is_ctype_instr())
         throw std::logic_error("Cannot parse jump for non C_TYPE instructions");
 
-    auto cur_instr = instrs[curr_instr_idx];
+    auto cur_instr = curr_instr();
     std::size_t pos = cur_instr.find(';');
     if (std::string::npos == pos)
         return "";
