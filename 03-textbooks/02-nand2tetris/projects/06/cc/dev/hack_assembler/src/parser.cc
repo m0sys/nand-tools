@@ -1,4 +1,3 @@
-// Parser for Hack assembly language.
 #include <algorithm>
 #include <ctype.h>
 #include <fstream>
