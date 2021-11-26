@@ -77,3 +77,118 @@ TEST_F(EncoderTestAddAsm, CTypeEncodeComp)
 
     // TODO: add null dst test case.
 }
+
+TEST(EncoderTestFullSet, AllComps)
+{
+    auto c0 = Encoder::encode_comp("0");
+    EXPECT_EQ(c0.size(), 7);
+    EXPECT_EQ(c0, "0101010");
+
+    auto c1 = Encoder::encode_comp("1");
+    EXPECT_EQ(c1.size(), 7);
+    EXPECT_EQ(c1, "0111111");
+
+    auto c2 = Encoder::encode_comp("-1");
+    EXPECT_EQ(c2.size(), 7);
+    EXPECT_EQ(c2, "0111010");
+
+    auto c3 = Encoder::encode_comp("D");
+    EXPECT_EQ(c3.size(), 7);
+    EXPECT_EQ(c3, "0001100");
+
+    auto c4 = Encoder::encode_comp("A");
+    EXPECT_EQ(c4.size(), 7);
+    EXPECT_EQ(c4, "0110000");
+
+    auto c5 = Encoder::encode_comp("M");
+    EXPECT_EQ(c5.size(), 7);
+    EXPECT_EQ(c5, "1110000");
+
+    auto c6 = Encoder::encode_comp("!D");
+    EXPECT_EQ(c6.size(), 7);
+    EXPECT_EQ(c6, "0001101");
+
+    auto c7 = Encoder::encode_comp("!A");
+    EXPECT_EQ(c7.size(), 7);
+    EXPECT_EQ(c7, "0110001");
+
+    auto c8 = Encoder::encode_comp("!M");
+    EXPECT_EQ(c8.size(), 7);
+    EXPECT_EQ(c8, "1110001");
+
+    auto c9 = Encoder::encode_comp("-D");
+    EXPECT_EQ(c9.size(), 7);
+    EXPECT_EQ(c9, "0001111");
+
+    auto c10 = Encoder::encode_comp("-A");
+    EXPECT_EQ(c10.size(), 7);
+    EXPECT_EQ(c10, "0110011");
+
+    auto c11 = Encoder::encode_comp("-M");
+    EXPECT_EQ(c11.size(), 7);
+    EXPECT_EQ(c11, "1110011");
+
+    auto c12 = Encoder::encode_comp("D+1");
+    EXPECT_EQ(c12.size(), 7);
+    EXPECT_EQ(c12, "0011111");
+
+    auto c13 = Encoder::encode_comp("A+1");
+    EXPECT_EQ(c13.size(), 7);
+    EXPECT_EQ(c13, "0110111");
+
+    auto c14 = Encoder::encode_comp("M+1");
+    EXPECT_EQ(c14.size(), 7);
+    EXPECT_EQ(c14, "1110111");
+
+    auto c15 = Encoder::encode_comp("D-1");
+    EXPECT_EQ(c15.size(), 7);
+    EXPECT_EQ(c15, "0001110");
+
+    auto c16 = Encoder::encode_comp("A-1");
+    EXPECT_EQ(c16.size(), 7);
+    EXPECT_EQ(c16, "0110010");
+
+    auto c17 = Encoder::encode_comp("M-1");
+    EXPECT_EQ(c17.size(), 7);
+    EXPECT_EQ(c17, "1110010");
+
+    auto c18 = Encoder::encode_comp("D+A");
+    EXPECT_EQ(c18.size(), 7);
+    EXPECT_EQ(c18, "0000010");
+
+    auto c19 = Encoder::encode_comp("D+M");
+    EXPECT_EQ(c19.size(), 7);
+    EXPECT_EQ(c19, "1000010");
+
+    auto c20 = Encoder::encode_comp("D-A");
+    EXPECT_EQ(c20.size(), 7);
+    EXPECT_EQ(c20, "0010011");
+
+    auto c21 = Encoder::encode_comp("D-M");
+    EXPECT_EQ(c21.size(), 7);
+    EXPECT_EQ(c21, "1010011");
+
+    auto c22 = Encoder::encode_comp("A-D");
+    EXPECT_EQ(c22.size(), 7);
+    EXPECT_EQ(c22, "0000111");
+
+    auto c23 = Encoder::encode_comp("M-D");
+    EXPECT_EQ(c23.size(), 7);
+    EXPECT_EQ(c23, "1000111");
+
+    auto c24 = Encoder::encode_comp("D&A");
+    EXPECT_EQ(c24.size(), 7);
+    EXPECT_EQ(c24, "0000000");
+
+    auto c25 = Encoder::encode_comp("D&M");
+    EXPECT_EQ(c25.size(), 7);
+    EXPECT_EQ(c25, "1000000");
+
+    auto c26 = Encoder::encode_comp("D|A");
+    EXPECT_EQ(c26.size(), 7);
+    EXPECT_EQ(c26, "0010101");
+
+    auto c27 = Encoder::encode_comp("D|M");
+    EXPECT_EQ(c27.size(), 7);
+    EXPECT_EQ(c27, "1010101");
+}
