@@ -65,6 +65,7 @@ std::map<std::string, std::string> create_comp_map()
 std::map<std::string, std::string> create_jump_map()
 {
     return std::map<std::string, std::string> {
+        { "", "000" },
         { "null", "000" },
         { "JGT", "001" },
         { "JEQ", "010" },

@@ -1,6 +1,9 @@
 cmake_minimum_required (VERSION 3.14)
 project (hack_assembler)
 
+# TODO: separate test and src cmake configs into subdir configs.
+# TODO: swap googletest with catch2.
+
 # Declare dependencies.
 include(FetchContent)
 FetchContent_Declare(
@@ -15,20 +18,28 @@ set (source_dir "${PROJECT_SOURCE_DIR}/src/")
 set (test_dir "${PROJECT_SOURCE_DIR}/test/")
 
 # Which files that we compile.
+# FIXME: replace this bad practice.
 file (GLOB source_files "${source_dir}/*.cc")
 file (GLOB test_files "${test_dir}/*.cc")
 
-add_executable (${PROJECT_NAME} ${source_files})
-add_executable (${PROJECT_NAME}_test ${test_files})
-add_library(${PROJECT_NAME}_lib STATIC ${source_files})
+set (main_exec hack_assembler)
+set (test_exec hack_assembler_test)
+add_executable (${main_exec} ${source_files})
+add_executable (${test_exec} ${test_files})
+add_library(${main_exec}_lib ${source_files})
+
+# Cached values.
+set (build_type Debug CACHE STRING "Build type")
+set_property(CACHE build_type PROPERTY
+    STRINGS Debug Release Dist
+)
 
 # GoogleTest setup.
 enable_testing()
-target_link_libraries(
-    ${PROJECT_NAME}_test PUBLIC
-    ${PROJECT_NAME}_lib
-    gtest_main
+target_link_libraries(${test_exec}
+    PUBLIC ${main_exec}_lib
+    PRIVATE gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(${PROJECT_NAME}_test)
+gtest_discover_tests(${test_exec})
