@@ -18,14 +18,15 @@ set (test_dir "${PROJECT_SOURCE_DIR}/test/")
 file (GLOB source_files "${source_dir}/*.cc")
 file (GLOB test_files "${test_dir}/*.cc")
 
+add_executable (${PROJECT_NAME} ${source_files})
 add_executable (${PROJECT_NAME}_test ${test_files})
-add_library(${PROJECT_NAME} STATIC ${source_files})
+add_library(${PROJECT_NAME}_lib STATIC ${source_files})
 
 # GoogleTest setup.
 enable_testing()
 target_link_libraries(
     ${PROJECT_NAME}_test PUBLIC
-    ${PROJECT_NAME}
+    ${PROJECT_NAME}_lib
     gtest_main
 )
 
