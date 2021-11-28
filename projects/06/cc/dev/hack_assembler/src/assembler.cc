@@ -10,6 +10,7 @@
 // I will build hardware for my code to live in. To exist. To Be. - m0sys (2021/11/27)
 
 Assembler::Assembler(std::string fname)
+    : fname(fname)
 {
 
     using std::cout;
@@ -41,11 +42,17 @@ Assembler::Assembler(std::string fname)
     cout << "Relative Path: " << rpath << "\n";
 
     // Create prog_name.hack file where machine code will later be written in.
-    string m_fname = rpath + prog_name + ".hack";
+    m_fname = rpath + prog_name + ".hack";
     cout << "\nMachine fname: " << m_fname << "\n";
     cout << "Original fname: " << fname << "\n";
+}
+
+void Assembler::assemble()
+{
+    using std::cout;
+    using std::string;
+
     std::ofstream outfile(m_fname);
-    // outfile << "Welcome to hack! Prog: " << m_fname << "\n";
 
     // Translation step.
     int counter = 0;
@@ -53,6 +60,7 @@ Assembler::Assembler(std::string fname)
     using e = Encoder;
     while (p.has_more_lines()) {
         if (p.instr_type() == InstrType::C_TYPE) {
+            // C_TYPE instruction.
             cout << "C_TYPE Found\n";
             auto dst = p.dst();
             auto comp = p.comp();
@@ -66,12 +74,14 @@ Assembler::Assembler(std::string fname)
             auto b_jump = e::encode_jump(p.jump());
             cout << "b_jump: " << b_jump << "\n";
             cout << "Decoded: " << b_dst << b_comp << b_jump << "\n";
-            outfile << b_dst << b_comp << b_jump << "\n";
+            outfile << "111" << b_comp << b_dst << b_jump << "\n";
         } else if (p.instr_type() == InstrType::A_TYPE) {
+            // A_TYPE instruction.
             cout << "A_TYPE Found\n";
             string out = std::bitset<16>(std::stoi(p.symbol())).to_string();
             outfile << out << "\n";
         } else {
+            // L_TYPE instruction.
             cout << "L_TYPE Found\n";
         }
         // TODO: make some catches.
@@ -84,8 +94,6 @@ Assembler::Assembler(std::string fname)
 
     outfile.close();
 }
-
-void Assembler::assemble() { }
 
 void Assembler::first_pass() { }
 void Assembler::second_pass() { }

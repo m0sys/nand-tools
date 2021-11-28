@@ -11,6 +11,7 @@ int main()
     LOG("");
     // Parser p("../../../add/Add.asm");
     Assembler a("../../../add/Add.asm");
+    a.assemble();
     // LOG("");
     // Assembler a2("Add.asm");
     // LOG("");
