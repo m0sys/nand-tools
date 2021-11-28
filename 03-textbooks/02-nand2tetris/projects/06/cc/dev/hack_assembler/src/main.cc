@@ -2,13 +2,18 @@
 
 #include "assembler.h"
 #include "parser.h"
+#include <stdexcept>
 
 #define LOG(x) std::cout << x << "\n"
 
-int main()
+int main(int argc, char* argv[])
 {
+    if (argc < 1)
+        throw std::logic_error("must provide fname as arg");
+
     LOG("Hello, assembler!");
-    LOG("");
-    Assembler a("../../../add/Add.asm");
+    Assembler a(argv[1]);
     a.assemble();
+    LOG("...");
+    LOG("Done assembling");
 }
