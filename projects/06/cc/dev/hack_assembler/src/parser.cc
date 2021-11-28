@@ -114,8 +114,6 @@ std::string Parser::dst()
     auto cur_instr = curr_instr();
     std::size_t pos = cur_instr.find('=');
     if (pos == std::string::npos)
-        pos = cur_instr.find(';');
-    else if (pos == std::string::npos)
         return "null";
     return cur_instr.substr(0, pos);
 }
@@ -128,10 +126,10 @@ std::string Parser::comp()
     auto cur_instr = curr_instr();
     std::size_t eq_nxt_pos = cur_instr.find('=');
     if (eq_nxt_pos == std::string::npos) {
-        std::cout << "comp: no equal sign!\n";
-        return "null";
+        eq_nxt_pos = 0;
+    } else {
+        eq_nxt_pos++;
     }
-    eq_nxt_pos++;
     unsigned npos = 0;
     while (npos + eq_nxt_pos < cur_instr.size() && cur_instr.at(npos + eq_nxt_pos) != ';')
         npos++;
