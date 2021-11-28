@@ -16,6 +16,8 @@ Assembler::Assembler(std::string fname)
     using std::cout;
     using std::string;
 
+    // TODO: might want to first check that fname exists before processing.
+
     // Parsing file name to find asm part of fname.
     auto ex_pos = fname.find(".asm");
     if (ex_pos == string::npos)
