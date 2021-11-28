@@ -12,7 +12,6 @@ Parser::Parser(std::string fname)
 {
     std::ifstream infile(fname);
     std::string line;
-    std::string asm_line;
 
     while (std::getline(infile, line)) {
         if (is_comment(line) || is_white_space(line))
