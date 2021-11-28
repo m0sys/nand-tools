@@ -1,7 +1,9 @@
 #include "assembler.h"
 #include "encoder.h"
 #include "parser.h"
+#include <algorithm>
 #include <bitset>
+#include <ctype.h>
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
@@ -15,6 +17,7 @@ Assembler::Assembler(std::string fname)
 
     using std::cout;
     using std::string;
+    using std::to_string;
 
     // TODO: might want to first check that fname exists before processing.
 
@@ -47,14 +50,40 @@ Assembler::Assembler(std::string fname)
     m_fname = rpath + prog_name + ".hack";
     cout << "\nMachine fname: " << m_fname << "\n";
     cout << "Original fname: " << fname << "\n";
+
+    // Create init symbols.
+
+    // Add R values.
+    for (int i = 0; i < 16; i++) {
+        auto symb = "R" + std::to_string(i);
+        st[symb] = to_string(i);
+    }
+
+    // Add Keywords.
+    st["SP"] = to_string(0);
+    st["LCL"] = to_string(1);
+    st["ARG"] = to_string(2);
+    st["THIS"] = to_string(3);
+    st["THAT"] = to_string(4);
+    st["SCREEN"] = to_string(16384);
+    st["KBD"] = to_string(24576);
+    st["LOOP"] = to_string(4);
+    st["STOP"] = to_string(18);
+}
+
+bool Assembler::is_num(std::string str)
+{
+    //
+    return std::all_of(str.begin(), str.end(), isdigit);
 }
 
 void Assembler::assemble()
 {
     using std::cout;
     using std::string;
-
     std::ofstream outfile(m_fname);
+
+    first_pass();
 
     // Translation step.
     int counter = 0;
@@ -67,7 +96,7 @@ void Assembler::assemble()
             auto dst = p.dst();
             auto comp = p.comp();
             auto jmp = p.jump();
-            cout << "TO decode: " << dst << comp << jmp << "\n";
+            cout << "TO decode: dst = " << dst << "; comp = " << comp << "; jmp = " << jmp << "\n";
 
             auto b_dst = e::encode_dst(p.dst());
             cout << "b_dst: " << b_dst << "\n";
@@ -80,7 +109,15 @@ void Assembler::assemble()
         } else if (p.instr_type() == InstrType::A_TYPE) {
             // A_TYPE instruction.
             cout << "A_TYPE Found\n";
-            string out = std::bitset<16>(std::stoi(p.symbol())).to_string();
+            auto symb = p.symbol();
+            cout << "Symb: " << symb << "\n";
+            string out;
+            if (is_num(symb))
+                out = std::bitset<16>(std::stoi(symb)).to_string();
+            else
+                // TODO: check for existance.
+                out = std::bitset<16>(std::stoi(st[symb])).to_string();
+
             outfile << out << "\n";
         } else {
             // L_TYPE instruction.
@@ -97,7 +134,19 @@ void Assembler::assemble()
     outfile.close();
 }
 
-void Assembler::first_pass() { }
+// Generate numbers for label symbols.
+void Assembler::first_pass()
+{
+    using std::to_string;
+    Parser p(fname);
+    for (int i = 0; p.has_more_lines(); i++) {
+        if (p.instr_type() == InstrType::L_TYPE)
+            st[p.symbol()] = to_string(i + 1);
+        p.advance();
+    }
+}
+
+// Generate numbers for variable symbols.
 void Assembler::second_pass() { }
 
 std::string Assembler::dec_to_bin(std::string dec) { return "hello"; }
