@@ -121,4 +121,18 @@ TEST(AssemblerTestRectAsm, TestMatchingResults)
     using std::string;
     auto a = Assembler("../../../rect/Rect.asm");
     a.assemble();
+    std::ifstream infile(a.m_fname);
+    string line;
+
+    // Testing 6th instruction.
+    for (int i = 0; i < 5; i++)
+        std::getline(infile, line);
+    ASSERT_EQ(line, "0000000000010000") << "hack i5 not equal";
+
+    // Testing 8th instruction.
+    for (int i = 0; i < 4; i++)
+        std::getline(infile, line);
+    ASSERT_EQ(line, "0000000000010001") << "hack i7 not equal";
+
+    infile.close();
 }
