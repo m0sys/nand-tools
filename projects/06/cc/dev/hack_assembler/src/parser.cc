@@ -19,6 +19,7 @@ Parser::Parser(std::string fname)
 
         remove_backslash_r(line);
         remove_all_whitespace(line);
+        remove_line_comment(line);
         instrs.push_back(line);
     }
 
@@ -41,6 +42,15 @@ void Parser::remove_all_whitespace(std::string& line)
     //
     line.erase(std::remove_if(line.begin(), line.end(), isspace), line.end());
 }
+
+void Parser::remove_line_comment(std::string& line)
+{
+    auto pos = line.find("//");
+    if (pos != std::string::npos) {
+        line.erase(pos);
+    }
+}
+
 void Parser::advance()
 {
     if (has_more_lines())
@@ -56,8 +66,6 @@ bool Parser::has_more_lines()
 
 InstrType Parser::instr_type()
 {
-    std::cout << "Parser: instr_type: curr_instr = " << curr_instr() << "\n";
-    std::cout << "Parser: instr_type: curr_instr[0] = " << curr_instr()[0] << "\n";
     switch (curr_instr()[0]) {
     case '(':
         return InstrType::L_TYPE;
