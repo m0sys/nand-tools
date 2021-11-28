@@ -136,3 +136,9 @@ TEST(AssemblerTestRectAsm, TestMatchingResults)
 
     infile.close();
 }
+
+TEST(AssemblerTestNotExistAsm, TestThrow)
+{
+    //
+    EXPECT_ANY_THROW(Assembler("not_exist.asm"));
+}
