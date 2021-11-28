@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <bitset>
 #include <ctype.h>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
@@ -14,12 +15,17 @@
 Assembler::Assembler(std::string fname)
     : fname(fname)
 {
+    // Check that fname exists before processing.
+    if (!std::filesystem::exists(fname))
+        throw std::logic_error("fname does not exist");
 
-    using std::cout;
+    create_prog_name();
+    create_init_st();
+}
+void Assembler::create_prog_name()
+{
     using std::string;
     using std::to_string;
-
-    // TODO: might want to first check that fname exists before processing.
 
     // Parsing file name to find asm part of fname.
     auto ex_pos = fname.find(".asm");
@@ -34,28 +40,25 @@ Assembler::Assembler(std::string fname)
 
     // Extract program name.
     if (last_slash_pos != string::npos) {
-        cout << "Found Backslash!\n";
         npos -= last_slash_pos;
         prog_name = fname.substr(last_slash_pos + 1, npos - 1);
         rpath = fname.substr(0, last_slash_pos + 1);
     } else {
-        cout << "Found No Backslash!\n";
         prog_name = fname.substr(0, npos);
     }
 
-    cout << "Prog Name: " << prog_name << "\n";
-    cout << "Relative Path: " << rpath << "\n";
-
     // Create prog_name.hack file where machine code will later be written in.
     m_fname = rpath + prog_name + ".hack";
-    cout << "\nMachine fname: " << m_fname << "\n";
-    cout << "Original fname: " << fname << "\n";
+}
+
+void Assembler::create_init_st()
+{
+    using std::to_string;
 
     // Create init symbols.
-
     // Add R values.
     for (int i = 0; i < 16; i++) {
-        auto symb = "R" + std::to_string(i);
+        auto symb = "R" + to_string(i);
         st[symb] = to_string(i);
     }
 
@@ -106,34 +109,26 @@ void Assembler::second_pass()
     std::ofstream outfile(m_fname);
 
     // Translation step.
-    int counter = 0;
     Parser p(fname);
     using e = Encoder;
+
     while (p.has_more_lines()) {
         if (p.instr_type() == InstrType::C_TYPE) {
             // C_TYPE instruction.
-            cout << "C_TYPE Found\n";
-            auto dst = p.dst();
-            auto comp = p.comp();
-            auto jmp = p.jump();
-            cout << "TO decode: dst = " << dst << "; comp = " << comp << "; jmp = " << jmp << "\n";
-
             auto b_dst = e::encode_dst(p.dst());
-            cout << "b_dst: " << b_dst << "\n";
             auto b_comp = e::encode_comp(p.comp());
-            cout << "b_comp: " << b_comp << "\n";
             auto b_jump = e::encode_jump(p.jump());
-            cout << "b_jump: " << b_jump << "\n";
-            cout << "Decoded: " << b_dst << b_comp << b_jump << "\n";
             outfile << "111" << b_comp << b_dst << b_jump << "\n";
+
         } else if (p.instr_type() == InstrType::A_TYPE) {
             // A_TYPE instruction.
-            cout << "A_TYPE Found\n";
             auto symb = p.symbol();
-            cout << "Symb: " << symb << "\n";
+            int addr;
             string out;
+
             if (is_num(symb))
-                out = std::bitset<16>(std::stoi(symb)).to_string();
+                addr = std::stoi(symb);
+
             else {
                 // Handles variables case.
                 if (st.find(symb) == st.end()) {
@@ -141,23 +136,17 @@ void Assembler::second_pass()
                     curr_var_idx++;
                 }
 
-                out = std::bitset<16>(std::stoi(st[symb])).to_string();
+                addr = std::stoi(st[symb]);
             }
 
+            out = dec_to_bin(addr);
             outfile << out << "\n";
-        } else {
-            // L_TYPE instruction.
-            cout << "L_TYPE Found\n";
         }
-        // TODO: make some catches.
-        cout << "Advancing\n";
+
         p.advance();
-        cout << "Advanced\n";
-        cout << "Counter: " << counter << "\n\n";
-        counter++;
     }
 
     outfile.close();
 }
 
-std::string Assembler::dec_to_bin(std::string dec) { return "hello"; }
+std::string Assembler::dec_to_bin(int dec) { return std::bitset<16>(dec).to_string(); }
