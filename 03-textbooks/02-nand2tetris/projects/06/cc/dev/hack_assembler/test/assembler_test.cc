@@ -115,3 +115,10 @@ TEST(AssemblerTestMaxAsm, TestMatchingResults)
     EXPECT_FALSE(std::getline(infile, line));
     infile.close();
 }
+
+TEST(AssemblerTestRectAsm, TestMatchingResults)
+{
+    using std::string;
+    auto a = Assembler("../../../rect/Rect.asm");
+    a.assemble();
+}
