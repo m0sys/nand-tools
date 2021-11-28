@@ -140,8 +140,10 @@ void Assembler::first_pass()
     using std::to_string;
     Parser p(fname);
     for (int i = 0; p.has_more_lines(); i++) {
-        if (p.instr_type() == InstrType::L_TYPE)
+        if (p.instr_type() == InstrType::L_TYPE) {
+            i--;
             st[p.symbol()] = to_string(i + 1);
+        }
         p.advance();
     }
 }
