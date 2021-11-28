@@ -113,6 +113,10 @@ std::string Parser::dst()
 
     auto cur_instr = curr_instr();
     std::size_t pos = cur_instr.find('=');
+    if (pos == std::string::npos)
+        pos = cur_instr.find(';');
+    else if (pos == std::string::npos)
+        return "null";
     return cur_instr.substr(0, pos);
 }
 
@@ -122,7 +126,12 @@ std::string Parser::comp()
         throw std::logic_error("Cannot parse comp for non C_TYPE instructions");
 
     auto cur_instr = curr_instr();
-    std::size_t eq_nxt_pos = cur_instr.find('=') + 1;
+    std::size_t eq_nxt_pos = cur_instr.find('=');
+    if (eq_nxt_pos == std::string::npos) {
+        std::cout << "comp: no equal sign!\n";
+        return "null";
+    }
+    eq_nxt_pos++;
     unsigned npos = 0;
     while (npos + eq_nxt_pos < cur_instr.size() && cur_instr.at(npos + eq_nxt_pos) != ';')
         npos++;
@@ -137,13 +146,14 @@ std::string Parser::jump()
     auto cur_instr = curr_instr();
     std::size_t pos = cur_instr.find(';');
     if (std::string::npos == pos)
-        return "";
+        return "null";
 
-    std::size_t pos_nxt = pos++;
+    pos++;
     unsigned npos = 0;
-    while (npos + pos_nxt < cur_instr.size())
+    while (npos + pos < cur_instr.size())
         npos++;
-    return cur_instr.substr(pos_nxt, npos);
+    return cur_instr.substr(pos, npos);
 }
 
 unsigned Parser::num_instrs() { return instrs.size(); }
+void Parser::reset() { curr_instr_idx = 0; }

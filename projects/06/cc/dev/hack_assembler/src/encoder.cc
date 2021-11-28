@@ -30,6 +30,7 @@ std::string Encoder::encode_jump(std::string asm_jump)
 std::map<std::string, std::string> create_comp_map()
 {
     return std::map<std::string, std::string> {
+        { "null", "0101010" },
         { "0", "0101010" },
         { "1", "0111111" },
         { "-1", "0111010" },

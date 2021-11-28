@@ -83,7 +83,7 @@ TEST_F(ParserTestAddAsm, CTypeCompL01)
 TEST_F(ParserTestAddAsm, CTypeJumpL01)
 {
     parser->advance();
-    EXPECT_EQ(parser->jump(), "") << "Parsed jump should be empty for curr ctype instr";
+    EXPECT_EQ(parser->jump(), "null") << "Parsed jump should be empty for curr ctype instr";
 }
 
 /*
