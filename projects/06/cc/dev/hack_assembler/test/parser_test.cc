@@ -85,3 +85,30 @@ TEST_F(ParserTestAddAsm, CTypeJumpL01)
     parser->advance();
     EXPECT_EQ(parser->jump(), "") << "Parsed jump should be empty for curr ctype instr";
 }
+
+/*
+ * Testing Max.asm
+ */
+
+class ParserTestMaxAsm : public ::testing::Test {
+protected:
+    void SetUp() override { parser = new Parser("../../../max/Max.asm"); }
+
+    void TearDown() override { delete parser; }
+
+    Parser* parser;
+};
+
+/* Testing first instruction in Add.asm */
+
+TEST_F(ParserTestMaxAsm, ATypeInstrTypeL00)
+{
+    //
+    EXPECT_EQ(parser->instr_type(), InstrType::A_TYPE);
+}
+
+// TEST_F(ParserTestMaxAsm, CTypeAdvanceL01)
+//{
+//    parser->advance();
+//    EXPECT_EQ(parser->instr_type(), InstrType::C_TYPE);
+//}
