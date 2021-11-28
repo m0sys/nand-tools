@@ -79,11 +79,31 @@ bool Assembler::is_num(std::string str)
 
 void Assembler::assemble()
 {
+    first_pass();
+    second_pass();
+}
+
+// Generate numbers for label symbols.
+void Assembler::first_pass()
+{
+    using std::to_string;
+    Parser p(fname);
+    for (int i = 0; p.has_more_lines(); i++) {
+        if (p.instr_type() == InstrType::L_TYPE) {
+            i--;
+            st[p.symbol()] = to_string(i + 1);
+        }
+        p.advance();
+    }
+}
+
+// Translates into machine code while also handling variables.
+void Assembler::second_pass()
+{
+
     using std::cout;
     using std::string;
     std::ofstream outfile(m_fname);
-
-    first_pass();
 
     // Translation step.
     int counter = 0;
@@ -114,9 +134,15 @@ void Assembler::assemble()
             string out;
             if (is_num(symb))
                 out = std::bitset<16>(std::stoi(symb)).to_string();
-            else
-                // TODO: check for existance.
+            else {
+                // Handles variables case.
+                if (st.find(symb) == st.end()) {
+                    st[symb] = std::to_string(curr_var_idx);
+                    curr_var_idx++;
+                }
+
                 out = std::bitset<16>(std::stoi(st[symb])).to_string();
+            }
 
             outfile << out << "\n";
         } else {
@@ -133,22 +159,5 @@ void Assembler::assemble()
 
     outfile.close();
 }
-
-// Generate numbers for label symbols.
-void Assembler::first_pass()
-{
-    using std::to_string;
-    Parser p(fname);
-    for (int i = 0; p.has_more_lines(); i++) {
-        if (p.instr_type() == InstrType::L_TYPE) {
-            i--;
-            st[p.symbol()] = to_string(i + 1);
-        }
-        p.advance();
-    }
-}
-
-// Generate numbers for variable symbols.
-void Assembler::second_pass() { }
 
 std::string Assembler::dec_to_bin(std::string dec) { return "hello"; }
