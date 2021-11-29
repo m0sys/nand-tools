@@ -21,6 +21,8 @@ enum class CommandType {
 
 class Parser {
 
+    using CT = CommandType;
+
 public:
     Parser(std::string fname);
     bool has_more_lines();
@@ -36,6 +38,11 @@ private:
     static void remove_all_whitespace(std::string& line);
     static void remove_line_comment(std::string& line);
     const std::string& curr_cmd();
+
+    bool is_push_type();
+    bool is_pop_type();
+    bool is_arith_type();
+    bool is_ret_type();
 
 private:
     unsigned curr_cmd_idx;
