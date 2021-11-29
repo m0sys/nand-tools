@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "common/strpulate.h"
 #include <algorithm>
 #include <fstream>
 #include <regex>
@@ -16,7 +17,7 @@ Parser::Parser(std::string fname)
 
     // Check that fname exists before processing.
     if (!std::filesystem::exists(fname))
-        throw std::logic_error("fname does not exist");
+        throw std::logic_error("Parser: fname does not exist");
 
     cout << "Beginning to parse vm file...\n";
     while (std::getline(infile, line)) {
@@ -72,7 +73,7 @@ void Parser::advance()
     if (has_more_lines())
         curr_cmd_idx++;
     else
-        throw std::out_of_range("Current index is at last instruction");
+        throw std::out_of_range("Parser: Current index is at last instruction");
 }
 
 CommandType Parser::command_type()
@@ -83,21 +84,52 @@ CommandType Parser::command_type()
     // Check for push command.
     auto push_pos = ccmd.find("push");
     if (push_pos != string::npos)
-        return CommandType::C_PUSH;
+        return CT::C_PUSH;
 
     // Check for pop command.
     auto pop_pos = ccmd.find("pop");
     if (pop_pos != string::npos)
-        return CommandType::C_POP;
+        return CT::C_POP;
 
     auto const rgx_arith = std::regex("(add|sub|neg|eq|gt|lt|and|or|not)");
     if (std::regex_match(ccmd.begin(), ccmd.end(), rgx_arith))
-        return CommandType::C_ARITH;
+        return CT::C_ARITH;
 
-    return CommandType::UNKNOWN;
+    return CT::UNKNOWN;
 }
 
 const std::string& Parser::curr_cmd() { return cmds[curr_cmd_idx]; }
 
-std::string Parser::arg1() { return ""; }
-int Parser::arg2() { return -1; }
+std::string Parser::arg1()
+{
+    using std::string;
+    auto ccmd = curr_cmd();
+    auto splits = common::split(ccmd, ' ');
+    if (is_push_type() || is_pop_type()) {
+        return splits[1];
+    };
+
+    if (is_arith_type())
+        return ccmd;
+
+    if (is_ret_type())
+        throw std::logic_error("Parser: ret type does not have arg1");
+
+    return "";
+}
+
+bool Parser::is_push_type() { return command_type() == CT::C_PUSH; }
+
+bool Parser::is_pop_type() { return command_type() == CT::C_POP; }
+bool Parser::is_arith_type() { return command_type() == CT::C_ARITH; }
+
+bool Parser::is_ret_type() { return command_type() == CT::C_RET; }
+
+int Parser::arg2()
+{
+    auto ccmd = curr_cmd();
+    auto splits = common::split(ccmd, ' ');
+    if (is_push_type() || is_pop_type())
+        return std::stoi(splits[2]);
+    return -1;
+}
