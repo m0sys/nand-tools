@@ -81,7 +81,7 @@ void AsmCoder::write_pop(const std::string& seg, int i)
     outfile << "@SP\n";
     outfile << "A=M\n";
     outfile << "M=M-1\n";
-    outfile << "@M\n";
+    outfile << "A=M\n";
     outfile << "D=M\n";
 
     // Figure out which register to write to.
