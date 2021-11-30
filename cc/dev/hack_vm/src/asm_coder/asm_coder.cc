@@ -1,5 +1,6 @@
 #include "asm_coder.h"
 #include <fstream>
+#include <iostream>
 #include <string>
 
 AsmCoder::AsmCoder(std::string asm_fname)
@@ -76,10 +77,10 @@ void AsmCoder::write_push(const std::string& seg, int i)
 // Writes top of the stack to seg[i].
 void AsmCoder::write_pop(const std::string& seg, int i)
 {
+    std::cout << "Poping: seg=" << seg << ", i=" << i << "\n";
 
     // Pop top of the stack.
     outfile << "@SP\n";
-    outfile << "A=M\n";
     outfile << "M=M-1\n";
     outfile << "A=M\n";
     outfile << "D=M\n";
