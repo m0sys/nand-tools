@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
     LOG("Hello, VM translator!");
 
     regex_playground();
-    // Parser("../../../projects/07/MemoryAccess/BasicTest/BasicTest.vm");
+    Parser("../../../projects/07/MemoryAccess/BasicTest/BasicTest.vm");
     LOG("Done VM translation");
 }
 
