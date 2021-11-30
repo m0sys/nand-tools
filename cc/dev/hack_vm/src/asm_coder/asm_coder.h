@@ -19,6 +19,9 @@ private:
     void write_push(const std::string& seg, int i);
     void write_pop(const std::string& seg, int i);
 
+    static void write_push_logic(std::ostream& out);
+    static void write_pop_logic(std::ostream& out);
+
 private:
     std::ofstream outfile;
 };
