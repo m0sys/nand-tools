@@ -286,6 +286,45 @@ TEST_F(AsmCoderTestBasicTestVM, Code16)
     infile.close();
 }
 
+TEST_F(AsmCoderTestBasicTestVM, Code17)
+{
+    using std::string;
+
+    // add
+    for (int i = 0; i < 16; i++)
+        parser->advance();
+    auto arg1 = parser->arg1();
+    asm_coder->write_arith(arg1);
+    asm_coder->close();
+
+    std::ifstream infile(asm_fname);
+    string line;
+
+    // Get first arg off the stack.
+    assert_pop_logic(infile);
+
+    // Save first arg into R13 register.
+    std::getline(infile, line);
+    ASSERT_EQ(line, "@R13") << "line not matching";
+
+    std::getline(infile, line);
+    ASSERT_EQ(line, "M=D") << "line not matching";
+
+    // Get second arg off the stack.
+    assert_pop_logic(infile);
+
+    // Do operation.
+    std::getline(infile, line);
+    ASSERT_EQ(line, "@R13") << "line not matching";
+
+    std::getline(infile, line);
+    ASSERT_EQ(line, "D=D+M") << "line not matching";
+
+    // Push res onto top of the stack.
+    assert_push_logic(infile);
+    infile.close();
+}
+
 TEST_F(AsmCoderTestBasicTestVM, Code18)
 {
     using std::string;
@@ -313,6 +352,45 @@ TEST_F(AsmCoderTestBasicTestVM, Code18)
     std::getline(infile, line);
     ASSERT_EQ(line, "D=M") << "line not matching";
 
+    assert_push_logic(infile);
+    infile.close();
+}
+
+TEST_F(AsmCoderTestBasicTestVM, Code19)
+{
+    using std::string;
+
+    // sub
+    for (int i = 0; i < 18; i++)
+        parser->advance();
+    auto arg1 = parser->arg1();
+    asm_coder->write_arith(arg1);
+    asm_coder->close();
+
+    std::ifstream infile(asm_fname);
+    string line;
+
+    // Get first arg off the stack.
+    assert_pop_logic(infile);
+
+    // Save first arg into R13 register.
+    std::getline(infile, line);
+    ASSERT_EQ(line, "@R13") << "line not matching";
+
+    std::getline(infile, line);
+    ASSERT_EQ(line, "M=D") << "line not matching";
+
+    // Get second arg off the stack.
+    assert_pop_logic(infile);
+
+    // Do operation.
+    std::getline(infile, line);
+    ASSERT_EQ(line, "@R13") << "line not matching";
+
+    std::getline(infile, line);
+    ASSERT_EQ(line, "D=D-M") << "line not matching";
+
+    // Push res onto top of the stack.
     assert_push_logic(infile);
     infile.close();
 }
