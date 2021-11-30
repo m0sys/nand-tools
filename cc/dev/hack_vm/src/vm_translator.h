@@ -3,6 +3,7 @@
 // Author: m0sys
 
 #pragma once
+#include <string>
 
 /*
  * Memory Segments Mapping:
@@ -32,4 +33,15 @@
  */
 
 class VMTranslator {
+
+public:
+    VMTranslator(std::string fname);
+    void translate();
+
+private:
+    void create_prog_name();
+
+private:
+    std::string asm_fname;
+    std::string fname;
 };
