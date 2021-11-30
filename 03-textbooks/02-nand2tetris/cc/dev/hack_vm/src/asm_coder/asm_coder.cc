@@ -8,7 +8,30 @@ AsmCoder::AsmCoder(std::string asm_fname)
 {
 }
 
-void AsmCoder::write_arith(std::string cmd) { }
+void AsmCoder::write_arith(std::string cmd)
+{
+    // Get first arg off the stack.
+    write_pop_logic(outfile);
+
+    // Save first arg into R13 register.
+    outfile << "@R13\n";
+    outfile << "M=D\n";
+
+    // Get second arg off the stack.
+    write_pop_logic(outfile);
+
+    // Do operation.
+    outfile << "@R13\n";
+
+    if (cmd == "add")
+        outfile << "D=D+M\n";
+    else
+        outfile << "D=D-M\n";
+
+    // Push res onto top of the stack.
+    write_push_logic(outfile);
+}
+
 void AsmCoder::write_push_pop(bool is_push, const std::string& seg, int i)
 {
     if (is_push)
@@ -67,11 +90,7 @@ void AsmCoder::write_push(const std::string& seg, int i)
     }
 
     // Push onto stack.
-    outfile << "@SP\n";
-    outfile << "A=M\n";
-    outfile << "M=D\n";
-    outfile << "@SP\n";
-    outfile << "M=M+1\n";
+    write_push_logic(outfile);
 }
 
 // Writes top of the stack to seg[i].
@@ -80,10 +99,7 @@ void AsmCoder::write_pop(const std::string& seg, int i)
     std::cout << "Poping: seg=" << seg << ", i=" << i << "\n";
 
     // Pop top of the stack.
-    outfile << "@SP\n";
-    outfile << "M=M-1\n";
-    outfile << "A=M\n";
-    outfile << "D=M\n";
+    write_pop_logic(outfile);
 
     // Figure out which register to write to.
     if (seg == "local")
@@ -122,4 +138,21 @@ void AsmCoder::write_pop(const std::string& seg, int i)
         outfile << "A=M+" << std::to_string(i) << "\n";
         outfile << "M=D\n";
     }
+}
+
+void AsmCoder::write_push_logic(std::ostream& out)
+{
+    out << "@SP\n";
+    out << "A=M\n";
+    out << "M=D\n";
+    out << "@SP\n";
+    out << "M=M+1\n";
+}
+
+void AsmCoder::write_pop_logic(std::ostream& out)
+{
+    out << "@SP\n";
+    out << "M=M-1\n";
+    out << "A=M\n";
+    out << "D=M\n";
 }
