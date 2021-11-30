@@ -1,4 +1,5 @@
 #include "parser/parser.h"
+#include "vm_translator.h"
 #include <iostream>
 #include <regex>
 #include <stdexcept>
@@ -15,8 +16,10 @@ int main(int argc, char* argv[])
 
     LOG("Hello, VM translator!");
 
-    regex_playground();
-    Parser("../../../projects/07/MemoryAccess/BasicTest/BasicTest.vm");
+    // regex_playground();
+    // Parser("../../../projects/07/MemoryAccess/BasicTest/BasicTest.vm");
+    VMTranslator vmt("../../../projects/07/MemoryAccess/BasicTest/BasicTest.vm");
+    vmt.translate();
     LOG("Done VM translation");
 }
 
