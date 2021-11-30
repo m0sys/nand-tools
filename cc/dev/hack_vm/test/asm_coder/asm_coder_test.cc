@@ -6,6 +6,8 @@
 #include <gtest/gtest.h>
 #include <string>
 
+void assert_push_logic(std::ifstream& in);
+
 /*
  * Testing BasicTest.vm
  */
@@ -49,26 +51,7 @@ TEST_F(AsmCoderTestBasicTestVM, Code1)
     std::getline(infile, line);
     ASSERT_EQ(line, "D=A") << "line not matching";
 
-    // line 2
-    std::getline(infile, line);
-    ASSERT_EQ(line, "@SP") << "line not matching";
-
-    // line 3
-    std::getline(infile, line);
-    ASSERT_EQ(line, "A=M") << "line not matching";
-
-    // line 4
-    std::getline(infile, line);
-    ASSERT_EQ(line, "M=D") << "line not matching";
-
-    // line 5
-    std::getline(infile, line);
-    ASSERT_EQ(line, "@SP") << "line not matching";
-
-    // line 6
-    std::getline(infile, line);
-    ASSERT_EQ(line, "M=M+1") << "line not matching";
-
+    assert_push_logic(infile);
     infile.close();
 }
 
@@ -99,26 +82,7 @@ TEST_F(AsmCoderTestBasicTestVM, Code15)
     std::getline(infile, line);
     ASSERT_EQ(line, "D=M") << "line not matching";
 
-    // line 3
-    std::getline(infile, line);
-    ASSERT_EQ(line, "@SP") << "line not matching";
-
-    // line 4
-    std::getline(infile, line);
-    ASSERT_EQ(line, "A=M") << "line not matching";
-
-    // line 5
-    std::getline(infile, line);
-    ASSERT_EQ(line, "M=D") << "line not matching";
-
-    // line 6
-    std::getline(infile, line);
-    ASSERT_EQ(line, "@SP") << "line not matching";
-
-    // line 7
-    std::getline(infile, line);
-    ASSERT_EQ(line, "M=M+1") << "line not matching";
-
+    assert_push_logic(infile);
     infile.close();
 }
 
@@ -149,26 +113,7 @@ TEST_F(AsmCoderTestBasicTestVM, Code16)
     std::getline(infile, line);
     ASSERT_EQ(line, "D=M") << "line not matching";
 
-    // line 3
-    std::getline(infile, line);
-    ASSERT_EQ(line, "@SP") << "line not matching";
-
-    // line 4
-    std::getline(infile, line);
-    ASSERT_EQ(line, "A=M") << "line not matching";
-
-    // line 5
-    std::getline(infile, line);
-    ASSERT_EQ(line, "M=D") << "line not matching";
-
-    // line 6
-    std::getline(infile, line);
-    ASSERT_EQ(line, "@SP") << "line not matching";
-
-    // line 7
-    std::getline(infile, line);
-    ASSERT_EQ(line, "M=M+1") << "line not matching";
-
+    assert_push_logic(infile);
     infile.close();
 }
 
@@ -199,26 +144,7 @@ TEST_F(AsmCoderTestBasicTestVM, Code18)
     std::getline(infile, line);
     ASSERT_EQ(line, "D=M") << "line not matching";
 
-    // line 3
-    std::getline(infile, line);
-    ASSERT_EQ(line, "@SP") << "line not matching";
-
-    // line 4
-    std::getline(infile, line);
-    ASSERT_EQ(line, "A=M") << "line not matching";
-
-    // line 5
-    std::getline(infile, line);
-    ASSERT_EQ(line, "M=D") << "line not matching";
-
-    // line 6
-    std::getline(infile, line);
-    ASSERT_EQ(line, "@SP") << "line not matching";
-
-    // line 7
-    std::getline(infile, line);
-    ASSERT_EQ(line, "M=M+1") << "line not matching";
-
+    assert_push_logic(infile);
     infile.close();
 }
 
@@ -249,26 +175,7 @@ TEST_F(AsmCoderTestBasicTestVM, Code20)
     std::getline(infile, line);
     ASSERT_EQ(line, "D=M") << "line not matching";
 
-    // line 3
-    std::getline(infile, line);
-    ASSERT_EQ(line, "@SP") << "line not matching";
-
-    // line 4
-    std::getline(infile, line);
-    ASSERT_EQ(line, "A=M") << "line not matching";
-
-    // line 5
-    std::getline(infile, line);
-    ASSERT_EQ(line, "M=D") << "line not matching";
-
-    // line 6
-    std::getline(infile, line);
-    ASSERT_EQ(line, "@SP") << "line not matching";
-
-    // line 7
-    std::getline(infile, line);
-    ASSERT_EQ(line, "M=M+1") << "line not matching";
-
+    assert_push_logic(infile);
     infile.close();
 }
 
@@ -307,25 +214,31 @@ TEST_F(AsmCoderTestBasicTestVM, Code24)
     std::getline(infile, line);
     ASSERT_EQ(line, "D=M") << "line not matching";
 
-    // line 5
-    std::getline(infile, line);
+    assert_push_logic(infile);
+    infile.close();
+}
+
+void assert_push_logic(std::ifstream& in)
+{
+    std::string line;
+
+    // line 1
+    std::getline(in, line);
     ASSERT_EQ(line, "@SP") << "line not matching";
 
-    // line 6
-    std::getline(infile, line);
+    // line 2
+    std::getline(in, line);
     ASSERT_EQ(line, "A=M") << "line not matching";
 
-    // line 7
-    std::getline(infile, line);
+    // line 3
+    std::getline(in, line);
     ASSERT_EQ(line, "M=D") << "line not matching";
 
-    // line 8
-    std::getline(infile, line);
+    // line 4
+    std::getline(in, line);
     ASSERT_EQ(line, "@SP") << "line not matching";
 
-    // line 9
-    std::getline(infile, line);
+    // line 5
+    std::getline(in, line);
     ASSERT_EQ(line, "M=M+1") << "line not matching";
-
-    infile.close();
 }
