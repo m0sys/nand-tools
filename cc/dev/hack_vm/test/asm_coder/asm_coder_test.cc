@@ -318,7 +318,7 @@ TEST_F(AsmCoderTestBasicTestVM, Code17)
     ASSERT_EQ(line, "@R13") << "line not matching";
 
     std::getline(infile, line);
-    ASSERT_EQ(line, "D=D+M") << "line not matching";
+    ASSERT_EQ(line, "D=M+D") << "line not matching";
 
     // Push res onto top of the stack.
     assert_push_logic(infile);
@@ -388,7 +388,7 @@ TEST_F(AsmCoderTestBasicTestVM, Code19)
     ASSERT_EQ(line, "@R13") << "line not matching";
 
     std::getline(infile, line);
-    ASSERT_EQ(line, "D=D-M") << "line not matching";
+    ASSERT_EQ(line, "D=M-D") << "line not matching";
 
     // Push res onto top of the stack.
     assert_push_logic(infile);

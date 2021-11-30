@@ -13,6 +13,18 @@ void AsmCoder::write_arith(std::string cmd)
     // Get first arg off the stack.
     write_pop_logic(outfile);
 
+    // Deal with unary ops first.
+    if (cmd == "neg")
+        outfile << "D=-D\n";
+    else if (cmd == "not")
+        outfile << "D=!D\n";
+
+    if (cmd == "neg" || cmd == "not") {
+        // Push res onto top of the stack.
+        write_push_logic(outfile);
+        return;
+    }
+
     // Save first arg into R13 register.
     outfile << "@R13\n";
     outfile << "M=D\n";
@@ -24,9 +36,15 @@ void AsmCoder::write_arith(std::string cmd)
     outfile << "@R13\n";
 
     if (cmd == "add")
-        outfile << "D=D+M\n";
+        outfile << "D=M+D\n";
+    else if (cmd == "sub")
+        outfile << "D=M-D\n";
+    else if (cmd == "and")
+        outfile << "D=M&D\n";
+    else if (cmd == "or")
+        outfile << "D=M|D\n";
     else
-        outfile << "D=D-M\n";
+        throw std::logic_error("AsmCoder: unsupported arithmentic op");
 
     // Push res onto top of the stack.
     write_push_logic(outfile);
