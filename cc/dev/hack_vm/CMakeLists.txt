@@ -23,7 +23,7 @@ set (test_dir "${PROJECT_SOURCE_DIR}/test/")
 #       will have a hardcoded list of source files at the time the build was
 #       generated. Therefore, we are forced to rebuild the build sys in order
 #       to get the new file. WE NEED TO FIX THIS.
-file (GLOB source_files "${source_dir}/*.cc")
+file (GLOB source_files "${source_dir}/*.cc", "${source_dir}/*/*.cc")
 file (GLOB test_files "${test_dir}/*.cc")
 
 set (main_exec hack_vm)

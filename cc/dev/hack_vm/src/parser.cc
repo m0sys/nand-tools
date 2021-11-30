@@ -65,7 +65,9 @@ void Parser::remove_line_comment(std::string& line)
 bool Parser::has_more_lines()
 {
     //
-    return curr_cmd_idx < cmds.size();
+    std::cout << "Current Cmd Idx: " << curr_cmd_idx << "\n";
+    std::cout << "CMDs Size: " << cmds.size() << "\n\n";
+    return curr_cmd_idx < cmds.size() - 1;
 }
 
 void Parser::advance()
@@ -131,5 +133,8 @@ int Parser::arg2()
     auto splits = common::split(ccmd, ' ');
     if (is_push_type() || is_pop_type())
         return std::stoi(splits[2]);
+    else
+        throw std::logic_error("arg2 can only be called for push|pop|call|func cmds");
     return -1;
 }
+int Parser::num_cmds() { return cmds.size(); }

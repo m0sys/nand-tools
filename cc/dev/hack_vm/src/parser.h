@@ -30,6 +30,7 @@ public:
     CommandType command_type();
     std::string arg1();
     int arg2();
+    int num_cmds();
 
 private:
     static bool is_comment(std::string line);
@@ -45,6 +46,6 @@ private:
     bool is_ret_type();
 
 private:
-    unsigned curr_cmd_idx;
+    unsigned curr_cmd_idx = 0;
     std::vector<std::string> cmds;
 };
