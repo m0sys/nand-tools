@@ -19,9 +19,9 @@ Parser::Parser(std::string fname)
     if (!std::filesystem::exists(fname))
         throw std::logic_error("Parser: fname does not exist");
 
-    cout << "Beginning to parse vm file...\n";
+    // cout << "Beginning to parse vm file...\n";
     while (std::getline(infile, line)) {
-        cout << "Parsing line: " << line << "\n";
+        // cout << "Parsing line: " << line << "\n";
         if (is_comment(line) || is_white_space(line))
             continue;
 
@@ -31,11 +31,11 @@ Parser::Parser(std::string fname)
         cmds.push_back(line);
     }
 
-    for (auto it : cmds)
-        cout << it << "\n";
+    // for (auto it : cmds)
+    //    cout << it << "\n";
     curr_cmd_idx = 0;
     infile.close();
-    cout << "Done parsing vm file!\n";
+    // cout << "Done parsing vm file!\n";
 }
 
 bool Parser::is_comment(std::string line) { return line.substr(0, 2) == "//"; }

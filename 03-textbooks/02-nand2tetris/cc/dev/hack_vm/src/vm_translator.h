@@ -11,10 +11,10 @@
  *  (SP):
  *      - address to one after the last value popped onto the stack.
  *
- *  local(LCP), argument(ARG), this(THIS), that(THAT):
+ *  local(LCL), argument(ARG), this(THIS), that(THAT):
  *      - push/pop [segment] i -> asm which accesses [segment_base] + i; where
  *                              [segment_base] = RAM[LCP/ARG/THIS/THAT].
- *      - LCP  -> RAM[1]
+ *      - LCL  -> RAM[1]
  *      - ARG  -> RAM[2]
  *      - THIS -> RAM[3]
  *      - THAT -> RAM[4]

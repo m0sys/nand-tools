@@ -22,7 +22,7 @@ void AsmCoder::write_push(const std::string& seg, int i)
 {
     // Figure out where the data comes from.
     if (seg == "local")
-        outfile << "@LCP\n";
+        outfile << "@LCL\n";
 
     else if (seg == "argument")
         outfile << "@ARG\n";
