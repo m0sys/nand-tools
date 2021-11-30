@@ -1,6 +1,6 @@
 // Test file for testing VM Parser.
 
-#include "../src/parser.h"
+#include "../../src/parser/parser.h"
 #include <gtest/gtest.h>
 
 /*

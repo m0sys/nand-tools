@@ -1,5 +1,5 @@
 #include "parser.h"
-#include "common/strpulate.h"
+#include "../common/strpulate.h"
 #include <algorithm>
 #include <fstream>
 #include <regex>
