@@ -41,17 +41,7 @@ M=M-1
 A=M
 D=M
 // [end]: pop_logic
-@R14
-M=D
-@8
-D=A
-D=M+D
-@R15
-M=D
-@R14
-D=M
-@R15
-A=M
+@StaticTest.8
 M=D
 // [end write_push_pop]
 
@@ -62,17 +52,7 @@ M=M-1
 A=M
 D=M
 // [end]: pop_logic
-@R14
-M=D
-@3
-D=A
-D=M+D
-@R15
-M=D
-@R14
-D=M
-@R15
-A=M
+@StaticTest.3
 M=D
 // [end write_push_pop]
 
@@ -83,24 +63,12 @@ M=M-1
 A=M
 D=M
 // [end]: pop_logic
-@R14
-M=D
-@1
-D=A
-D=M+D
-@R15
-M=D
-@R14
-D=M
-@R15
-A=M
+@StaticTest.1
 M=D
 // [end write_push_pop]
 
 // push static 3
-D=M
-@3
-A=D+A
+@StaticTest.3
 D=M
 // [start]: push_logic
 @SP
@@ -112,9 +80,7 @@ M=M+1
 // [end write_push_pop]
 
 // push static 1
-D=M
-@1
-A=D+A
+@StaticTest.1
 D=M
 // [start]: push_logic
 @SP
@@ -152,9 +118,7 @@ M=M+1
 // [end write_arith]
 
 // push static 8
-D=M
-@8
-A=D+A
+@StaticTest.8
 D=M
 // [start]: push_logic
 @SP

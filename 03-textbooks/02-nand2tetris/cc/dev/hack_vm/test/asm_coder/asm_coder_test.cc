@@ -20,7 +20,7 @@ protected:
         vm_fname = "../../../projects/07/MemoryAccess/BasicTest/BasicTest.vm";
         asm_fname = "../../../projects/07/MemoryAccess/BasicTest/BasicTest.asm";
         parser = new Parser(vm_fname);
-        asm_coder = new AsmCoder(asm_fname);
+        asm_coder = new AsmCoder(asm_fname, "BasicTest");
     }
 
     void TearDown() override { delete parser; }

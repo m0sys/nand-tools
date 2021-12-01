@@ -9,7 +9,7 @@
 class AsmCoder {
 
 public:
-    AsmCoder(std::string asm_fname);
+    AsmCoder(std::string asm_fname, std::string prog_name);
     void write_arith(std::string cmd);
     void write_push_pop(bool is_push, const std::string& seg, int i);
 
@@ -24,4 +24,5 @@ private:
 
 private:
     std::ofstream outfile;
+    std::string prog_name;
 };

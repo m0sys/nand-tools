@@ -22,7 +22,7 @@ void VMTranslator::translate()
 {
 
     Parser p(fname);
-    AsmCoder ac(asm_fname);
+    AsmCoder ac(asm_fname, prog_name);
     using CT = CommandType;
 
     while (p.has_more_lines()) {
@@ -62,7 +62,6 @@ void VMTranslator::create_prog_name()
 
     // Check for last occurance of backslash.
     auto last_slash_pos = fname.rfind("/");
-    string prog_name;
     string rpath = "";
     auto npos = fname.size() - 3;
 
