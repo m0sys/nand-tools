@@ -5,6 +5,9 @@
 #include <stdexcept>
 #include <string>
 
+// DEBUG
+#include "common/log.h"
+
 VMTranslator::VMTranslator(std::string fname)
     : fname { fname }
 {
@@ -24,13 +27,20 @@ void VMTranslator::translate()
 
     while (p.has_more_lines()) {
         auto ct = p.command_type();
-        if (ct == CT::C_POP)
+        if (ct == CT::C_POP) {
+            DEBUG_LOG("VM -> Command Type: C_POP");
             ac.write_push_pop(false, p.arg1(), p.arg2());
-        else if (ct == CT::C_PUSH)
-            ac.write_push_pop(true, p.arg1(), p.arg2());
+        }
 
-        else if (ct == CT::C_ARITH)
+        else if (ct == CT::C_PUSH) {
+            DEBUG_LOG("VM -> Command Type: C_PUSH");
+            ac.write_push_pop(true, p.arg1(), p.arg2());
+        }
+
+        else if (ct == CT::C_ARITH) {
+            DEBUG_LOG("VM -> Command Type: C_ARITH");
             ac.write_arith(p.arg1());
+        }
 
         p.advance();
     }

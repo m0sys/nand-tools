@@ -16,25 +16,8 @@ int main(int argc, char* argv[])
 
     LOG("Hello, VM translator!");
 
-    // regex_playground();
-    // Parser("../../../projects/07/MemoryAccess/BasicTest/BasicTest.vm");
-    VMTranslator vmt("../../../projects/07/MemoryAccess/BasicTest/BasicTest.vm");
+    VMTranslator vmt(argv[1]);
     vmt.translate();
+
     LOG("Done VM translation");
-}
-
-void regex_playground()
-{
-    using std::cout;
-    using std::string;
-
-    auto const rgx = std::regex("(add|sub|neg|eq|gt|lt|and|or|not)");
-
-    string s1 = "add";
-    string s2 = "sub";
-    string s3 = "lt";
-
-    cout << s1 << ": " << std::regex_match(s1.begin(), s1.end(), rgx) << "\n";
-    cout << s2 << ": " << std::regex_match(s2.begin(), s2.end(), rgx) << "\n";
-    cout << s3 << ": " << std::regex_match(s3.begin(), s3.end(), rgx) << "\n";
 }
