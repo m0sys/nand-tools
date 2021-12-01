@@ -1,2 +1,5 @@
 *.hack linguist-vendored
 *.asm linguist-vendored
+*.asm linguist-vendored
+*.tst linguist-vendored
+*.tcl linguist-vendored
