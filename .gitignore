@@ -132,11 +132,12 @@
 */*/bd/*/ip/*/*.xml
 */*/*/bd/*/ip/*/*.xml
 
-*.c
-*.h
 *.vho
 *.html
 */*/bd/*/ip/*/*.tcl
 */*/*/bd/*/ip/*/*.tcl
 hw_handoff
 ipshared
+
+# Cmake
+CMakeFiles/
