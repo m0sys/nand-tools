@@ -13,6 +13,7 @@ AsmCoder::AsmCoder(std::string asm_fname, std::string prog_name)
 void AsmCoder::write_arith(std::string cmd)
 {
     outfile << "// " << cmd << "\n";
+
     // Get first arg off the stack.
     write_pop_logic(outfile);
 
@@ -47,6 +48,7 @@ void AsmCoder::write_arith(std::string cmd)
         outfile << "D=D&M\n";
     else if (cmd == "or")
         outfile << "D=D|M\n";
+
     // TODO: add jumping logic.
     /*
     else if (cmd == "eq") {
@@ -95,6 +97,7 @@ void AsmCoder::close()
 void AsmCoder::write_push(const std::string& seg, int i)
 {
     outfile << "// push " << seg << " " << i << "\n";
+
     // Figure out where the data comes from.
     if (seg == "local")
         outfile << "@LCL\n";
@@ -107,8 +110,6 @@ void AsmCoder::write_push(const std::string& seg, int i)
 
     else if (seg == "that")
         outfile << "@THAT\n";
-
-    // Load D register with appropriate value.
 
     if (seg == "constant") {
         // Load constant i into D register.
@@ -146,7 +147,6 @@ void AsmCoder::write_push(const std::string& seg, int i)
         outfile << "D=M\n";
     }
 
-    // Push onto stack.
     write_push_logic(outfile);
 }
 
@@ -156,6 +156,7 @@ void AsmCoder::write_pop(const std::string& seg, int i)
     DEBUG_LOG("Poping: seg=" << seg << ", i=" << i);
 
     outfile << "// pop " << seg << " " << i << "\n";
+
     // Pop top of the stack.
     write_pop_logic(outfile);
 
@@ -184,8 +185,7 @@ void AsmCoder::write_pop(const std::string& seg, int i)
         outfile << "@R14\n";
         outfile << "D=M\n"; // popped value is now here
 
-        // FIXME: cannot use @M as address. M will be determined when file is loaded.
-        //        that is what is stored at RAM[R15] will not become the next address.
+        // Store D.
         outfile << "@R15\n";
         outfile << "A=M\n";
         outfile << "M=D\n";
@@ -197,10 +197,7 @@ void AsmCoder::write_pop(const std::string& seg, int i)
     }
 
     else { // seg = {local|argument|this|that}
-        // Load (base+i) into D register.
-
-        // outfile << "@" << std::to_string(i) << "\n";
-
+        // Store D into register (base+i).
         outfile << "@R14\n"; // location where popped value is
         outfile << "M=D\n";
         outfile << "@" << std::to_string(i) << "\n";
@@ -226,8 +223,7 @@ void AsmCoder::write_pop(const std::string& seg, int i)
         outfile << "@R14\n";
         outfile << "D=M\n";
 
-        // FIXME: cannot use @M as address. M will be determined when file is loaded.
-        //        that is what is stored at RAM[R15] will not become the next address.
+        // Store D.
         outfile << "@R15\n";
         outfile << "A=M\n";
         outfile << "M=D\n";
