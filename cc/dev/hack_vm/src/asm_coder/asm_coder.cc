@@ -37,14 +37,15 @@ void AsmCoder::write_arith(std::string cmd)
     // Do operation.
     outfile << "@R13\n";
 
+    // NOTE: M = arg1 (y) , D = arg2 (x).
     if (cmd == "add")
-        outfile << "D=M+D\n";
+        outfile << "D=D+M\n";
     else if (cmd == "sub")
         outfile << "D=D-M\n";
     else if (cmd == "and")
-        outfile << "D=M&D\n";
+        outfile << "D=D&M\n";
     else if (cmd == "or")
-        outfile << "D=M|D\n";
+        outfile << "D=D|M\n";
     // TODO: add jumping logic.
     /*
     else if (cmd == "eq") {
