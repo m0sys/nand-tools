@@ -45,8 +45,6 @@ void VMTranslator::translate()
         p.advance();
     }
 
-    // TODO: add end of prog asm.
-
     ac.close();
 }
 

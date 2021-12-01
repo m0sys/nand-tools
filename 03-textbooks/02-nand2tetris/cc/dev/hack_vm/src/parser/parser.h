@@ -36,7 +36,6 @@ private:
     static bool is_comment(std::string line);
     static bool is_white_space(std::string line);
     static void remove_backslash_r(std::string& line);
-    static void remove_all_whitespace(std::string& line);
     static void remove_line_comment(std::string& line);
     const std::string& curr_cmd();
 
