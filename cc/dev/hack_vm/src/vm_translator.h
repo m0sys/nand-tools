@@ -44,4 +44,5 @@ private:
 private:
     std::string asm_fname;
     std::string fname;
+    std::string prog_name;
 };

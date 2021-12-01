@@ -4,8 +4,9 @@
 #include <iostream>
 #include <string>
 
-AsmCoder::AsmCoder(std::string asm_fname)
+AsmCoder::AsmCoder(std::string asm_fname, std::string prog_name)
     : outfile { std::ofstream(asm_fname) }
+    , prog_name { prog_name }
 {
 }
 
@@ -132,6 +133,11 @@ void AsmCoder::write_push(const std::string& seg, int i)
         outfile << "D=M\n";
     }
 
+    else if (seg == "static") {
+        outfile << "@" << prog_name << "." << std::to_string(i) << "\n";
+        outfile << "D=M\n";
+    }
+
     else { // seg = {local|argument|this|that}
         // Load (base+i) into D register.
         outfile << "D=M\n";
@@ -182,6 +188,11 @@ void AsmCoder::write_pop(const std::string& seg, int i)
         //        that is what is stored at RAM[R15] will not become the next address.
         outfile << "@R15\n";
         outfile << "A=M\n";
+        outfile << "M=D\n";
+    }
+
+    else if (seg == "static") {
+        outfile << "@" << prog_name << "." << std::to_string(i) << "\n";
         outfile << "M=D\n";
     }
 
