@@ -401,6 +401,7 @@ TEST_F(ParserTestStackTestVM, ParserCmd38)
     ASSERT_EQ(parser->arg1(), "not") << "Parsed arg1 does not match";
     ASSERT_ANY_THROW(parser->arg2()) << "Parsed arg2 must throw";
 
+    parser->advance();
     ASSERT_FALSE(parser->has_more_lines()) << "Parser must not have any more lines";
     ASSERT_ANY_THROW(parser->advance()) << "Parser must have reached the end of cmds";
 }
