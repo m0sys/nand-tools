@@ -13,6 +13,8 @@ void assert_pop_logic(std::ifstream& in);
  * Testing BasicTest.vm
  */
 
+#define TEST_BASIC_TEST 0
+#if TEST_BASIC_TEST
 class AsmCoderTestBasicTestVM : public ::testing::Test {
 protected:
     void SetUp() override
@@ -510,3 +512,4 @@ void assert_pop_logic(std::ifstream& in)
     std::getline(in, line);
     ASSERT_EQ(line, "D=M") << "line not matching";
 }
+#endif
