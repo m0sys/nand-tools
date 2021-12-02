@@ -42,6 +42,18 @@ void VMTranslator::translate()
             ac.write_arith(p.arg1());
         }
 
+        else if (ct == CT::C_LABEL) {
+            ac.write_label(p.arg1());
+        }
+
+        else if (ct == CT::C_GOTO) {
+            ac.write_goto(p.arg1());
+        }
+
+        else if (ct == CT::C_IF) {
+            ac.write_if(p.arg1());
+        }
+
         p.advance();
     }
 

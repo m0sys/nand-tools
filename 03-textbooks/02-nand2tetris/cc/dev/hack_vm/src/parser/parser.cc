@@ -87,6 +87,23 @@ CommandType Parser::command_type()
 	if (std::regex_match(ccmd.begin(), ccmd.end(), rgx_arith))
 		return CT::C_ARITH;
 
+	// Check for label command.
+	auto label_pos = ccmd.find("label");
+	if (label_pos != string::npos)
+		return CT::C_LABEL;
+
+	// Check for if-goto command.
+	auto ifgoto_pos = ccmd.find("if-goto");
+	if (ifgoto_pos != string::npos)
+		return CT::C_IF;
+
+	// Check for goto command.
+	auto goto_pos = ccmd.find("goto");
+	if (goto_pos != string::npos)
+		return CT::C_GOTO;
+
+	// TODO: add support for functions.
+
 	return CT::UNKNOWN;
 }
 
@@ -104,6 +121,11 @@ std::string Parser::arg1()
 	if (is_arith_type())
 		return ccmd;
 
+	if (is_label_type() || is_goto_type() || is_ifgoto_type())
+		return splits[1];
+
+	// TODO: add support for functions.
+
 	if (is_ret_type())
 		throw std::logic_error("Parser: ret type does not have arg1");
 
@@ -111,16 +133,19 @@ std::string Parser::arg1()
 }
 
 bool Parser::is_push_type() { return command_type() == CT::C_PUSH; }
-
 bool Parser::is_pop_type() { return command_type() == CT::C_POP; }
 bool Parser::is_arith_type() { return command_type() == CT::C_ARITH; }
-
+bool Parser::is_label_type() { return command_type() == CT::C_LABEL; }
 bool Parser::is_ret_type() { return command_type() == CT::C_RET; }
+bool Parser::is_goto_type() { return command_type() == CT::C_GOTO; }
+bool Parser::is_ifgoto_type() { return command_type() == CT::C_IF; }
 
 int Parser::arg2()
 {
 	auto ccmd = curr_cmd();
 	auto splits = common::split(ccmd, ' ');
+
+	// TODO: add support for functions.
 	if (is_push_type() || is_pop_type())
 		return std::stoi(splits[2]);
 	else

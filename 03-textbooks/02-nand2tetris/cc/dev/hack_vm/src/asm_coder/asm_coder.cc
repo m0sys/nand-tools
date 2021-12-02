@@ -152,16 +152,6 @@ void AsmCoder::write_push_pop(bool is_push, const std::string& seg, int i)
     WRITE_COMMENT(outfile, "[end_write_push_pop]\n");
 }
 
-void AsmCoder::close()
-{
-    // Add END loop.
-    outfile << "(END)\n";
-    outfile << "@END\n";
-    outfile << "0;JMP\n";
-
-    outfile.close();
-}
-
 // Writes seg[i] to the top of the stack.
 void AsmCoder::write_push(const std::string& seg, int i)
 {
@@ -285,6 +275,36 @@ void AsmCoder::write_pop(const std::string& seg, int i)
         // Store D.
         write_store_d15(outfile);
     }
+}
+
+void AsmCoder::write_label(std::string label)
+{
+    //
+    outfile << "(" << label << ")\n";
+}
+
+void AsmCoder::write_goto(std::string label)
+{
+    outfile << "@" << label << "\n";
+    outfile << "0;JMP\n";
+}
+
+void AsmCoder::write_if(std::string label)
+{
+    // If stack top value is not zero goto label.
+    write_pop_logic(outfile);
+    outfile << "@" << label << "\n";
+    outfile << "D;JNE\n";
+}
+
+void AsmCoder::close()
+{
+    // Add END loop.
+    outfile << "(END)\n";
+    outfile << "@END\n";
+    outfile << "0;JMP\n";
+
+    outfile.close();
 }
 
 void AsmCoder::write_at_sp(std::ostream& out) { out << "@SP\n"; }
