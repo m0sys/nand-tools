@@ -25,4 +25,8 @@ private:
 private:
     std::ofstream outfile;
     std::string prog_name;
+
+    static int count_eq;
+    static int count_lt;
+    static int count_gt;
 };
