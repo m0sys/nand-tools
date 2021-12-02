@@ -4,6 +4,10 @@
 #include <iostream>
 #include <string>
 
+int AsmCoder::count_eq = 0;
+int AsmCoder::count_lt = 0;
+int AsmCoder::count_gt = 0;
+
 AsmCoder::AsmCoder(std::string asm_fname, std::string prog_name)
     : outfile { std::ofstream(asm_fname) }
     , prog_name { prog_name }
@@ -13,60 +17,144 @@ AsmCoder::AsmCoder(std::string asm_fname, std::string prog_name)
 void AsmCoder::write_arith(std::string cmd)
 {
     outfile << "// " << cmd << "\n";
+    bool is_jumpy = false;
+    if (cmd == "eq" || cmd == "lt" || cmd == "gt")
+        is_jumpy = true;
 
-    // Get first arg off the stack.
-    write_pop_logic(outfile);
+    if (is_jumpy) {
+        // TODO: add jumping logic.
+        if (cmd == "eq") {
+            outfile << "// [eq_start]\n";
+            // outfile << "D=D-M\n";
+            write_arith("sub");
+            write_pop_logic(outfile);
 
-    // Deal with unary ops first.
-    if (cmd == "neg")
-        outfile << "D=-D\n";
-    else if (cmd == "not")
-        outfile << "D=!D\n";
+            // Compute new unique label.
+            auto eq_label = prog_name + ".EQ" + std::to_string(count_eq);
+            auto eq_label_continue = eq_label + ".CONTINUE";
+            count_eq++;
 
-    if (cmd == "neg" || cmd == "not") {
-        // Push res onto top of the stack.
-        write_push_logic(outfile);
-        return;
+            outfile << "@" << eq_label << "\n";
+            outfile << "D;JEQ\n";
+            // False Case.
+            outfile << "D=0\n";
+            // write_push_logic(outfile);
+            outfile << "@" << eq_label_continue << "\n";
+            outfile << "0;JMP\n";
+
+            // True Case.
+            outfile << "(" << eq_label << ")\n";
+            outfile << "D=-1\n";
+            // TODO: might want to leave this to continue.
+            // write_push_logic(outfile);
+            outfile << "@" << eq_label_continue << "\n";
+            outfile << "0;JMP\n";
+
+            // Continue.
+            outfile << "(" << eq_label_continue << ")\n";
+            outfile << "// [eq_end]\n";
+        } else if (cmd == "lt") {
+            outfile << "// [lt_start]\n";
+            // outfile << "D=D-M\n";
+            write_arith("sub");
+            write_pop_logic(outfile);
+
+            // Compute new unique label.
+            auto lt_label = prog_name + ".LT" + std::to_string(count_lt);
+            auto lt_label_continue = lt_label + ".CONTINUE";
+            count_lt++;
+
+            outfile << "@" << lt_label << "\n";
+            outfile << "D;JLT\n";
+            // False Case.
+            outfile << "D=0\n";
+            // write_push_logic(outfile);
+            outfile << "@" << lt_label_continue << "\n";
+            outfile << "0;JMP\n";
+
+            // True Case.
+            outfile << "(" << lt_label << ")\n";
+            outfile << "D=-1\n";
+            // TODO: might want to leave this to continue.
+            // write_push_logic(outfile);
+            outfile << "@" << lt_label_continue << "\n";
+            outfile << "0;JMP\n";
+
+            // Continue.
+            outfile << "(" << lt_label_continue << ")\n";
+            outfile << "// [lt_end]\n";
+
+        } else {
+            outfile << "// [gt_start]\n";
+            // outfile << "D=D-M\n";
+            write_arith("sub");
+            write_pop_logic(outfile);
+
+            // Compute new unique label.
+            auto gt_label = prog_name + ".GT" + std::to_string(count_gt);
+            auto gt_label_continue = gt_label + ".CONTINUE";
+            count_gt++;
+
+            outfile << "@" << gt_label << "\n";
+            outfile << "D;JGT\n";
+            // False Case.
+            outfile << "D=0\n";
+            // write_push_logic(outfile);
+            outfile << "@" << gt_label_continue << "\n";
+            outfile << "0;JMP\n";
+
+            // True Case.
+            outfile << "(" << gt_label << ")\n";
+            outfile << "D=-1\n";
+            // TODO: might want to leave this to continue.
+            // write_push_logic(outfile);
+            outfile << "@" << gt_label_continue << "\n";
+            outfile << "0;JMP\n";
+
+            // Continue.
+            outfile << "(" << gt_label_continue << ")\n";
+            outfile << "// [gt_end]\n";
+        }
+
+    } else {
+
+        // Get first arg off the stack.
+        write_pop_logic(outfile);
+
+        // Deal with unary ops first.
+        if (cmd == "neg")
+            outfile << "D=-D\n";
+        else if (cmd == "not")
+            outfile << "D=!D\n";
+
+        if (cmd == "neg" || cmd == "not") {
+            // Push res onto top of the stack.
+            write_push_logic(outfile);
+            return;
+        }
+
+        // Save first arg into R13 register.
+        outfile << "@R13\n";
+        outfile << "M=D\n";
+
+        // Get second arg off the stack.
+        write_pop_logic(outfile);
+
+        // Do operation.
+        outfile << "@R13\n";
+
+        // NOTE: M = arg1 (y) , D = arg2 (x).
+        if (cmd == "add")
+            outfile << "D=D+M\n";
+        else if (cmd == "sub")
+            outfile << "D=D-M\n";
+        else if (cmd == "and")
+            outfile << "D=D&M\n";
+        else if (cmd == "or")
+            outfile << "D=D|M\n";
+        else
+            throw std::logic_error("AsmCoder: unsupported arithmentic op");
     }
-
-    // Save first arg into R13 register.
-    outfile << "@R13\n";
-    outfile << "M=D\n";
-
-    // Get second arg off the stack.
-    write_pop_logic(outfile);
-
-    // Do operation.
-    outfile << "@R13\n";
-
-    // NOTE: M = arg1 (y) , D = arg2 (x).
-    if (cmd == "add")
-        outfile << "D=D+M\n";
-    else if (cmd == "sub")
-        outfile << "D=D-M\n";
-    else if (cmd == "and")
-        outfile << "D=D&M\n";
-    else if (cmd == "or")
-        outfile << "D=D|M\n";
-
-    // TODO: add jumping logic.
-    /*
-    else if (cmd == "eq") {
-        outfile << "D=M-D\n";
-        outfile << "@TRUE\n";
-        outfile << "D;JEQ\n";
-        outfile << "@FALSE\n";
-        outfile << "0;JMP\n";
-
-        outfile << "(TRUE)\n";
-        outfile << "D=-1\n";
-        outfile << "(FALSE)\n";
-        outfile << "D=0\n";
-    }
-    */
-
-    else
-        throw std::logic_error("AsmCoder: unsupported arithmentic op");
 
     // Push res onto top of the stack.
     write_push_logic(outfile);
