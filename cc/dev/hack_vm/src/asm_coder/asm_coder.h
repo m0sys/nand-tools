@@ -25,8 +25,9 @@ public:
 private:
     void write_push(const std::string& seg, int i);
     void write_pop(const std::string& seg, int i);
+    std::string comp_unique_logical_label(std::string type, int c);
 
-    // Asm specialized writers.
+    // Specialized asm writers.
     static void write_push_logic(std::ostream& out);
     static void write_pop_logic(std::ostream& out);
     static void write_store_d15(std::ostream& out);
@@ -38,6 +39,12 @@ private:
     static void write_at_arg(std::ostream& out);
     static void write_at_this(std::ostream& out);
     static void write_at_that(std::ostream& out);
+
+    void write_logical_logic(std::string label);
+    static void write_logical_jmp_logic(std::ostream& out, std::string label);
+    static void write_true_case(std::ostream& out, std::string label);
+    static void write_false_case(std::ostream& out, std::string label);
+    static void write_continue_label(std::ostream& out, std::string label);
 
 private:
     std::ofstream outfile;

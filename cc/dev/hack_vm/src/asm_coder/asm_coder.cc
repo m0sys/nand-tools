@@ -23,94 +23,30 @@ void AsmCoder::write_arith(std::string cmd)
         is_jumpy = true;
 
     if (is_jumpy) {
-        // TODO: add jumping logic.
         if (cmd == "eq") {
             WRITE_COMMENT(outfile, "eq_start");
-            write_arith("sub");
-            write_pop_logic(outfile);
 
-            // Compute new unique label.
-            auto eq_label = prog_name + ".EQ" + std::to_string(count_eq);
-            auto eq_label_continue = eq_label + ".CONTINUE";
+            auto eq_label = comp_unique_logical_label(".EQ", count_eq);
+            write_logical_logic(eq_label);
             count_eq++;
 
-            outfile << "@" << eq_label << "\n";
-            outfile << "D;JEQ\n";
-            // False Case.
-            outfile << "D=0\n";
-            // write_push_logic(outfile);
-            outfile << "@" << eq_label_continue << "\n";
-            outfile << "0;JMP\n";
-
-            // True Case.
-            outfile << "(" << eq_label << ")\n";
-            outfile << "D=-1\n";
-            // TODO: might want to leave this to continue.
-            // write_push_logic(outfile);
-            outfile << "@" << eq_label_continue << "\n";
-            outfile << "0;JMP\n";
-
-            // Continue.
-            outfile << "(" << eq_label_continue << ")\n";
             WRITE_COMMENT(outfile, "eq_end");
         } else if (cmd == "lt") {
             WRITE_COMMENT(outfile, "lt_start");
-            write_arith("sub");
-            write_pop_logic(outfile);
 
-            // Compute new unique label.
-            auto lt_label = prog_name + ".LT" + std::to_string(count_lt);
-            auto lt_label_continue = lt_label + ".CONTINUE";
+            auto lt_label = comp_unique_logical_label(".LT", count_lt);
+            write_logical_logic(lt_label);
             count_lt++;
 
-            outfile << "@" << lt_label << "\n";
-            outfile << "D;JLT\n";
-            // False Case.
-            outfile << "D=0\n";
-            // write_push_logic(outfile);
-            outfile << "@" << lt_label_continue << "\n";
-            outfile << "0;JMP\n";
-
-            // True Case.
-            outfile << "(" << lt_label << ")\n";
-            outfile << "D=-1\n";
-            // TODO: might want to leave this to continue.
-            // write_push_logic(outfile);
-            outfile << "@" << lt_label_continue << "\n";
-            outfile << "0;JMP\n";
-
-            // Continue.
-            outfile << "(" << lt_label_continue << ")\n";
             WRITE_COMMENT(outfile, "lt_end");
 
         } else {
             WRITE_COMMENT(outfile, "gt_start");
-            write_arith("sub");
-            write_pop_logic(outfile);
 
-            // Compute new unique label.
-            auto gt_label = prog_name + ".GT" + std::to_string(count_gt);
-            auto gt_label_continue = gt_label + ".CONTINUE";
+            auto gt_label = comp_unique_logical_label(".GT", count_gt);
+            write_logical_logic(gt_label);
             count_gt++;
 
-            outfile << "@" << gt_label << "\n";
-            outfile << "D;JGT\n";
-            // False Case.
-            outfile << "D=0\n";
-            // write_push_logic(outfile);
-            outfile << "@" << gt_label_continue << "\n";
-            outfile << "0;JMP\n";
-
-            // True Case.
-            outfile << "(" << gt_label << ")\n";
-            outfile << "D=-1\n";
-            // TODO: might want to leave this to continue.
-            // write_push_logic(outfile);
-            outfile << "@" << gt_label_continue << "\n";
-            outfile << "0;JMP\n";
-
-            // Continue.
-            outfile << "(" << gt_label_continue << ")\n";
             WRITE_COMMENT(outfile, "gt_end");
         }
 
@@ -158,6 +94,52 @@ void AsmCoder::write_arith(std::string cmd)
     write_push_logic(outfile);
 
     WRITE_COMMENT(outfile, "[end_write_arith]\n");
+}
+
+std::string AsmCoder::comp_unique_logical_label(std::string type, int c)
+{
+    //
+    return prog_name + type + std::to_string(c);
+}
+void AsmCoder::write_logical_logic(std::string label)
+{
+    write_arith("sub");
+    write_pop_logic(outfile);
+    write_logical_jmp_logic(outfile, label);
+}
+void AsmCoder::write_logical_jmp_logic(std::ostream& out, std::string label)
+{
+    out << "@" << label << "\n";
+    if (label.find("EQ") != std::string::npos)
+        out << "D;JEQ\n";
+    else if (label.find("LT") != std::string::npos)
+        out << "D;JLT\n";
+    else if (label.find("GT") != std::string::npos)
+        out << "D;JGT\n";
+    write_false_case(out, label);
+    write_true_case(out, label);
+    write_continue_label(out, label);
+}
+
+void AsmCoder::write_true_case(std::ostream& out, std::string label)
+{
+    out << "(" << label << ")\n";
+    out << "D=-1\n";
+    out << "@" << label << ".CONTINUE\n";
+    out << "0;JMP\n";
+}
+
+void AsmCoder::write_false_case(std::ostream& out, std::string label)
+{
+    out << "D=0\n";
+    out << "@" << label << ".CONTINUE\n";
+    out << "0;JMP\n";
+}
+
+void AsmCoder::write_continue_label(std::ostream& out, std::string label)
+{
+    //
+    out << "(" << label << ".CONTINUE)\n";
 }
 
 void AsmCoder::write_push_pop(bool is_push, const std::string& seg, int i)
