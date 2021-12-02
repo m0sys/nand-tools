@@ -19,6 +19,9 @@ public:
     AsmCoder(std::string asm_fname, std::string prog_name);
     void write_arith(std::string cmd);
     void write_push_pop(bool is_push, const std::string& seg, int i);
+    void write_label(std::string label);
+    void write_goto(std::string label);
+    void write_if(std::string label);
 
     void close(); // closes the output file/stream.
 

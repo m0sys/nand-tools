@@ -42,6 +42,9 @@ private:
     bool is_push_type();
     bool is_pop_type();
     bool is_arith_type();
+    bool is_label_type();
+    bool is_goto_type();
+    bool is_ifgoto_type();
     bool is_ret_type();
 
 private:
