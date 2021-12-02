@@ -6,6 +6,13 @@
 #include <fstream>
 #include <string>
 
+#define __COMMENTS_ENB__ 0
+#if __COMMENTS_ENB__
+#define WRITE_COMMENT(outfile, msg) outfile << "// " << msg << "\n"
+#else
+#define WRITE_COMMENT(outfile, msg)
+#endif
+
 class AsmCoder {
 
 public:
@@ -19,8 +26,18 @@ private:
     void write_push(const std::string& seg, int i);
     void write_pop(const std::string& seg, int i);
 
+    // Asm specialized writers.
     static void write_push_logic(std::ostream& out);
     static void write_pop_logic(std::ostream& out);
+    static void write_store_d15(std::ostream& out);
+    static void write_store_d15addr_read_d14(std::ostream& out);
+    static void write_load_imm_d(std::ostream& out, int i);
+
+    static void write_at_sp(std::ostream& out);
+    static void write_at_lcl(std::ostream& out);
+    static void write_at_arg(std::ostream& out);
+    static void write_at_this(std::ostream& out);
+    static void write_at_that(std::ostream& out);
 
 private:
     std::ofstream outfile;

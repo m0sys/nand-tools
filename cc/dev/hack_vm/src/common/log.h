@@ -6,9 +6,9 @@
 
 #define LOG(msg) std::cout << __FILENAME__ << "(" << __LINE__ << "): " << msg << std::endl
 
-#define DEBUG_MODE 0
+#define __DEBUG_MODE__ 0
 
-#if DEBUG_MODE
+#if __DEBUG_MODE__
 #define DEBUG_LOG(msg) LOG(msg)
 #else
 #define DEBUG_LOG(msg)

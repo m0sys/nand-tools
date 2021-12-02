@@ -16,7 +16,8 @@ AsmCoder::AsmCoder(std::string asm_fname, std::string prog_name)
 
 void AsmCoder::write_arith(std::string cmd)
 {
-    outfile << "// " << cmd << "\n";
+    WRITE_COMMENT(outfile, cmd);
+
     bool is_jumpy = false;
     if (cmd == "eq" || cmd == "lt" || cmd == "gt")
         is_jumpy = true;
@@ -24,8 +25,7 @@ void AsmCoder::write_arith(std::string cmd)
     if (is_jumpy) {
         // TODO: add jumping logic.
         if (cmd == "eq") {
-            outfile << "// [eq_start]\n";
-            // outfile << "D=D-M\n";
+            WRITE_COMMENT(outfile, "eq_start");
             write_arith("sub");
             write_pop_logic(outfile);
 
@@ -52,10 +52,9 @@ void AsmCoder::write_arith(std::string cmd)
 
             // Continue.
             outfile << "(" << eq_label_continue << ")\n";
-            outfile << "// [eq_end]\n";
+            WRITE_COMMENT(outfile, "eq_end");
         } else if (cmd == "lt") {
-            outfile << "// [lt_start]\n";
-            // outfile << "D=D-M\n";
+            WRITE_COMMENT(outfile, "lt_start");
             write_arith("sub");
             write_pop_logic(outfile);
 
@@ -82,11 +81,10 @@ void AsmCoder::write_arith(std::string cmd)
 
             // Continue.
             outfile << "(" << lt_label_continue << ")\n";
-            outfile << "// [lt_end]\n";
+            WRITE_COMMENT(outfile, "lt_end");
 
         } else {
-            outfile << "// [gt_start]\n";
-            // outfile << "D=D-M\n";
+            WRITE_COMMENT(outfile, "gt_start");
             write_arith("sub");
             write_pop_logic(outfile);
 
@@ -113,7 +111,7 @@ void AsmCoder::write_arith(std::string cmd)
 
             // Continue.
             outfile << "(" << gt_label_continue << ")\n";
-            outfile << "// [gt_end]\n";
+            WRITE_COMMENT(outfile, "gt_end");
         }
 
     } else {
@@ -159,7 +157,7 @@ void AsmCoder::write_arith(std::string cmd)
     // Push res onto top of the stack.
     write_push_logic(outfile);
 
-    outfile << "// [end write_arith]\n\n";
+    WRITE_COMMENT(outfile, "[end_write_arith]\n");
 }
 
 void AsmCoder::write_push_pop(bool is_push, const std::string& seg, int i)
@@ -168,7 +166,8 @@ void AsmCoder::write_push_pop(bool is_push, const std::string& seg, int i)
         write_push(seg, i);
     else
         write_pop(seg, i);
-    outfile << "// [end write_push_pop]\n\n";
+
+    WRITE_COMMENT(outfile, "[end_write_push_pop]\n");
 }
 
 void AsmCoder::close()
@@ -184,32 +183,31 @@ void AsmCoder::close()
 // Writes seg[i] to the top of the stack.
 void AsmCoder::write_push(const std::string& seg, int i)
 {
-    outfile << "// push " << seg << " " << i << "\n";
+    WRITE_COMMENT(outfile, "push " << seg << " " << i);
 
     // Figure out where the data comes from.
     if (seg == "local")
-        outfile << "@LCL\n";
+        write_at_lcl(outfile);
 
     else if (seg == "argument")
-        outfile << "@ARG\n";
+        write_at_arg(outfile);
 
     else if (seg == "this")
-        outfile << "@THIS\n";
+        write_at_this(outfile);
 
     else if (seg == "that")
-        outfile << "@THAT\n";
+        write_at_that(outfile);
 
     if (seg == "constant") {
         // Load constant i into D register.
-        outfile << "@" << std::to_string(i) << "\n";
-        outfile << "D=A\n";
+        write_load_imm_d(outfile, i);
     }
 
     else if (seg == "pointer") {
         if (i == 0)
-            outfile << "@THIS\n";
+            write_at_this(outfile);
         else
-            outfile << "@THAT\n";
+            write_at_that(outfile);
 
         outfile << "D=M\n";
     }
@@ -243,7 +241,7 @@ void AsmCoder::write_pop(const std::string& seg, int i)
 {
     DEBUG_LOG("Poping: seg=" << seg << ", i=" << i);
 
-    outfile << "// pop " << seg << " " << i << "\n";
+    WRITE_COMMENT(outfile, "pop " << seg << " " << i);
 
     // Pop top of the stack.
     write_pop_logic(outfile);
@@ -252,9 +250,9 @@ void AsmCoder::write_pop(const std::string& seg, int i)
 
     if (seg == "pointer") {
         if (i == 0)
-            outfile << "@THIS\n";
+            write_at_this(outfile);
         else
-            outfile << "@THAT\n";
+            write_at_that(outfile);
 
         outfile << "M=D\n";
     }
@@ -268,15 +266,10 @@ void AsmCoder::write_pop(const std::string& seg, int i)
         outfile << "@" << std::to_string(i) << "\n";
         outfile << "D=D+A\n"; // address to store popped value
 
-        outfile << "@R15\n"; // location where address to store is
-        outfile << "M=D\n";
-        outfile << "@R14\n";
-        outfile << "D=M\n"; // popped value is now here
+        write_store_d15addr_read_d14(outfile);
 
         // Store D.
-        outfile << "@R15\n";
-        outfile << "A=M\n";
-        outfile << "M=D\n";
+        write_store_d15(outfile);
     }
 
     else if (seg == "static") {
@@ -288,53 +281,75 @@ void AsmCoder::write_pop(const std::string& seg, int i)
         // Store D into register (base+i).
         outfile << "@R14\n"; // location where popped value is
         outfile << "M=D\n";
-        outfile << "@" << std::to_string(i) << "\n";
-        outfile << "D=A\n";
+        write_load_imm_d(outfile, i);
 
         // Figure out which register to write to.
         if (seg == "local")
-            outfile << "@LCL\n";
+            write_at_lcl(outfile);
 
         else if (seg == "argument")
-            outfile << "@ARG\n";
+            write_at_arg(outfile);
 
         else if (seg == "this")
-            outfile << "@THIS\n";
+            write_at_this(outfile);
 
         else if (seg == "that")
-            outfile << "@THAT\n";
+            write_at_that(outfile);
 
         outfile << "D=M+D\n"; // location where to store popped value
-        outfile << "@R15\n";
-        outfile << "M=D\n";
 
-        outfile << "@R14\n";
-        outfile << "D=M\n";
+        write_store_d15addr_read_d14(outfile);
 
         // Store D.
-        outfile << "@R15\n";
-        outfile << "A=M\n";
-        outfile << "M=D\n";
+        write_store_d15(outfile);
     }
+}
+
+void AsmCoder::write_at_sp(std::ostream& out) { out << "@SP\n"; }
+void AsmCoder::write_at_lcl(std::ostream& out) { out << "@LCL\n"; }
+
+void AsmCoder::write_at_arg(std::ostream& out) { out << "@ARG\n"; }
+void AsmCoder::write_at_this(std::ostream& out) { out << "@THIS\n"; }
+void AsmCoder::write_at_that(std::ostream& out) { out << "@THAT\n"; }
+
+void AsmCoder::write_load_imm_d(std::ostream& out, int i)
+{
+    out << "@" << std::to_string(i) << "\n";
+    out << "D=A\n";
+}
+
+void AsmCoder::write_store_d15addr_read_d14(std::ostream& out)
+{
+    out << "@R15\n";
+    out << "M=D\n";
+    out << "@R14\n";
+    out << "D=M\n";
+}
+
+void AsmCoder::write_store_d15(std::ostream& out)
+{
+    out << "@R15\n";
+    out << "A=M\n";
+    out << "M=D\n";
 }
 
 void AsmCoder::write_push_logic(std::ostream& out)
 {
-    out << "// [start]: push_logic\n";
-    out << "@SP\n";
+    WRITE_COMMENT(out, "[start_push_logic]");
+    write_at_sp(out);
     out << "A=M\n";
     out << "M=D\n";
-    out << "@SP\n";
+    write_at_sp(out);
     out << "M=M+1\n";
-    out << "// [end]: push_logic\n";
+    WRITE_COMMENT(out, "[end_push_logic]");
 }
 
 void AsmCoder::write_pop_logic(std::ostream& out)
 {
-    out << "// [start]: pop_logic\n";
-    out << "@SP\n";
+    WRITE_COMMENT(out, "[start_pop_logic]");
+    write_at_sp(out);
     out << "M=M-1\n";
     out << "A=M\n";
     out << "D=M\n";
-    out << "// [end]: pop_logic\n";
+    WRITE_COMMENT(out, "[end_pop_logic]");
 }
