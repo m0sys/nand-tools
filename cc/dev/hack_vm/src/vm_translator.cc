@@ -54,6 +54,20 @@ void VMTranslator::translate()
             ac.write_if(p.arg1());
         }
 
+        // TODO: add functions.
+        // NOTE: must handle unique label generation for functions here.
+        else if (ct == CT::C_FUNC) {
+            ac.write_func(p.arg1(), p.arg2());
+        }
+
+        else if (ct == CT::C_RET) {
+            ac.write_return();
+        }
+
+        else {
+            throw std::logic_error("VMTranslator: Unsupported command");
+        }
+
         p.advance();
     }
 

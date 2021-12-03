@@ -118,12 +118,12 @@ void AsmCoder::write_logical_jmp_logic(std::ostream& out, std::string label)
         out << "D;JGT\n";
     write_false_case(out, label);
     write_true_case(out, label);
-    write_continue_label(out, label);
+    write_label_point(out, label + ".CONTINUE");
 }
 
 void AsmCoder::write_true_case(std::ostream& out, std::string label)
 {
-    out << "(" << label << ")\n";
+    write_label_point(out, label);
     out << "D=-1\n";
     out << "@" << label << ".CONTINUE\n";
     out << "0;JMP\n";
@@ -136,10 +136,10 @@ void AsmCoder::write_false_case(std::ostream& out, std::string label)
     out << "0;JMP\n";
 }
 
-void AsmCoder::write_continue_label(std::ostream& out, std::string label)
+void AsmCoder::write_label_point(std::ostream& out, std::string label)
 {
     //
-    out << "(" << label << ".CONTINUE)\n";
+    out << "(" << label << ")\n";
 }
 
 void AsmCoder::write_push_pop(bool is_push, const std::string& seg, int i)
@@ -280,7 +280,7 @@ void AsmCoder::write_pop(const std::string& seg, int i)
 void AsmCoder::write_label(std::string label)
 {
     //
-    outfile << "(" << label << ")\n";
+    write_label_point(outfile, label);
 }
 
 void AsmCoder::write_goto(std::string label)
@@ -295,6 +295,189 @@ void AsmCoder::write_if(std::string label)
     write_pop_logic(outfile);
     outfile << "@" << label << "\n";
     outfile << "D;JNE\n";
+}
+
+/*
+ * Generates code to init local vars of callee to 0.
+ *
+ * Args:
+ *  - func_name: unique directory level function name.
+ *  - n_vars: number of local variables to initialized to 0.
+ */
+void AsmCoder::write_func(std::string func_name, int n_vars)
+{
+    WRITE_COMMENT(outfile, prog_name << ".vm: [start_func]: " << func_name);
+    std::string ufunc_name = prog_name + "." + func_name;
+
+    // Initialize local variables.
+    write_label_point(outfile, ufunc_name);
+    for (int i = 0; i < n_vars; i++) {
+        write_push("constant", 0);
+        write_pop("local", i);
+    }
+
+    WRITE_COMMENT(outfile, prog_name << ".vm: [end_func]: " << func_name);
+}
+
+/*
+ * Generates code to saves caller's frame on the stack and jumps to exec callee.
+ *
+ * Args:
+ *  - func_name: unique directory level function name.
+ *  - n_args: number of arguments pushed to seg_arg prior to this call.
+ */
+void AsmCoder::write_call(std::string func_name, int n_args)
+{
+    WRITE_COMMENT(outfile, "[start_call]: " << func_name);
+    std::string point_of_ret = prog_name + "." + func_name + "$ret";
+    int i = 0;
+    if (ret_map.contains(point_of_ret))
+        i = ret_map[point_of_ret];
+
+    // Save caller's frame (state) in stack before proceeding.
+
+    // Push ret_addr onto stack.
+    outfile << "@" << point_of_ret << std::to_string(i) << "\n";
+    write_set_d2a(outfile);
+    write_push_logic(outfile);
+
+    // Push lcl|arg|this|that onto stack.
+    write_at_lcl(outfile);
+    write_set_d2m(outfile);
+    write_push_logic(outfile);
+
+    write_at_arg(outfile);
+    write_set_d2m(outfile);
+    write_push_logic(outfile);
+
+    write_at_this(outfile);
+    write_set_d2m(outfile);
+    write_push_logic(outfile);
+
+    write_at_that(outfile);
+    write_set_d2m(outfile);
+    write_push_logic(outfile);
+
+    // Set ARG = SP - 5 - nArgs
+    write_at_sp(outfile);
+    write_set_d2m(outfile);
+    write_at_arg(outfile);
+    // ARG = SP
+    outfile << "M=D\n";
+    write_load_imm_d(outfile, 5);
+    write_at_arg(outfile);
+    // ARG = SP - 5
+    outfile << "M=M-D\n";
+    write_load_imm_d(outfile, n_args);
+    write_at_arg(outfile);
+    // ARG = SP -5 - nArgs
+    outfile << "M=M-D\n";
+
+    // Set LCL = SP
+    write_at_sp(outfile);
+    write_set_d2m(outfile);
+    write_at_lcl(outfile);
+    // LCL = SP
+    outfile << "M=D\n";
+
+    // Goto func_name
+    outfile << "@" << func_name << "\n";
+    outfile << "0;JMP\n";
+
+    // Jump to location where calle code is.
+    write_label_point(outfile, point_of_ret + std::to_string(i));
+    ret_map[point_of_ret] = i + 1;
+    WRITE_COMMENT(outfile, "[end_call]: " << func_name);
+}
+
+void AsmCoder::write_set_d2a(std::ostream& out) { out << "D=A\n"; }
+void AsmCoder::write_set_d2m(std::ostream& out) { out << "D=M\n"; }
+
+/*
+ * Generates code to copy ret value to top of caller's working stack,
+ * reinstate the segment pointers of the caller (sp|lcl|arg|this|that),
+ * and jump to exec command at return_addr onward.
+ */
+void AsmCoder::write_return()
+{
+    // NOTE: "*" is C/C++ dereferencing syntax.
+    //       So `frame = LCL` means set frame to address LCL while
+    //       `frame = *LCL` would mean set frame to whatever value LCL
+    //       points to.
+    //       Hence retAddr = *(frame - 5) means set retAddr to whatever
+    //       value the address (frame - 5) points to - that is,
+    //       retAddr = RAM[frame-5].
+
+    WRITE_COMMENT(outfile, "[start_return]");
+
+    // Put return value in temp reg (frame).
+    write_at_lcl(outfile);
+    write_set_d2a(outfile);
+    outfile << "@R13\n"; // FRAME
+    // frame = LCL
+    outfile << "M=D\n";
+
+    // retAddr = *(frame-5)
+    write_load_imm_d(outfile, 5);
+    outfile << "@R13\n";
+    outfile << "D=M-D\n";
+    outfile << "@R14\n"; // RET_ADDR
+    outfile << "M=D\n";
+
+    // Reposition return val & sp for caller.
+    // *ARG = pop()
+    write_pop_logic(outfile);
+    write_at_arg(outfile);
+    outfile << "M=D\n";
+
+    // SP = ARG+1
+    write_at_arg(outfile);
+    write_set_d2m(outfile);
+    outfile << "D=D+1\n";
+    write_at_sp(outfile);
+    write_set_d2m(outfile);
+
+    // Restore caller's fram (state) from stack before returning to return_addr.
+
+    // FIXME: R14 = -4?
+
+    // THAT = *(frame-1)
+    outfile << "@R13\n";
+    outfile << "D=M-1\n";
+    outfile << "A=D\n";
+    write_at_that(outfile);
+    write_set_d2m(outfile);
+
+    // THIS = *(frame-2)
+    write_load_imm_d(outfile, 2);
+    outfile << "@R13\n";
+    outfile << "D=M-D\n";
+    outfile << "A=D\n";
+    write_at_this(outfile);
+    write_set_d2m(outfile);
+
+    // ARG = *(frame-3)
+    write_load_imm_d(outfile, 3);
+    outfile << "@R13\n";
+    outfile << "D=M-D\n";
+    outfile << "A=D\n";
+    write_at_arg(outfile);
+    write_set_d2m(outfile);
+
+    // LCL = *(frame-4)
+    write_load_imm_d(outfile, 4);
+    outfile << "@R13\n";
+    outfile << "D=M-D\n";
+    outfile << "A=D\n";
+    write_at_lcl(outfile);
+    write_set_d2m(outfile);
+
+    // Goto return_addr.
+    outfile << "@R14\n";
+    write_set_d2m(outfile);
+    outfile << "A=D\n";
+    outfile << "0;JMP\n";
+    WRITE_COMMENT(outfile, "[end_return]");
 }
 
 void AsmCoder::close()

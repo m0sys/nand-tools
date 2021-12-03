@@ -4,9 +4,10 @@
 
 #pragma once
 #include <fstream>
+#include <map>
 #include <string>
 
-#define __COMMENTS_ENB__ 0
+#define __COMMENTS_ENB__ 1
 #if __COMMENTS_ENB__
 #define WRITE_COMMENT(outfile, msg) outfile << "// " << msg << "\n"
 #else
@@ -22,6 +23,9 @@ public:
     void write_label(std::string label);
     void write_goto(std::string label);
     void write_if(std::string label);
+    void write_func(std::string func_name, int n_vars);
+    void write_call(std::string func_name, int n_args);
+    void write_return();
 
     void close(); // closes the output file/stream.
 
@@ -36,6 +40,8 @@ private:
     static void write_store_d15(std::ostream& out);
     static void write_store_d15addr_read_d14(std::ostream& out);
     static void write_load_imm_d(std::ostream& out, int i);
+    static void write_set_d2m(std::ostream& out);
+    static void write_set_d2a(std::ostream& out);
 
     static void write_at_sp(std::ostream& out);
     static void write_at_lcl(std::ostream& out);
@@ -47,11 +53,12 @@ private:
     static void write_logical_jmp_logic(std::ostream& out, std::string label);
     static void write_true_case(std::ostream& out, std::string label);
     static void write_false_case(std::ostream& out, std::string label);
-    static void write_continue_label(std::ostream& out, std::string label);
+    static void write_label_point(std::ostream& out, std::string label);
 
 private:
     std::ofstream outfile;
     std::string prog_name;
+    std::map<std::string, int> ret_map;
 
     static int count_eq;
     static int count_lt;
