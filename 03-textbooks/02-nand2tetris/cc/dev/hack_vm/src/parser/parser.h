@@ -45,6 +45,8 @@ private:
     bool is_label_type();
     bool is_goto_type();
     bool is_ifgoto_type();
+    bool is_func_type();
+    bool is_call_type();
     bool is_ret_type();
 
 private:
