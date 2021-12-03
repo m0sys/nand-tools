@@ -412,7 +412,7 @@ void AsmCoder::write_return()
 
     // Put return value in temp reg (frame).
     write_at_lcl(outfile);
-    write_set_d2a(outfile);
+    write_set_d2m(outfile);
     outfile << "@R13\n"; // FRAME
     // frame = LCL
     outfile << "M=D\n";
@@ -422,55 +422,68 @@ void AsmCoder::write_return()
     outfile << "@R13\n";
     outfile << "D=M-D\n";
     outfile << "@R14\n"; // RET_ADDR
-    outfile << "M=D\n";
+    outfile << "M=D\n";  // l:158
 
     // Reposition return val & sp for caller.
     // *ARG = pop()
-    write_pop_logic(outfile);
-    write_at_arg(outfile);
-    outfile << "M=D\n";
+    // FIXME: With some magic RAM[310] = 1196 (return_value)
+    write_at_arg(outfile);  // l:163 RAM[2] = 310
+    write_set_d2m(outfile); // D = 310
+    outfile << "@R15\n";
+    outfile << "M=D\n";       // R15 = 310
+    write_pop_logic(outfile); // D = return_value
+    outfile << "@R15\n";
+    outfile << "A=M\n";
+    outfile << "M=D\n"; // l:164 // RAM[R15] = D = 1196
 
     // SP = ARG+1
     write_at_arg(outfile);
     write_set_d2m(outfile);
-    outfile << "D=D+1\n";
+    outfile << "D=D+1\n"; // l:167
     write_at_sp(outfile);
-    write_set_d2m(outfile);
+    outfile << "M=D\n";
+    // write_set_d2m(outfile);
 
     // Restore caller's fram (state) from stack before returning to return_addr.
 
-    // FIXME: R14 = -4?
-
     // THAT = *(frame-1)
-    outfile << "@R13\n";
+    outfile << "@R13\n"; // l:170
     outfile << "D=M-1\n";
     outfile << "A=D\n";
-    write_at_that(outfile);
     write_set_d2m(outfile);
+    write_at_that(outfile);
+    outfile << "M=D\n";
+    // write_set_d2m(outfile);
 
     // THIS = *(frame-2)
-    write_load_imm_d(outfile, 2);
+    write_load_imm_d(outfile, 2); // l:176
     outfile << "@R13\n";
     outfile << "D=M-D\n";
     outfile << "A=D\n";
-    write_at_this(outfile);
     write_set_d2m(outfile);
+    write_at_this(outfile);
+    outfile << "M=D\n";
+    // write_set_d2m(outfile);
 
     // ARG = *(frame-3)
-    write_load_imm_d(outfile, 3);
+    write_load_imm_d(outfile, 3); // l:184
     outfile << "@R13\n";
     outfile << "D=M-D\n";
     outfile << "A=D\n";
-    write_at_arg(outfile);
     write_set_d2m(outfile);
+    write_at_arg(outfile);
+    outfile << "M=D\n";
+    // write_set_d2m(outfile);
 
     // LCL = *(frame-4)
-    write_load_imm_d(outfile, 4);
+    write_load_imm_d(outfile, 4); // l:192
     outfile << "@R13\n";
     outfile << "D=M-D\n";
     outfile << "A=D\n";
-    write_at_lcl(outfile);
     write_set_d2m(outfile);
+    write_at_lcl(outfile);
+    outfile << "M=D\n";
+    // write_set_d2m(outfile);
 
     // Goto return_addr.
     outfile << "@R14\n";
