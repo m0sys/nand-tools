@@ -7,7 +7,7 @@
 #include <map>
 #include <string>
 
-#define __COMMENTS_ENB__ 1
+#define __COMMENTS_ENB__ 0
 #if __COMMENTS_ENB__
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #define WRITE_COMMENT(outfile, msg) outfile << "// " << __FILENAME__ << " (" << __LINE__ << "): " << msg << "\n"
