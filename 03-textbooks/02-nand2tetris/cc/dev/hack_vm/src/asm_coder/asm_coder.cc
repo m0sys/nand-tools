@@ -206,7 +206,8 @@ void AsmCoder::write_push(const std::string& seg, int i)
         outfile << "@5\n";
         outfile << "D=A\n";
         outfile << "@" << std::to_string(i) << "\n";
-        outfile << "A=D+A\n";
+        outfile << "D=D+A\n";
+        outfile << "A=D\n";
         outfile << "D=M\n";
     }
 
@@ -248,6 +249,14 @@ void AsmCoder::write_pop(const std::string& seg, int i)
     }
 
     else if (seg == "temp") {
+
+        // outfile << "@5\n";
+        // outfile << "D=A\n";
+        // outfile << "@" << std::to_string(i) << "\n";
+        // outfile << "D=D+A\n";
+        // outfile << "A=D\n";
+        // outfile << "D=M\n";
+
         outfile << "@R14\n"; // location where popped value is
         outfile << "M=D\n";
 
@@ -256,10 +265,17 @@ void AsmCoder::write_pop(const std::string& seg, int i)
         outfile << "@" << std::to_string(i) << "\n";
         outfile << "D=D+A\n"; // address to store popped value
 
-        write_store_d15addr_read_d14(outfile);
+        // write_store_d15addr_read_d14(outfile); // REMOVED
+        outfile << "@R15\n"; // ADDED
+        outfile << "M=D\n";  // ADDED
+        outfile << "@R14\n"; // ADDED
+        outfile << "D=M\n";  // ADDED
 
         // Store D.
-        write_store_d15(outfile);
+        // write_store_d15(outfile); // REMOVED
+        outfile << "@R15\n"; // ADDED
+        outfile << "A=M\n";  // ADDED
+        outfile << "M=D\n";  // ADDED
     }
 
     else if (seg == "static") {
@@ -429,11 +445,11 @@ void AsmCoder::write_return()
     WRITE_COMMENT(outfile, "[start_return]");
 
     // Put return value in temp reg (frame).
+    // frame = LCL
     write_at_lcl(outfile);
     write_set_d2m(outfile);
     // FIXME: why is FRAME = 279?
     outfile << "@R13\n"; // FRAME
-    // frame = LCL
     outfile << "M=D\n";
 
     // retAddr = *(frame-5)
@@ -441,19 +457,22 @@ void AsmCoder::write_return()
     outfile << "@R13\n";
     outfile << "D=M-D\n";
     // FIXME: RET_ADDR should be 273 not 274.
-    outfile << "@R14\n"; // RET_ADDR
-    outfile << "M=D\n";  // l:158
+    outfile << "A=D\n";     // ADDED
+    write_set_d2m(outfile); // ADDED
+    outfile << "@R14\n";    // RET_ADDR
+    outfile << "M=D\n";     // l:158
 
     // Reposition return val & sp for caller.
     // *ARG = pop()
     // DONE: With some magic RAM[310] = 1196 (return_value)
-    write_at_arg(outfile);  // l:163 RAM[2] = 310
+    write_at_arg(outfile);  // l:163 RAM[2] (*ARG) = 310
     write_set_d2m(outfile); // D = 310
     outfile << "@R15\n";
-    outfile << "M=D\n";       // R15 = 310
+    outfile << "M=D\n";       // R15 = *ARG
     write_pop_logic(outfile); // D = return_value
-    outfile << "@R15\n";
+    outfile << "@R15\n";      // retVal
     outfile << "A=M\n";
+    // FIXME: this is somehow overwriting R14??
     outfile << "M=D\n"; // l:164 // RAM[R15] = D = 1196
 
     // SP = ARG+1
@@ -506,11 +525,12 @@ void AsmCoder::write_return()
     // write_set_d2m(outfile);
 
     // Goto return_addr.
+    // TODO: break @: 189 & 245
     outfile << "@R14\n";
     write_set_d2m(outfile);
     // FIXME: I want to goto RAM[RAM[R14]] (D should be 273; therefore A = 273)
-    outfile << "A=D\n";
-    outfile << "D=M\n";
+    // outfile << "A=D\n";//  REMOVED
+    // write_set_d2m(outfile); // REMOVED
     outfile << "A=D\n";
     outfile << "0;JMP\n";
 
@@ -527,12 +547,12 @@ void AsmCoder::close()
     outfile.close();
 }
 
-void AsmCoder::set_file_name(std::string prog_name)
+void AsmCoder::set_file_name(std::string pname)
 {
     WRITE_COMMENT(outfile, "");
     WRITE_COMMENT(outfile, "");
-    WRITE_COMMENT(outfile, "[new_prog_name: " << prog_name << "]\n\n");
-    prog_name = prog_name;
+    WRITE_COMMENT(outfile, "[new_prog_name: " << pname << "]\n\n");
+    prog_name = pname;
 }
 
 void AsmCoder::write_at_sp(std::ostream& out) { out << "@SP\n"; }
