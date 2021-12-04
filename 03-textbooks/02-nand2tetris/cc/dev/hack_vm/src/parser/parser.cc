@@ -26,6 +26,7 @@ Parser::Parser(std::string fname)
 
 		remove_backslash_r(line);
 		remove_line_comment(line);
+		rtrim(line);
 		cmds.push_back(line);
 	}
 
@@ -49,6 +50,13 @@ void Parser::remove_line_comment(std::string& line)
 	if (pos != std::string::npos) {
 		line.erase(pos);
 	}
+}
+void Parser::rtrim(std::string& s)
+{
+	s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+		return !std::isspace(ch);
+	}).base(),
+		s.end());
 }
 
 void Parser::advance()
@@ -117,6 +125,8 @@ CommandType Parser::command_type()
 	if (ret_pos != string::npos)
 		return CT::C_RET;
 
+	LOG("current command: " << ccmd);
+	LOG("lt find: " << ccmd.find("lt"));
 	return CT::UNKNOWN;
 }
 

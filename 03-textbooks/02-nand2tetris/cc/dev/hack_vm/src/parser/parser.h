@@ -37,6 +37,7 @@ private:
     static bool is_white_space(std::string line);
     static void remove_backslash_r(std::string& line);
     static void remove_line_comment(std::string& line);
+    static void rtrim(std::string& s);
     const std::string& curr_cmd();
 
     bool is_push_type();
