@@ -27,7 +27,7 @@ public:
     void write_func(std::string func_name, int n_vars);
     void write_call(std::string func_name, int n_args);
     void write_return();
-    void set_file_name(std::string prog_name);
+    void set_file_name(std::string pname);
 
     void close(); // closes the output file/stream.
 

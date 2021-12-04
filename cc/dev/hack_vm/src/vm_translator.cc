@@ -55,6 +55,7 @@ void VMTranslator::translate()
             LOG("new prog fname: " << fname);
         }
         first_file = false;
+        std::string func_name = "";
 
         while (p.has_more_lines()) {
             auto ct = p.command_type();
@@ -75,22 +76,27 @@ void VMTranslator::translate()
 
             else if (ct == CT::C_LABEL) {
                 auto label = p.arg1();
-
+                label = func_name + "$" + label;
                 ac.write_label(label);
             }
 
             else if (ct == CT::C_GOTO) {
-                ac.write_goto(p.arg1());
+                auto label = p.arg1();
+                label = func_name + "$" + label;
+                ac.write_goto(label);
             }
 
             else if (ct == CT::C_IF) {
-                ac.write_if(p.arg1());
+                auto label = p.arg1();
+                label = func_name + "$" + label;
+                ac.write_if(label);
             }
 
             // TODO: add functions.
             // NOTE: must handle unique label generation for functions here.
             else if (ct == CT::C_FUNC) {
-                ac.write_func(p.arg1(), p.arg2());
+                func_name = p.arg1();
+                ac.write_func(func_name, p.arg2());
             }
 
             else if (ct == CT::C_RET) {
