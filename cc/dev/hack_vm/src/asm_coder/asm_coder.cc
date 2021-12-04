@@ -8,10 +8,25 @@ int AsmCoder::count_eq = 0;
 int AsmCoder::count_lt = 0;
 int AsmCoder::count_gt = 0;
 
-AsmCoder::AsmCoder(std::string asm_fname, std::string prog_name)
+AsmCoder::AsmCoder(std::string asm_fname, std::string prog_name, bool is_multi)
     : outfile { std::ofstream(asm_fname) }
     , prog_name { prog_name }
 {
+    // TODO: implement bootstraping code.
+    // TODO: enable boostraping only when multifile.
+    if (is_multi) {
+        LOG("IS MULTI");
+        WRITE_COMMENT(outfile, "[start_boostrap_code]");
+        // SP = 256
+        write_load_imm_d(outfile, 256);
+        write_at_sp(outfile);
+        outfile << "M=D\n";
+        // call Sys.init
+        write_call("Sys.init", 0);
+        WRITE_COMMENT(outfile, "[end_boostrap_code]\n\n");
+
+        WRITE_COMMENT(outfile, "[init_prog_name: " << prog_name << "]");
+    }
 }
 
 void AsmCoder::write_arith(std::string cmd)
@@ -86,8 +101,11 @@ void AsmCoder::write_arith(std::string cmd)
             outfile << "D=D&M\n";
         else if (cmd == "or")
             outfile << "D=D|M\n";
-        else
+        else {
+            LOG(cmd);
+            LOG(cmd.size());
             throw std::logic_error("AsmCoder: unsupported arithmentic op");
+        }
     }
 
     // Push res onto top of the stack.
@@ -307,10 +325,10 @@ void AsmCoder::write_if(std::string label)
 void AsmCoder::write_func(std::string func_name, int n_vars)
 {
     WRITE_COMMENT(outfile, prog_name << ".vm: [start_func]: " << func_name);
-    std::string ufunc_name = prog_name + "." + func_name;
+    // std::string ufunc_name = prog_name + "." + func_name;
 
     // Initialize local variables.
-    write_label_point(outfile, ufunc_name);
+    write_label_point(outfile, func_name);
     for (int i = 0; i < n_vars; i++) {
         write_push("constant", 0);
         write_pop("local", i);
@@ -329,7 +347,7 @@ void AsmCoder::write_func(std::string func_name, int n_vars)
 void AsmCoder::write_call(std::string func_name, int n_args)
 {
     WRITE_COMMENT(outfile, "[start_call]: " << func_name);
-    std::string point_of_ret = prog_name + "." + func_name + "$ret";
+    std::string point_of_ret = func_name + "$ret";
     int i = 0;
     if (ret_map.contains(point_of_ret))
         i = ret_map[point_of_ret];
@@ -426,7 +444,7 @@ void AsmCoder::write_return()
 
     // Reposition return val & sp for caller.
     // *ARG = pop()
-    // FIXME: With some magic RAM[310] = 1196 (return_value)
+    // DONE: With some magic RAM[310] = 1196 (return_value)
     write_at_arg(outfile);  // l:163 RAM[2] = 310
     write_set_d2m(outfile); // D = 310
     outfile << "@R15\n";
@@ -490,6 +508,7 @@ void AsmCoder::write_return()
     write_set_d2m(outfile);
     outfile << "A=D\n";
     outfile << "0;JMP\n";
+
     WRITE_COMMENT(outfile, "[end_return]");
 }
 
@@ -501,6 +520,14 @@ void AsmCoder::close()
     outfile << "0;JMP\n";
 
     outfile.close();
+}
+
+void AsmCoder::set_file_name(std::string prog_name)
+{
+    WRITE_COMMENT(outfile, "");
+    WRITE_COMMENT(outfile, "");
+    WRITE_COMMENT(outfile, "[new_prog_name: " << prog_name << "]\n\n");
+    prog_name = prog_name;
 }
 
 void AsmCoder::write_at_sp(std::ostream& out) { out << "@SP\n"; }

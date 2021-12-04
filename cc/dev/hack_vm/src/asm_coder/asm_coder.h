@@ -9,7 +9,8 @@
 
 #define __COMMENTS_ENB__ 1
 #if __COMMENTS_ENB__
-#define WRITE_COMMENT(outfile, msg) outfile << "// " << msg << "\n"
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#define WRITE_COMMENT(outfile, msg) outfile << "// " << __FILENAME__ << " (" << __LINE__ << "): " << msg << "\n"
 #else
 #define WRITE_COMMENT(outfile, msg)
 #endif
@@ -17,7 +18,7 @@
 class AsmCoder {
 
 public:
-    AsmCoder(std::string asm_fname, std::string prog_name);
+    AsmCoder(std::string asm_fname, std::string prog_name, bool is_multi);
     void write_arith(std::string cmd);
     void write_push_pop(bool is_push, const std::string& seg, int i);
     void write_label(std::string label);
@@ -26,6 +27,7 @@ public:
     void write_func(std::string func_name, int n_vars);
     void write_call(std::string func_name, int n_args);
     void write_return();
+    void set_file_name(std::string prog_name);
 
     void close(); // closes the output file/stream.
 

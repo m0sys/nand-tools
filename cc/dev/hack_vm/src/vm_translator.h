@@ -4,6 +4,7 @@
 
 #pragma once
 #include <string>
+#include <vector>
 
 /*
  * Memory Segments Mapping:
@@ -39,10 +40,12 @@ public:
     void translate();
 
 private:
-    void create_prog_name();
+    void create_prog_name(const std::string& fname);
+    void create_asm_name();
 
 private:
-    std::string asm_fname;
     std::string fname;
+    std::vector<std::string> paths;
+    std::string asm_fname;
     std::string prog_name;
 };
