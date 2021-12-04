@@ -1,22 +1,22 @@
-// SimpleFunction.vm: [start_func]: SimpleFunction.test
-(SimpleFunction.SimpleFunction.test)
-// push constant 0
+// asm_coder.cc (327): SimpleFunction.vm: [start_func]: SimpleFunction.test
+(SimpleFunction.test)
+// asm_coder.cc (176): push constant 0
 @0
 D=A
-// [start_push_logic]
+// asm_coder.cc (563): [start_push_logic]
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// [end_push_logic]
-// pop local 0
-// [start_pop_logic]
+// asm_coder.cc (569): [end_push_logic]
+// asm_coder.cc (234): pop local 0
+// asm_coder.cc (574): [start_pop_logic]
 @SP
 M=M-1
 A=M
 D=M
-// [end_pop_logic]
+// asm_coder.cc (579): [end_pop_logic]
 @R14
 M=D
 @0
@@ -30,23 +30,23 @@ D=M
 @R15
 A=M
 M=D
-// push constant 0
+// asm_coder.cc (176): push constant 0
 @0
 D=A
-// [start_push_logic]
+// asm_coder.cc (563): [start_push_logic]
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// [end_push_logic]
-// pop local 1
-// [start_pop_logic]
+// asm_coder.cc (569): [end_push_logic]
+// asm_coder.cc (234): pop local 1
+// asm_coder.cc (574): [start_pop_logic]
 @SP
 M=M-1
 A=M
 D=M
-// [end_pop_logic]
+// asm_coder.cc (579): [end_pop_logic]
 @R14
 M=D
 @1
@@ -60,161 +60,161 @@ D=M
 @R15
 A=M
 M=D
-// SimpleFunction.vm: [end_func]: SimpleFunction.test
-// push local 0
+// asm_coder.cc (337): SimpleFunction.vm: [end_func]: SimpleFunction.test
+// asm_coder.cc (176): push local 0
 @LCL
 D=M
 @0
 A=D+A
 D=M
-// [start_push_logic]
+// asm_coder.cc (563): [start_push_logic]
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// [end_push_logic]
-// [end_write_push_pop]
+// asm_coder.cc (569): [end_push_logic]
+// asm_coder.cc (170): [end_write_push_pop]
 
-// push local 1
+// asm_coder.cc (176): push local 1
 @LCL
 D=M
 @1
 A=D+A
 D=M
-// [start_push_logic]
+// asm_coder.cc (563): [start_push_logic]
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// [end_push_logic]
-// [end_write_push_pop]
+// asm_coder.cc (569): [end_push_logic]
+// asm_coder.cc (170): [end_write_push_pop]
 
-// add
-// [start_pop_logic]
+// asm_coder.cc (34): add
+// asm_coder.cc (574): [start_pop_logic]
 @SP
 M=M-1
 A=M
 D=M
-// [end_pop_logic]
+// asm_coder.cc (579): [end_pop_logic]
 @R13
 M=D
-// [start_pop_logic]
+// asm_coder.cc (574): [start_pop_logic]
 @SP
 M=M-1
 A=M
 D=M
-// [end_pop_logic]
+// asm_coder.cc (579): [end_pop_logic]
 @R13
 D=D+M
-// [start_push_logic]
+// asm_coder.cc (563): [start_push_logic]
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// [end_push_logic]
-// [end_write_arith]
+// asm_coder.cc (569): [end_push_logic]
+// asm_coder.cc (114): [end_write_arith]
 
-// not
-// [start_pop_logic]
+// asm_coder.cc (34): not
+// asm_coder.cc (574): [start_pop_logic]
 @SP
 M=M-1
 A=M
 D=M
-// [end_pop_logic]
+// asm_coder.cc (579): [end_pop_logic]
 D=!D
-// [start_push_logic]
+// asm_coder.cc (563): [start_push_logic]
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// [end_push_logic]
-// push argument 0
+// asm_coder.cc (569): [end_push_logic]
+// asm_coder.cc (176): push argument 0
 @ARG
 D=M
 @0
 A=D+A
 D=M
-// [start_push_logic]
+// asm_coder.cc (563): [start_push_logic]
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// [end_push_logic]
-// [end_write_push_pop]
+// asm_coder.cc (569): [end_push_logic]
+// asm_coder.cc (170): [end_write_push_pop]
 
-// add
-// [start_pop_logic]
+// asm_coder.cc (34): add
+// asm_coder.cc (574): [start_pop_logic]
 @SP
 M=M-1
 A=M
 D=M
-// [end_pop_logic]
+// asm_coder.cc (579): [end_pop_logic]
 @R13
 M=D
-// [start_pop_logic]
+// asm_coder.cc (574): [start_pop_logic]
 @SP
 M=M-1
 A=M
 D=M
-// [end_pop_logic]
+// asm_coder.cc (579): [end_pop_logic]
 @R13
 D=D+M
-// [start_push_logic]
+// asm_coder.cc (563): [start_push_logic]
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// [end_push_logic]
-// [end_write_arith]
+// asm_coder.cc (569): [end_push_logic]
+// asm_coder.cc (114): [end_write_arith]
 
-// push argument 1
+// asm_coder.cc (176): push argument 1
 @ARG
 D=M
 @1
 A=D+A
 D=M
-// [start_push_logic]
+// asm_coder.cc (563): [start_push_logic]
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// [end_push_logic]
-// [end_write_push_pop]
+// asm_coder.cc (569): [end_push_logic]
+// asm_coder.cc (170): [end_write_push_pop]
 
-// sub
-// [start_pop_logic]
+// asm_coder.cc (34): sub
+// asm_coder.cc (574): [start_pop_logic]
 @SP
 M=M-1
 A=M
 D=M
-// [end_pop_logic]
+// asm_coder.cc (579): [end_pop_logic]
 @R13
 M=D
-// [start_pop_logic]
+// asm_coder.cc (574): [start_pop_logic]
 @SP
 M=M-1
 A=M
 D=M
-// [end_pop_logic]
+// asm_coder.cc (579): [end_pop_logic]
 @R13
 D=D-M
-// [start_push_logic]
+// asm_coder.cc (563): [start_push_logic]
 @SP
 A=M
 M=D
 @SP
 M=M+1
-// [end_push_logic]
-// [end_write_arith]
+// asm_coder.cc (569): [end_push_logic]
+// asm_coder.cc (114): [end_write_arith]
 
-// [start_return]
+// asm_coder.cc (429): [start_return]
 @LCL
 D=M
 @R13
@@ -229,12 +229,12 @@ M=D
 D=M
 @R15
 M=D
-// [start_pop_logic]
+// asm_coder.cc (574): [start_pop_logic]
 @SP
 M=M-1
 A=M
 D=M
-// [end_pop_logic]
+// asm_coder.cc (579): [end_pop_logic]
 @R15
 A=M
 M=D
@@ -277,7 +277,7 @@ M=D
 D=M
 A=D
 0;JMP
-// [end_return]
+// asm_coder.cc (512): [end_return]
 (END)
 @END
 0;JMP
