@@ -431,6 +431,7 @@ void AsmCoder::write_return()
     // Put return value in temp reg (frame).
     write_at_lcl(outfile);
     write_set_d2m(outfile);
+    // FIXME: why is FRAME = 279?
     outfile << "@R13\n"; // FRAME
     // frame = LCL
     outfile << "M=D\n";
@@ -439,6 +440,7 @@ void AsmCoder::write_return()
     write_load_imm_d(outfile, 5);
     outfile << "@R13\n";
     outfile << "D=M-D\n";
+    // FIXME: RET_ADDR should be 273 not 274.
     outfile << "@R14\n"; // RET_ADDR
     outfile << "M=D\n";  // l:158
 
@@ -506,6 +508,9 @@ void AsmCoder::write_return()
     // Goto return_addr.
     outfile << "@R14\n";
     write_set_d2m(outfile);
+    // FIXME: I want to goto RAM[RAM[R14]] (D should be 273; therefore A = 273)
+    outfile << "A=D\n";
+    outfile << "D=M\n";
     outfile << "A=D\n";
     outfile << "0;JMP\n";
 
