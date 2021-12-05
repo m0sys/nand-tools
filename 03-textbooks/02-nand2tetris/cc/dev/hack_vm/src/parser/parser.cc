@@ -26,6 +26,7 @@ Parser::Parser(std::string fname)
 
 		remove_backslash_r(line);
 		remove_line_comment(line);
+		rtrim(line);
 		cmds.push_back(line);
 	}
 
@@ -49,6 +50,13 @@ void Parser::remove_line_comment(std::string& line)
 	if (pos != std::string::npos) {
 		line.erase(pos);
 	}
+}
+void Parser::rtrim(std::string& s)
+{
+	s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+		return !std::isspace(ch);
+	}).base(),
+		s.end());
 }
 
 void Parser::advance()
@@ -87,6 +95,38 @@ CommandType Parser::command_type()
 	if (std::regex_match(ccmd.begin(), ccmd.end(), rgx_arith))
 		return CT::C_ARITH;
 
+	// Check for label command.
+	auto label_pos = ccmd.find("label");
+	if (label_pos != string::npos)
+		return CT::C_LABEL;
+
+	// Check for if-goto command.
+	auto ifgoto_pos = ccmd.find("if-goto");
+	if (ifgoto_pos != string::npos)
+		return CT::C_IF;
+
+	// Check for goto command.
+	auto goto_pos = ccmd.find("goto");
+	if (goto_pos != string::npos)
+		return CT::C_GOTO;
+
+	// Check for function command.
+	auto func_pos = ccmd.find("function");
+	if (func_pos != string::npos)
+		return CT::C_FUNC;
+
+	// Check for call command.
+	auto call_pos = ccmd.find("call");
+	if (call_pos != string::npos)
+		return CT::C_CALL;
+
+	// Check for ret command.
+	auto ret_pos = ccmd.find("ret");
+	if (ret_pos != string::npos)
+		return CT::C_RET;
+
+	LOG("current command: " << ccmd);
+	LOG("lt find: " << ccmd.find("lt"));
 	return CT::UNKNOWN;
 }
 
@@ -104,6 +144,12 @@ std::string Parser::arg1()
 	if (is_arith_type())
 		return ccmd;
 
+	if (is_label_type() || is_goto_type() || is_ifgoto_type())
+		return splits[1];
+
+	if (is_func_type() || is_call_type())
+		return splits[1];
+
 	if (is_ret_type())
 		throw std::logic_error("Parser: ret type does not have arg1");
 
@@ -111,17 +157,24 @@ std::string Parser::arg1()
 }
 
 bool Parser::is_push_type() { return command_type() == CT::C_PUSH; }
-
 bool Parser::is_pop_type() { return command_type() == CT::C_POP; }
 bool Parser::is_arith_type() { return command_type() == CT::C_ARITH; }
-
+bool Parser::is_label_type() { return command_type() == CT::C_LABEL; }
+bool Parser::is_goto_type() { return command_type() == CT::C_GOTO; }
+bool Parser::is_ifgoto_type() { return command_type() == CT::C_IF; }
+bool Parser::is_func_type() { return command_type() == CT::C_FUNC; }
+bool Parser::is_call_type() { return command_type() == CT::C_CALL; }
 bool Parser::is_ret_type() { return command_type() == CT::C_RET; }
 
 int Parser::arg2()
 {
 	auto ccmd = curr_cmd();
 	auto splits = common::split(ccmd, ' ');
+
 	if (is_push_type() || is_pop_type())
+		return std::stoi(splits[2]);
+
+	else if (is_func_type() || is_call_type())
 		return std::stoi(splits[2]);
 	else
 		throw std::logic_error("arg2 can only be called for push|pop|call|func cmds");

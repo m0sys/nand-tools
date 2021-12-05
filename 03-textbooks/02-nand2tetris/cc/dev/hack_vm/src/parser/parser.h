@@ -37,11 +37,17 @@ private:
     static bool is_white_space(std::string line);
     static void remove_backslash_r(std::string& line);
     static void remove_line_comment(std::string& line);
+    static void rtrim(std::string& s);
     const std::string& curr_cmd();
 
     bool is_push_type();
     bool is_pop_type();
     bool is_arith_type();
+    bool is_label_type();
+    bool is_goto_type();
+    bool is_ifgoto_type();
+    bool is_func_type();
+    bool is_call_type();
     bool is_ret_type();
 
 private:
