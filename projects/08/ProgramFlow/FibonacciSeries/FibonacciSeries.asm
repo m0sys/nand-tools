@@ -1,416 +1,283 @@
-// asm_coder.cc (176): push argument 1
-@ARG
-D=M
-@1
-A=D+A
-D=M
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (234): pop pointer 1
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@THAT
-M=D
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (176): push constant 0
-@0
-D=A
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (234): pop that 0
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R14
-M=D
-@0
-D=A
-@THAT
-D=M+D
-@R15
-M=D
-@R14
-D=M
-@R15
-A=M
-M=D
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (176): push constant 1
-@1
-D=A
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (234): pop that 1
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R14
-M=D
-@1
-D=A
-@THAT
-D=M+D
-@R15
-M=D
-@R14
-D=M
-@R15
-A=M
-M=D
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (176): push argument 0
-@ARG
-D=M
-@0
-A=D+A
-D=M
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (176): push constant 2
-@2
-D=A
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (34): sub
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R13
-M=D
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R13
-D=D-M
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (114): [end_write_arith]
-
-// asm_coder.cc (234): pop argument 0
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R14
-M=D
-@0
-D=A
-@ARG
-D=M+D
-@R15
-M=D
-@R14
-D=M
-@R15
-A=M
-M=D
-// asm_coder.cc (170): [end_write_push_pop]
-
-(MAIN_LOOP_START)
-// asm_coder.cc (176): push argument 0
-@ARG
-D=M
-@0
-A=D+A
-D=M
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@COMPUTE_ELEMENT
-D;JNE
-@END_PROGRAM
-0;JMP
-(COMPUTE_ELEMENT)
-// asm_coder.cc (176): push that 0
-@THAT
-D=M
-@0
-A=D+A
-D=M
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (176): push that 1
-@THAT
-D=M
-@1
-A=D+A
-D=M
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (34): add
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R13
-M=D
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R13
-D=D+M
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (114): [end_write_arith]
-
-// asm_coder.cc (234): pop that 2
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R14
-M=D
-@2
-D=A
-@THAT
-D=M+D
-@R15
-M=D
-@R14
-D=M
-@R15
-A=M
-M=D
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (176): push pointer 1
-@THAT
-D=M
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (176): push constant 1
-@1
-D=A
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (34): add
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R13
-M=D
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R13
-D=D+M
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (114): [end_write_arith]
-
-// asm_coder.cc (234): pop pointer 1
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@THAT
-M=D
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (176): push argument 0
-@ARG
-D=M
-@0
-A=D+A
-D=M
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (176): push constant 1
-@1
-D=A
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (170): [end_write_push_pop]
-
-// asm_coder.cc (34): sub
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R13
-M=D
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R13
-D=D-M
-// asm_coder.cc (563): [start_push_logic]
-@SP
-A=M
-M=D
-@SP
-M=M+1
-// asm_coder.cc (569): [end_push_logic]
-// asm_coder.cc (114): [end_write_arith]
-
-// asm_coder.cc (234): pop argument 0
-// asm_coder.cc (574): [start_pop_logic]
-@SP
-M=M-1
-A=M
-D=M
-// asm_coder.cc (579): [end_pop_logic]
-@R14
-M=D
-@0
-D=A
-@ARG
-D=M+D
-@R15
-M=D
-@R14
-D=M
-@R15
-A=M
-M=D
-// asm_coder.cc (170): [end_write_push_pop]
-
-@MAIN_LOOP_START
-0;JMP
-(END_PROGRAM)
-(END)
-@END
-0;JMP
+@ARG // (561) 
+D=M // (222) 
+@1 // (223) 
+A=D+A // (224) 
+D=M // (225) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@THAT // (563) 
+M=D // (248) 
+@0 // (567) 
+D=A // (568) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R14 // (288) location where popped value is stored
+M=D // (289) 
+@0 // (567) 
+D=A // (568) 
+@THAT // (563) 
+D=M+D // (305) location where popped val will be stored
+@R15 // (573) storing D in R15
+M=D // (574) 
+@R14 // (575) loading R14 into D
+D=M // (576) 
+@R15 // (581) storing D in RAM[R15]
+A=M // (582) 
+M=D // (583) 
+@1 // (567) 
+D=A // (568) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R14 // (288) location where popped value is stored
+M=D // (289) 
+@1 // (567) 
+D=A // (568) 
+@THAT // (563) 
+D=M+D // (305) location where popped val will be stored
+@R15 // (573) storing D in R15
+M=D // (574) 
+@R14 // (575) loading R14 into D
+D=M // (576) 
+@R15 // (581) storing D in RAM[R15]
+A=M // (582) 
+M=D // (583) 
+@ARG // (561) 
+D=M // (222) 
+@0 // (223) 
+A=D+A // (224) 
+D=M // (225) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@2 // (567) 
+D=A // (568) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R13 // (81) 
+M=D // (82) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R13 // (88) 
+D=D-M // (94) sub op
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R14 // (288) location where popped value is stored
+M=D // (289) 
+@0 // (567) 
+D=A // (568) 
+@ARG // (561) 
+D=M+D // (305) location where popped val will be stored
+@R15 // (573) storing D in R15
+M=D // (574) 
+@R14 // (575) loading R14 into D
+D=M // (576) 
+@R15 // (581) storing D in RAM[R15]
+A=M // (582) 
+M=D // (583) 
+($MAIN_LOOP_START) // (161) 
+@ARG // (561) 
+D=M // (222) 
+@0 // (223) 
+A=D+A // (224) 
+D=M // (225) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@$COMPUTE_ELEMENT // (330) 
+D;JNE // (331) 
+@$END_PROGRAM // (322) 
+0;JMP // (323) 
+($COMPUTE_ELEMENT) // (161) 
+@THAT // (563) 
+D=M // (222) 
+@0 // (223) 
+A=D+A // (224) 
+D=M // (225) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@THAT // (563) 
+D=M // (222) 
+@1 // (223) 
+A=D+A // (224) 
+D=M // (225) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R13 // (81) 
+M=D // (82) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R13 // (88) 
+D=D+M // (92) add op
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R14 // (288) location where popped value is stored
+M=D // (289) 
+@2 // (567) 
+D=A // (568) 
+@THAT // (563) 
+D=M+D // (305) location where popped val will be stored
+@R15 // (573) storing D in R15
+M=D // (574) 
+@R14 // (575) loading R14 into D
+D=M // (576) 
+@R15 // (581) storing D in RAM[R15]
+A=M // (582) 
+M=D // (583) 
+@THAT // (563) 
+D=M // (203) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@1 // (567) 
+D=A // (568) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R13 // (81) 
+M=D // (82) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R13 // (88) 
+D=D+M // (92) add op
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@THAT // (563) 
+M=D // (248) 
+@ARG // (561) 
+D=M // (222) 
+@0 // (223) 
+A=D+A // (224) 
+D=M // (225) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@1 // (567) 
+D=A // (568) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R13 // (81) 
+M=D // (82) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R13 // (88) 
+D=D-M // (94) sub op
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R14 // (288) location where popped value is stored
+M=D // (289) 
+@0 // (567) 
+D=A // (568) 
+@ARG // (561) 
+D=M+D // (305) location where popped val will be stored
+@R15 // (573) storing D in R15
+M=D // (574) 
+@R14 // (575) loading R14 into D
+D=M // (576) 
+@R15 // (581) storing D in RAM[R15]
+A=M // (582) 
+M=D // (583) 
+@$MAIN_LOOP_START // (322) 
+0;JMP // (323) 
+($END_PROGRAM) // (161) 
+(END) // (543) ...closing file...
+@END // (544) 
+0;JMP // (545) 

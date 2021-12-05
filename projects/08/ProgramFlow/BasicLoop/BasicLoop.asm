@@ -1,159 +1,159 @@
-@0
-D=A
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@SP
-M=M-1
-A=M
-D=M
-@R14
-M=D
-@0
-D=A
-@LCL
-D=M+D
-@R15
-M=D
-@R14
-D=M
-@R15
-A=M
-M=D
-(LOOP_START)
-@ARG
-D=M
-@0
-A=D+A
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@LCL
-D=M
-@0
-A=D+A
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@SP
-M=M-1
-A=M
-D=M
-@R13
-M=D
-@SP
-M=M-1
-A=M
-D=M
-@R13
-D=D+M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@SP
-M=M-1
-A=M
-D=M
-@R14
-M=D
-@0
-D=A
-@LCL
-D=M+D
-@R15
-M=D
-@R14
-D=M
-@R15
-A=M
-M=D
-@ARG
-D=M
-@0
-A=D+A
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@1
-D=A
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@SP
-M=M-1
-A=M
-D=M
-@R13
-M=D
-@SP
-M=M-1
-A=M
-D=M
-@R13
-D=D-M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@SP
-M=M-1
-A=M
-D=M
-@R14
-M=D
-@0
-D=A
-@ARG
-D=M+D
-@R15
-M=D
-@R14
-D=M
-@R15
-A=M
-M=D
-@ARG
-D=M
-@0
-A=D+A
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@SP
-M=M-1
-A=M
-D=M
-@LOOP_START
-D;JNE
-@LCL
-D=M
-@0
-A=D+A
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-(END)
-@END
-0;JMP
+@0 // (567) 
+D=A // (568) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R14 // (288) location where popped value is stored
+M=D // (289) 
+@0 // (567) 
+D=A // (568) 
+@LCL // (559) 
+D=M+D // (305) location where popped val will be stored
+@R15 // (573) storing D in R15
+M=D // (574) 
+@R14 // (575) loading R14 into D
+D=M // (576) 
+@R15 // (581) storing D in RAM[R15]
+A=M // (582) 
+M=D // (583) 
+($LOOP_START) // (161) 
+@ARG // (561) 
+D=M // (222) 
+@0 // (223) 
+A=D+A // (224) 
+D=M // (225) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@LCL // (559) 
+D=M // (222) 
+@0 // (223) 
+A=D+A // (224) 
+D=M // (225) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R13 // (81) 
+M=D // (82) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R13 // (88) 
+D=D+M // (92) add op
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R14 // (288) location where popped value is stored
+M=D // (289) 
+@0 // (567) 
+D=A // (568) 
+@LCL // (559) 
+D=M+D // (305) location where popped val will be stored
+@R15 // (573) storing D in R15
+M=D // (574) 
+@R14 // (575) loading R14 into D
+D=M // (576) 
+@R15 // (581) storing D in RAM[R15]
+A=M // (582) 
+M=D // (583) 
+@ARG // (561) 
+D=M // (222) 
+@0 // (223) 
+A=D+A // (224) 
+D=M // (225) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@1 // (567) 
+D=A // (568) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R13 // (81) 
+M=D // (82) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R13 // (88) 
+D=D-M // (94) sub op
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@R14 // (288) location where popped value is stored
+M=D // (289) 
+@0 // (567) 
+D=A // (568) 
+@ARG // (561) 
+D=M+D // (305) location where popped val will be stored
+@R15 // (573) storing D in R15
+M=D // (574) 
+@R14 // (575) loading R14 into D
+D=M // (576) 
+@R15 // (581) storing D in RAM[R15]
+A=M // (582) 
+M=D // (583) 
+@ARG // (561) 
+D=M // (222) 
+@0 // (223) 
+A=D+A // (224) 
+D=M // (225) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+@SP // (558) 
+M=M-1 // (601) 
+A=M // (602) 
+D=M // (603) 
+@$LOOP_START // (330) 
+D;JNE // (331) 
+@LCL // (559) 
+D=M // (222) 
+@0 // (223) 
+A=D+A // (224) 
+D=M // (225) 
+@SP // (558) 
+A=M // (590) 
+M=D // (591) 
+@SP // (558) 
+M=M+1 // (593) 
+(END) // (543) ...closing file...
+@END // (544) 
+0;JMP // (545) 
