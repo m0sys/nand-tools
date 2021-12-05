@@ -7,9 +7,9 @@
 #include <map>
 #include <string>
 
-#define __COMMENTS_ENB__ 1
-#define __EOL_COMM_ENB__ 1
-#define __LINE_NUM_ENB__ 1
+#define __COMMENTS_ENB__ 0
+#define __EOL_COMM_ENB__ 0
+#define __LINE_NUM_ENB__ 0
 
 #define WRITE_ENDL(outfile) outfile << "\n"
 #if __COMMENTS_ENB__
