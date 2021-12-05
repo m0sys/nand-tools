@@ -9,11 +9,11 @@
 
 #define __COMMENTS_ENB__ 0
 #if __COMMENTS_ENB__
-#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-#define WRITE_COMMENT(outfile, msg) outfile << "// " << __FILENAME__ << " (" << __LINE__ << "): " << msg << "\n"
+#define WRITE_COMMENT(outfile, msg) outfile << "//  (" << __LINE__ << "): " << msg << "\n"
 #else
 #define WRITE_COMMENT(outfile, msg)
 #endif
+#define WRITE_ASM(outfile, cmd, msg) outfile << cmd << " // (" << __LINE__ << ") " << msg << "\n"
 
 class AsmCoder {
 
@@ -56,6 +56,8 @@ private:
     static void write_true_case(std::ostream& out, std::string label);
     static void write_false_case(std::ostream& out, std::string label);
     static void write_label_point(std::ostream& out, std::string label);
+
+    static bool is_jumpy(std::string cmd);
 
 private:
     std::ofstream outfile;
