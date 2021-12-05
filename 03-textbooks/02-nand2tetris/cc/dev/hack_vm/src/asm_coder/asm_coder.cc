@@ -12,8 +12,6 @@ AsmCoder::AsmCoder(std::string asm_fname, std::string prog_name, bool is_multi)
     : outfile { std::ofstream(asm_fname) }
     , prog_name { prog_name }
 {
-    // TODO: implement bootstraping code.
-    // TODO: enable boostraping only when multifile.
     if (is_multi) {
         DEBUG_LOG("IS MULTI");
         WRITE_COMMENT(outfile, "[init_prog_name: " << prog_name << "]");
@@ -21,7 +19,7 @@ AsmCoder::AsmCoder(std::string asm_fname, std::string prog_name, bool is_multi)
         // SP = 256
         WRITE_COMMENT(outfile, "[SP = 256]");
         write_load_imm_d(outfile, 256);
-        write_at_sp(outfile);
+        write_at_sp_asm(outfile);
         WRITE_ASM(outfile, "M=D", "");
         // call Sys.init
         write_call("Sys.init", 0);
@@ -31,40 +29,43 @@ AsmCoder::AsmCoder(std::string asm_fname, std::string prog_name, bool is_multi)
 
 void AsmCoder::write_arith(std::string cmd)
 {
+    WRITE_ENDL(outfile);
     WRITE_COMMENT(outfile, cmd);
 
     if (is_jumpy(cmd)) {
         if (cmd == "eq") {
-            WRITE_COMMENT(outfile, "eq_start");
+            WRITE_COMMENT(outfile, "[eq_start]");
 
             auto eq_label = comp_unique_logical_label(".EQ", count_eq);
-            write_logical_logic(eq_label);
+            write_pred_asm(eq_label);
             count_eq++;
 
-            WRITE_COMMENT(outfile, "eq_end");
+            WRITE_COMMENT(outfile, "[eq_end]");
+
         } else if (cmd == "lt") {
-            WRITE_COMMENT(outfile, "lt_start");
+            WRITE_COMMENT(outfile, "[lt_start]");
 
             auto lt_label = comp_unique_logical_label(".LT", count_lt);
-            write_logical_logic(lt_label);
+            write_pred_asm(lt_label);
             count_lt++;
 
-            WRITE_COMMENT(outfile, "lt_end");
+            WRITE_COMMENT(outfile, "[lt_end]");
 
         } else {
-            WRITE_COMMENT(outfile, "gt_start");
+            WRITE_COMMENT(outfile, "[gt_start]");
 
             auto gt_label = comp_unique_logical_label(".GT", count_gt);
-            write_logical_logic(gt_label);
+            write_pred_asm(gt_label);
             count_gt++;
 
-            WRITE_COMMENT(outfile, "gt_end");
+            WRITE_COMMENT(outfile, "[gt_end]");
         }
 
     } else {
 
         // Get first arg off the stack.
-        write_pop_logic(outfile);
+        WRITE_COMMENT(outfile, "Getting first arg off the stack (y)");
+        write_pop_asm(outfile);
 
         // Deal with unary ops first.
         if (cmd == "neg")
@@ -73,16 +74,17 @@ void AsmCoder::write_arith(std::string cmd)
             WRITE_ASM(outfile, "D=!D", "negation unary op");
         if (cmd == "neg" || cmd == "not") {
             // Push res onto top of the stack.
-            write_push_logic(outfile);
+            write_push_asm(outfile);
             return;
         }
 
         // Save first arg into R13 register.
-        WRITE_ASM(outfile, "@R13", "");
+        WRITE_ASM(outfile, "@R13", "save first arg here (y)");
         WRITE_ASM(outfile, "M=D", "");
 
         // Get second arg off the stack.
-        write_pop_logic(outfile);
+        WRITE_COMMENT(outfile, "Getting second arg off the stack (x)");
+        write_pop_asm(outfile);
 
         // Do operation.
         WRITE_ASM(outfile, "@R13", "");
@@ -97,14 +99,13 @@ void AsmCoder::write_arith(std::string cmd)
         else if (cmd == "or")
             WRITE_ASM(outfile, "D=D|M", "or op");
         else {
-            DEBUG_LOG(cmd);
-            DEBUG_LOG(cmd.size());
             throw std::logic_error("AsmCoder: unsupported arithmentic op");
         }
     }
 
     // Push res onto top of the stack.
-    write_push_logic(outfile);
+    WRITE_COMMENT(outfile, "Pushing arith res onto top of the stack");
+    write_push_asm(outfile);
 
     WRITE_COMMENT(outfile, "[end_write_arith]\n");
 }
@@ -120,13 +121,13 @@ std::string AsmCoder::comp_unique_logical_label(std::string type, int c)
     //
     return prog_name + type + std::to_string(c);
 }
-void AsmCoder::write_logical_logic(std::string label)
+void AsmCoder::write_pred_asm(std::string label)
 {
     write_arith("sub");
-    write_pop_logic(outfile);
-    write_logical_jmp_logic(outfile, label);
+    write_pop_asm(outfile);
+    write_pred_jmp_asm(outfile, label);
 }
-void AsmCoder::write_logical_jmp_logic(std::ostream& out, std::string label)
+void AsmCoder::write_pred_jmp_asm(std::ostream& out, std::string label)
 {
     WRITE_ASM(out, "@" << label, "");
     if (label.find("EQ") != std::string::npos)
@@ -135,27 +136,27 @@ void AsmCoder::write_logical_jmp_logic(std::ostream& out, std::string label)
         WRITE_ASM(out, "D;JLT", "");
     else if (label.find("GT") != std::string::npos)
         WRITE_ASM(out, "D;JGT", "");
-    write_false_case(out, label);
-    write_true_case(out, label);
-    write_label_point(out, label + ".CONTINUE");
+    write_false_case_asm(out, label);
+    write_true_case_asm(out, label);
+    write_label_point_asm(out, label + ".CONTINUE");
 }
 
-void AsmCoder::write_false_case(std::ostream& out, std::string label)
+void AsmCoder::write_false_case_asm(std::ostream& out, std::string label)
 {
     WRITE_ASM(out, "D=0", "");
     WRITE_ASM(out, "@" << label << ".CONTINUE", "");
     WRITE_ASM(out, "0;JMP", "");
 }
 
-void AsmCoder::write_true_case(std::ostream& out, std::string label)
+void AsmCoder::write_true_case_asm(std::ostream& out, std::string label)
 {
-    write_label_point(out, label);
+    write_label_point_asm(out, label);
     WRITE_ASM(out, "D=-1", "");
     WRITE_ASM(out, "@" << label << ".CONTINUE", "");
     WRITE_ASM(out, "0;JMP", "");
 }
 
-void AsmCoder::write_label_point(std::ostream& out, std::string label)
+void AsmCoder::write_label_point_asm(std::ostream& out, std::string label)
 {
     //
     WRITE_ASM(out, "(" << label << ")", "");
@@ -163,6 +164,8 @@ void AsmCoder::write_label_point(std::ostream& out, std::string label)
 
 void AsmCoder::write_push_pop(bool is_push, const std::string& seg, int i)
 {
+    WRITE_ENDL(outfile);
+
     if (is_push)
         write_push(seg, i);
     else
@@ -176,19 +179,7 @@ void AsmCoder::write_push(const std::string& seg, int i)
 {
     WRITE_COMMENT(outfile, "push " << seg << " " << i);
 
-    // Figure out where the data comes from.
-    if (seg == "local")
-        write_at_lcl(outfile);
-
-    else if (seg == "argument")
-        write_at_arg(outfile);
-
-    else if (seg == "this")
-        write_at_this(outfile);
-
-    else if (seg == "that")
-        write_at_that(outfile);
-
+    // Figure out type of push.
     if (seg == "constant") {
         // Load constant i into D register.
         write_load_imm_d(outfile, i);
@@ -196,9 +187,9 @@ void AsmCoder::write_push(const std::string& seg, int i)
 
     else if (seg == "pointer") {
         if (i == 0)
-            write_at_this(outfile);
+            write_at_this_asm(outfile);
         else
-            write_at_that(outfile);
+            write_at_that_asm(outfile);
 
         WRITE_ASM(outfile, "D=M", "");
     }
@@ -207,8 +198,7 @@ void AsmCoder::write_push(const std::string& seg, int i)
         WRITE_ASM(outfile, "@R5", "");
         WRITE_ASM(outfile, "D=A", "");
         WRITE_ASM(outfile, "@" << std::to_string(i), "");
-        WRITE_ASM(outfile, "D=D+A", "");
-        WRITE_ASM(outfile, "A=D", "");
+        WRITE_ASM(outfile, "A=D+A", "");
         WRITE_ASM(outfile, "D=M", "");
     }
 
@@ -218,6 +208,19 @@ void AsmCoder::write_push(const std::string& seg, int i)
     }
 
     else { // seg = {local|argument|this|that}
+
+        if (seg == "local")
+            write_at_lcl_asm(outfile);
+
+        else if (seg == "argument")
+            write_at_arg_asm(outfile);
+
+        else if (seg == "this")
+            write_at_this_asm(outfile);
+
+        else if (seg == "that")
+            write_at_that_asm(outfile);
+
         // Load (base+i) into D register.
         WRITE_ASM(outfile, "D=M", "");
         WRITE_ASM(outfile, "@" << std::to_string(i), "");
@@ -225,38 +228,29 @@ void AsmCoder::write_push(const std::string& seg, int i)
         WRITE_ASM(outfile, "D=M", "");
     }
 
-    write_push_logic(outfile);
+    write_push_asm(outfile);
 }
 
 // Writes top of the stack to seg[i].
 void AsmCoder::write_pop(const std::string& seg, int i)
 {
-    DEBUG_LOG("Poping: seg=" << seg << ", i=" << i);
-
     WRITE_COMMENT(outfile, "pop " << seg << " " << i);
 
     // Pop top of the stack.
-    write_pop_logic(outfile);
+    WRITE_COMMENT(outfile, "Popping top of the stack into reg D");
+    write_pop_asm(outfile);
 
     // Store D register in appropriate register.
-
+    WRITE_COMMENT(outfile, "Storing val in D in appropriate register");
     if (seg == "pointer") {
         if (i == 0)
-            write_at_this(outfile);
+            write_at_this_asm(outfile);
         else
-            write_at_that(outfile);
+            write_at_that_asm(outfile);
         WRITE_ASM(outfile, "M=D", "");
     }
 
     else if (seg == "temp") {
-
-        // outfile << "@5\n";
-        // outfile << "D=A\n";
-        // outfile << "@" << std::to_string(i) << "\n";
-        // outfile << "D=D+A\n";
-        // outfile << "A=D\n";
-        // outfile << "D=M\n";
-
         WRITE_ASM(outfile, "@R14", "location where popped value is stored");
         WRITE_ASM(outfile, "M=D", "");
 
@@ -266,16 +260,9 @@ void AsmCoder::write_pop(const std::string& seg, int i)
         WRITE_ASM(outfile, "D=D+A", "address to store popped val");
 
         write_store_d15addr_read_d14(outfile); // REMOVED
-        // outfile << "@R15\n"; // ADDED
-        // outfile << "M=D\n";  // ADDED
-        // outfile << "@R14\n"; // ADDED
-        // outfile << "D=M\n";  // ADDED
 
         // Store D.
         write_store_d15(outfile); // REMOVED
-        // outfile << "@R15\n"; // ADDED
-        // outfile << "A=M\n";  // ADDED
-        // outfile << "M=D\n";  // ADDED
     }
 
     else if (seg == "static") {
@@ -291,16 +278,16 @@ void AsmCoder::write_pop(const std::string& seg, int i)
 
         // Figure out which register to write to.
         if (seg == "local")
-            write_at_lcl(outfile);
+            write_at_lcl_asm(outfile);
 
         else if (seg == "argument")
-            write_at_arg(outfile);
+            write_at_arg_asm(outfile);
 
         else if (seg == "this")
-            write_at_this(outfile);
+            write_at_this_asm(outfile);
 
         else if (seg == "that")
-            write_at_that(outfile);
+            write_at_that_asm(outfile);
 
         WRITE_ASM(outfile, "D=M+D", "location where popped val will be stored");
 
@@ -313,20 +300,25 @@ void AsmCoder::write_pop(const std::string& seg, int i)
 
 void AsmCoder::write_label(std::string label)
 {
-    //
-    write_label_point(outfile, label);
+    WRITE_ENDL(outfile);
+    WRITE_COMMENT(outfile, "label " << label);
+    write_label_point_asm(outfile, label);
 }
 
 void AsmCoder::write_goto(std::string label)
 {
+    WRITE_ENDL(outfile);
+    WRITE_COMMENT(outfile, "goto");
     WRITE_ASM(outfile, "@" << label, "");
     WRITE_ASM(outfile, "0;JMP", "");
 }
 
 void AsmCoder::write_if(std::string label)
 {
+    WRITE_ENDL(outfile);
+    WRITE_COMMENT(outfile, "if-goto " << label);
     // If stack top value is not zero goto label.
-    write_pop_logic(outfile);
+    write_pop_asm(outfile);
     WRITE_ASM(outfile, "@" << label, "");
     WRITE_ASM(outfile, "D;JNE", "");
 }
@@ -340,14 +332,16 @@ void AsmCoder::write_if(std::string label)
  */
 void AsmCoder::write_func(std::string func_name, int n_vars)
 {
-    WRITE_COMMENT(outfile, prog_name << ".vm: [start_func]: " << func_name);
-    // std::string ufunc_name = prog_name + "." + func_name;
+    WRITE_ENDL(outfile);
+    WRITE_COMMENT(outfile, prog_name << ".vm: function " << func_name << " " << n_vars);
 
     // Initialize local variables.
-    write_label_point(outfile, func_name);
-    for (int i = 0; i < n_vars; i++) {
-        write_push("constant", 0);
-        write_pop("local", i);
+    write_label_point_asm(outfile, func_name);
+    for (int i = 0; i < n_vars; i++) { // repeat nVars times
+        // push 0
+        WRITE_COMMENT(outfile, "Intializing local " << i << " to 0");
+        WRITE_ASM(outfile, "D=0", "");
+        write_push_asm(outfile);
     }
 
     WRITE_COMMENT(outfile, prog_name << ".vm: [end_func]: " << func_name);
@@ -362,7 +356,10 @@ void AsmCoder::write_func(std::string func_name, int n_vars)
  */
 void AsmCoder::write_call(std::string func_name, int n_args)
 {
-    WRITE_COMMENT(outfile, "[start_call]: " << func_name);
+    WRITE_ENDL(outfile);
+    WRITE_COMMENT(outfile, "call " << func_name << " " << n_args);
+
+    // Generate return label (returnAddress).
     std::string point_of_ret = func_name + "$ret";
     int i = 0;
     if (ret_map.contains(point_of_ret))
@@ -371,56 +368,65 @@ void AsmCoder::write_call(std::string func_name, int n_args)
     // Save caller's frame (state) in stack before proceeding.
 
     // Push ret_addr onto stack.
+    WRITE_COMMENT(outfile, "push returnAddress");
     WRITE_ASM(outfile, "@" << point_of_ret << std::to_string(i), "");
     write_set_d2a(outfile);
-    write_push_logic(outfile);
+    write_push_asm(outfile);
 
     // Push lcl|arg|this|that onto stack.
-    write_at_lcl(outfile);
+    WRITE_COMMENT(outfile, "push LCL");
+    write_at_lcl_asm(outfile);
     write_set_d2m(outfile);
-    write_push_logic(outfile);
+    write_push_asm(outfile);
 
-    write_at_arg(outfile);
+    WRITE_COMMENT(outfile, "push ARG");
+    write_at_arg_asm(outfile);
     write_set_d2m(outfile);
-    write_push_logic(outfile);
+    write_push_asm(outfile);
 
-    write_at_this(outfile);
+    WRITE_COMMENT(outfile, "push THIS");
+    write_at_this_asm(outfile);
     write_set_d2m(outfile);
-    write_push_logic(outfile);
+    write_push_asm(outfile);
 
-    write_at_that(outfile);
+    WRITE_COMMENT(outfile, "push THAT");
+    write_at_that_asm(outfile);
     write_set_d2m(outfile);
-    write_push_logic(outfile);
+    write_push_asm(outfile);
 
-    // Set ARG = SP - 5 - nArgs
-    write_at_sp(outfile);
+    // Reposiiton ARG and LCL
+    WRITE_COMMENT(outfile, "ARG = SP - 5 - nArgs");
+    write_at_sp_asm(outfile);
     write_set_d2m(outfile);
-    write_at_arg(outfile);
+    write_at_arg_asm(outfile);
     // ARG = SP
     WRITE_ASM(outfile, "M=D", "");
     write_load_imm_d(outfile, 5);
-    write_at_arg(outfile);
+    write_at_arg_asm(outfile);
     // ARG = SP - 5
     WRITE_ASM(outfile, "M=M-D", "");
     write_load_imm_d(outfile, n_args);
-    write_at_arg(outfile);
-    // ARG = SP -5 - nArgs
-    WRITE_ASM(outfile, "M=M-D", "");
+    write_at_arg_asm(outfile);
+    // ARG = SP - 5 - nArgs
+    WRITE_ASM(outfile, "M=M-D", "now ARG = SP - 5 - nArgs");
 
-    // Set LCL = SP
-    write_at_sp(outfile);
+    WRITE_COMMENT(outfile, "LCL = SP");
+    write_at_sp_asm(outfile);
     write_set_d2m(outfile);
-    write_at_lcl(outfile);
+    write_at_lcl_asm(outfile);
     // LCL = SP
-    WRITE_ASM(outfile, "M=D", "");
+    WRITE_ASM(outfile, "M=D", "now LCL = SP");
 
     // Goto func_name
+    WRITE_COMMENT(outfile, "goto f");
     WRITE_ASM(outfile, "@" << func_name, "");
     WRITE_ASM(outfile, "0;JMP", "");
 
     // Jump to location where calle code is.
-    write_label_point(outfile, point_of_ret + std::to_string(i));
+    WRITE_COMMENT(outfile, "(returnAddress)");
+    write_label_point_asm(outfile, point_of_ret + std::to_string(i));
     ret_map[point_of_ret] = i + 1;
+
     WRITE_COMMENT(outfile, "[end_call]: " << func_name);
 }
 
@@ -442,95 +448,92 @@ void AsmCoder::write_return()
     //       value the address (frame - 5) points to - that is,
     //       retAddr = RAM[frame-5].
 
+    WRITE_ENDL(outfile);
     WRITE_COMMENT(outfile, "[start_return]");
 
     // Put return value in temp reg (frame).
     // frame = LCL
-    write_at_lcl(outfile);
+    WRITE_COMMENT(outfile, "frame = LCL");
+    write_at_lcl_asm(outfile);
     write_set_d2m(outfile);
-    // FIXME: why is FRAME = 279?
     WRITE_ASM(outfile, "@R13", "FRAME");
     WRITE_ASM(outfile, "M=D", "");
 
     // retAddr = *(frame-5)
+    WRITE_COMMENT(outfile, "retAddr = *(frame-5)");
     write_load_imm_d(outfile, 5);
     WRITE_ASM(outfile, "@R13", "");
     WRITE_ASM(outfile, "D=M-D", "");
-    // FIXME: RET_ADDR should be 273 not 274.
     WRITE_ASM(outfile, "A=D", "");
-    write_set_d2m(outfile);         // ADDED
-    WRITE_ASM(outfile, "@R14", ""); // RET_ADDR
+    write_set_d2m(outfile);
+    WRITE_ASM(outfile, "@R14", "RET_ADDR");
     WRITE_ASM(outfile, "M=D", "");
 
     // Reposition return val & sp for caller.
     // *ARG = pop()
-    // DONE: With some magic RAM[310] = 1196 (return_value)
-    write_at_arg(outfile);  // l:163 RAM[2] (*ARG) = 310
-    write_set_d2m(outfile); // D = 310
-    WRITE_ASM(outfile, "@R15", "storing *ARG in R15");
-    WRITE_ASM(outfile, "M=D", "");  // R15 = *ARG
-    write_pop_logic(outfile);       // D = return_value
-    WRITE_ASM(outfile, "@R15", ""); // retVal
-    WRITE_ASM(outfile, "A=M", "");
-    // FIXME: this is somehow overwriting R14??
+    WRITE_COMMENT(outfile, "*ARG = pop()");
+    write_at_arg_asm(outfile);
+    write_set_d2m(outfile);
+    WRITE_ASM(outfile, "@R15", "storing ARG in R15");
+    WRITE_ASM(outfile, "M=D", "");
+    write_pop_asm(outfile);
+    WRITE_ASM(outfile, "@R15", "RET_VAL");
+    WRITE_ASM(outfile, "A=M", "A=*ARG");
     WRITE_ASM(outfile, "M=D", "");
 
     // SP = ARG+1
-    write_at_arg(outfile);
+    WRITE_COMMENT(outfile, "SP = ARG+1");
+    write_at_arg_asm(outfile);
     write_set_d2m(outfile);
     WRITE_ASM(outfile, "D=D+1", "");
-    write_at_sp(outfile);
+    write_at_sp_asm(outfile);
     WRITE_ASM(outfile, "M=D", "");
-    // write_set_d2m(outfile);
 
     // Restore caller's fram (state) from stack before returning to return_addr.
 
     // THAT = *(frame-1)
-    WRITE_ASM(outfile, "@R13", "");
+    WRITE_COMMENT(outfile, "THAT = *(frame-1)");
+    WRITE_ASM(outfile, "@R13", "must still contain FRAME");
     WRITE_ASM(outfile, "D=M-1", "");
     WRITE_ASM(outfile, "A=D", "");
     write_set_d2m(outfile);
-    write_at_that(outfile);
+    write_at_that_asm(outfile);
     WRITE_ASM(outfile, "M=D", "");
-    // write_set_d2m(outfile);
 
     // THIS = *(frame-2)
+    WRITE_COMMENT(outfile, "THIS = *(frame-2)");
     write_load_imm_d(outfile, 2); // l:176
-    WRITE_ASM(outfile, "@R13", "");
+    WRITE_ASM(outfile, "@R13", "must still contain FRAME");
     WRITE_ASM(outfile, "D=M-D", "");
     WRITE_ASM(outfile, "A=D", "");
     write_set_d2m(outfile);
-    write_at_this(outfile);
+    write_at_this_asm(outfile);
     WRITE_ASM(outfile, "M=D", "");
-    // write_set_d2m(outfile);
 
     // ARG = *(frame-3)
+    WRITE_COMMENT(outfile, "ARG = *(frame-3)");
     write_load_imm_d(outfile, 3); // l:184
-    WRITE_ASM(outfile, "@R13", "");
+    WRITE_ASM(outfile, "@R13", "must still contain FRAME");
     WRITE_ASM(outfile, "D=M-D", "");
     WRITE_ASM(outfile, "A=D", "");
     write_set_d2m(outfile);
-    write_at_arg(outfile);
+    write_at_arg_asm(outfile);
     WRITE_ASM(outfile, "M=D", "");
-    // write_set_d2m(outfile);
 
     // LCL = *(frame-4)
+    WRITE_COMMENT(outfile, "LCL = *(frame-4)");
     write_load_imm_d(outfile, 4); // l:192
-    WRITE_ASM(outfile, "@R13", "");
+    WRITE_ASM(outfile, "@R13", "must still contain FRAME");
     WRITE_ASM(outfile, "D=M-D", "");
     WRITE_ASM(outfile, "A=D", "");
     write_set_d2m(outfile);
-    write_at_lcl(outfile);
+    write_at_lcl_asm(outfile);
     WRITE_ASM(outfile, "M=D", "");
-    // write_set_d2m(outfile);
 
     // Goto return_addr.
-    // TODO: break @: 189 & 245
-    WRITE_ASM(outfile, "@R14", "");
+    WRITE_COMMENT(outfile, "goto retAddr");
+    WRITE_ASM(outfile, "@R14", "must still contain RET_ADDR");
     write_set_d2m(outfile);
-    // FIXME: I want to goto RAM[RAM[R14]] (D should be 273; therefore A = 273)
-    // outfile << "A=D\n";//  REMOVED
-    // write_set_d2m(outfile); // REMOVED
     WRITE_ASM(outfile, "A=D", "");
     WRITE_ASM(outfile, "0;JMP", "");
 
@@ -555,12 +558,12 @@ void AsmCoder::set_file_name(std::string pname)
     prog_name = pname;
 }
 
-void AsmCoder::write_at_sp(std::ostream& out) { WRITE_ASM(out, "@SP", ""); }
-void AsmCoder::write_at_lcl(std::ostream& out) { WRITE_ASM(out, "@LCL", ""); }
+void AsmCoder::write_at_sp_asm(std::ostream& out) { WRITE_ASM(out, "@SP", ""); }
+void AsmCoder::write_at_lcl_asm(std::ostream& out) { WRITE_ASM(out, "@LCL", ""); }
 
-void AsmCoder::write_at_arg(std::ostream& out) { WRITE_ASM(out, "@ARG", ""); }
-void AsmCoder::write_at_this(std::ostream& out) { WRITE_ASM(out, "@THIS", ""); }
-void AsmCoder::write_at_that(std::ostream& out) { WRITE_ASM(out, "@THAT", ""); }
+void AsmCoder::write_at_arg_asm(std::ostream& out) { WRITE_ASM(out, "@ARG", ""); }
+void AsmCoder::write_at_this_asm(std::ostream& out) { WRITE_ASM(out, "@THIS", ""); }
+void AsmCoder::write_at_that_asm(std::ostream& out) { WRITE_ASM(out, "@THAT", ""); }
 
 void AsmCoder::write_load_imm_d(std::ostream& out, int i)
 {
@@ -583,21 +586,21 @@ void AsmCoder::write_store_d15(std::ostream& out)
     WRITE_ASM(out, "M=D", "");
 }
 
-void AsmCoder::write_push_logic(std::ostream& out)
+void AsmCoder::write_push_asm(std::ostream& out)
 {
     WRITE_COMMENT(out, "[start_push_logic]");
-    write_at_sp(out);
+    write_at_sp_asm(out);
     WRITE_ASM(out, "A=M", "");
     WRITE_ASM(out, "M=D", "");
-    write_at_sp(out);
+    write_at_sp_asm(out);
     WRITE_ASM(out, "M=M+1", "");
     WRITE_COMMENT(out, "[end_push_logic]");
 }
 
-void AsmCoder::write_pop_logic(std::ostream& out)
+void AsmCoder::write_pop_asm(std::ostream& out)
 {
     WRITE_COMMENT(out, "[start_pop_logic]");
-    write_at_sp(out);
+    write_at_sp_asm(out);
     WRITE_ASM(out, "M=M-1", "");
     WRITE_ASM(out, "A=M", "");
     WRITE_ASM(out, "D=M", "");
