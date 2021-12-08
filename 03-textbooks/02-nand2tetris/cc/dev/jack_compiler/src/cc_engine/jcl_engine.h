@@ -48,10 +48,12 @@ public:
     // Compiles an expression.
     void compile_expr();
 
-    // Compiles a term.
-    //
-    // If the current token is an ID, the routine will resolve it into a
-    // variable, an array element, or a subroutine call.
+    /*
+     * Compiles a term.
+     *
+     * If the current token is an ID, the routine will resolve it into a
+     * variable, an array element, or a subroutine call.
+     */
     void compile_term();
 
     /*
