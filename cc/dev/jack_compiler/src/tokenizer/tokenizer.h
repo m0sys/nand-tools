@@ -68,6 +68,13 @@ public:
     std::string str_val();
 
 private:
+    bool is_comment(const std::string& line);
+    bool is_white_space(const std::string& line);
+    void remove_backslash_r(std::string& line);
+    void remove_line_comment(std::string& line);
+    void rtrim(std::string& line);
+
+private:
     unsigned curr_token_idx = 0;
     std::vector<std::string> tokns;
 };
