@@ -4,6 +4,7 @@
 int main()
 {
     LOG("HELLO, WORLD");
-    Tokenizer t("../../../projects/10/ExpressionLessSquare/Square.jack");
+    // Tokenizer t("../../../projects/10/ExpressionLessSquare/Square.jack");
+    Tokenizer t("../../../projects/10/ArrayTest/Main.jack");
     DEBUG_LOG("HELLO, WORLD; DEBUG");
 }

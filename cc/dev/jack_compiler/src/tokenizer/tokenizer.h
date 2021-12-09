@@ -72,9 +72,58 @@ private:
     bool is_white_space(const std::string& line);
     void remove_backslash_r(std::string& line);
     void remove_line_comment(std::string& line);
-    void rtrim(std::string& line);
+    std::string curr_token();
+    bool found_kwd(std::string kwd);
+    bool found_symb(std::string symb);
+    static bool is_num(std::string);
 
 private:
     unsigned curr_token_idx = 0;
     std::vector<std::string> tokns;
+
+    const std::vector<std::string> SYMBS {
+        "{",
+        "}",
+        "(",
+        ")",
+        "[",
+        "]",
+        ".",
+        ",",
+        ";",
+        "+",
+        "-",
+        "*",
+        "/",
+        "&",
+        "|",
+        "<",
+        ">",
+        "=",
+        "~",
+    };
+
+    const std::vector<std::string> KWDS {
+        "class",
+        "constructor",
+        "function",
+        "method",
+        "field",
+        "static",
+        "var",
+        "int",
+        "char",
+        "boolean",
+        "void",
+        "true",
+        "false",
+        "null",
+        "this",
+        "let",
+        "do",
+        "if",
+        "else",
+        "while",
+        "return",
+    };
 };
