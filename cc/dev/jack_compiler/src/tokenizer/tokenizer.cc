@@ -26,53 +26,94 @@ Tokenizer::Tokenizer(std::string jack_file)
         if (is_comment(line) || is_white_space(line))
             continue;
 
-        remove_backslash_r(line);
-        remove_line_comment(line);
-        rtrim(line);
+        // remove_backslash_r(line);
+        // remove_line_comment(line);
+        // rtrim(line);
         lines.push_back(line);
     }
 
     string tokn;
     for (const auto& l : lines) {
+        LOG(l);
         std::stringstream ss(l);
         while (std::getline(ss, tokn, ' ')) {
             if (is_white_space(tokn))
                 continue;
 
-            // Handle method calls. e.g. game.run();
-            if (tokn.find('.') != string::npos) {
-                int p_pos = tokn.find('.');
-                string lhs = tokn.substr(0, p_pos);
-                string rhs = tokn.substr(p_pos + 1, tokn.size() - p_pos);
-                LOG("TOKEN: " << tokn);
-                LOG("LHS: " << lhs);
-                LOG("RHS: " << rhs);
-                LOG("RHS: meth = " << rhs.substr(0, rhs.size() - 3));
-                tokns.push_back(lhs);
-                tokns.push_back(string(1, '.'));
-                tokns.push_back(rhs.substr(0, rhs.size() - 3));
-                tokns.push_back(string(1, rhs[rhs.size() - 3]));
-                tokns.push_back(string(1, rhs[rhs.size() - 2]));
-                tokns.push_back(string(1, rhs[rhs.size() - 1]));
+            bool is_meth_call = tokn.find('.') != string::npos;
+            bool has_left_paren = tokn.find('(') != string::npos;
+            bool has_right_paren = tokn.find(')') != string::npos;
+            bool has_comma = tokn.find(',') != string::npos;
+            bool has_semi = tokn.find(';') != string::npos;
+            bool is_exception = is_meth_call || has_left_paren || has_right_paren || has_comma || has_semi;
+
+            if (is_exception) {
+                string rest = tokn;
+                // Handle method call.
+                if (is_meth_call) {
+                    int p_pos = rest.find('.');
+                    string lhs = rest.substr(0, p_pos);
+                    string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
+                    tokns.push_back(lhs);
+                    tokns.push_back(string(1, '.'));
+                    rest = rhs;
+                }
+
+                // Handle left paren.
+                has_left_paren = rest.find('(') != string::npos;
+                if (has_left_paren) {
+                    int p_pos = rest.find('(');
+                    string lhs = rest.substr(0, p_pos);
+                    string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
+                    if (lhs.size() != 0)
+                        tokns.push_back(lhs);
+                    tokns.push_back(string(1, '('));
+                    rest = rhs;
+                }
+
+                // Handle comma.
+                has_comma = rest.find(',') != string::npos;
+                if (has_comma) {
+                    int p_pos = rest.find(',');
+                    string lhs = rest.substr(0, p_pos);
+                    string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
+                    if (lhs.size() != 0)
+                        tokns.push_back(lhs);
+                    tokns.push_back(string(1, ','));
+                    rest = rhs;
+                }
+
+                // Handle right paren.
+                has_right_paren = rest.find(')') != string::npos;
+                if (has_right_paren) {
+                    int p_pos = rest.find(')');
+                    string lhs = rest.substr(0, p_pos);
+                    string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
+                    if (lhs.size() != 0)
+                        tokns.push_back(lhs);
+                    tokns.push_back(string(1, ')'));
+                    rest = rhs;
+                }
+
+                // Handle semicolon.
+                has_semi = rest.find(';') != string::npos;
+                if (has_semi) {
+                    int p_pos = rest.find(';');
+                    string lhs = rest.substr(0, p_pos);
+                    string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
+                    if (lhs.size() != 0)
+                        tokns.push_back(lhs);
+                    tokns.push_back(string(1, ';'));
+                    rest = rhs;
+                }
+                if (rest.size() != 0)
+                    tokns.push_back(rest);
+
                 continue;
             }
 
-            // Handle end of statement ';'.
-            if (tokn.find(';') != string::npos) {
-                tokns.push_back(tokn.substr(0, tokn.size() - 1));
-                tokns.push_back(string(1, ';'));
-                continue;
-            }
-
-            // TODO: handle function declaration param lst.
-            //
-            // TODO: handle if condition.
-
-            // if (tokn.find(';') != string::npos)
-            //    continue;
             tokns.push_back(tokn);
         }
-        LOG(l);
     }
 
     for (const auto& t : tokns)
