@@ -35,7 +35,7 @@ Tokenizer::Tokenizer(std::string jack_file)
 
     string tokn;
     for (const auto& l : lines) {
-        LOG(l);
+        DEBUG_LOG(l);
         std::stringstream ss(l);
 
         while (std::getline(ss, tokn, ' ')) {
@@ -156,8 +156,8 @@ Tokenizer::Tokenizer(std::string jack_file)
         }
     }
 
-    for (const auto& t : tokns)
-        LOG("tkn(" << t.size() << "): " << t);
+    // for (const auto& t : tokns)
+    //    LOG("tkn(" << t.size() << "): " << t);
 
     curr_token_idx = 0;
     infile.close();
