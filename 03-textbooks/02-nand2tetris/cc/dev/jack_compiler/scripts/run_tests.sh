@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cmake --build build
-#./build/hack_vm_test
+./build/jack_compiler_test
 
 ##printf "Boostrap code\n"
 ##./build/hack_vm ../../../projects/08/FunctionCalls/StaticsTest/
