@@ -72,6 +72,7 @@ private:
     bool is_white_space(const std::string& line);
     void remove_backslash_r(std::string& line);
     void remove_line_comment(std::string& line);
+    void advance_str_const();
     std::string curr_token();
     bool found_kwd(std::string kwd);
     bool found_symb(std::string symb);
