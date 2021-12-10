@@ -286,7 +286,7 @@ void JCLEngine::compile_subroutine_body()
     using std::logic_error;
 
     // Handle '{'.
-    write_left_bra_or_throw();
+    write_left_curl_or_throw();
 
     // Handle varDec*: 'var' type varName (',' varName)*';'
     // FIXME: *
@@ -296,9 +296,10 @@ void JCLEngine::compile_subroutine_body()
     }
 
     compile_stmts();
-    write_right_bra_or_throw();
+    write_right_curl_or_throw();
 }
-void write_left_bra_or_throw()
+
+void JCLEngine::write_left_curl_or_throw()
 {
     auto ttk = tkz.token_type();
     if (ttk == TokenType::SYMB && tkz.symbol() == '{')
@@ -308,7 +309,8 @@ void write_left_bra_or_throw()
     }
     tkz.advance();
 }
-void write_right_bra_or_throw()
+
+void JCLEngine::write_right_curl_or_throw()
 {
     auto ttk = tkz.token_type();
     if (ttk == TokenType::SYMB && tkz.symbol() == '}')
@@ -362,13 +364,107 @@ void JCLEngine::compile_stmts()
     }
 }
 
-void JCLEngine::compile_let() { }
+void JCLEngine::compile_let()
+{
+    // Handle letStmt: 'let' varName ('['expr']')? '=' expr;
+    write_xml_kwd("let");
+    tkz.advance();
+    write_vname_or_throw();
 
-void JCLEngine::compile_if() { }
+    // Handle ('['expr']')?
+    auto ttk = tkz.token_type();
+    if (ttk == TokenType::SYMB && tkz.symbol() == '[') {
+        write_left_bra_or_throw();
+        compile_expr();
+        write_right_bra_or_throw();
+    }
 
-void JCLEngine::compile_while() { }
+    // Handle '='.
+    ttk = tkz.token_type();
+    if (ttk == TokenType::SYMB && tkz.symbol() == '=') {
+        write_xml_symb(tkz.symbol());
+        tkz.advance();
+    } else
+        throw std::logic_error("JCLEngine: must be '='");
 
-void JCLEngine::compile_do() { }
+    compile_expr();
+    write_semicolon_or_throw();
+}
+
+void JCLEngine::write_left_bra_or_throw()
+{
+    auto ttk = tkz.token_type();
+    if (ttk == TokenType::SYMB && tkz.symbol() == '[')
+        write_xml_symb(tkz.symbol());
+    else {
+        throw std::logic_error("JCLEngine: must be '['");
+    }
+    tkz.advance();
+}
+
+void JCLEngine::write_right_bra_or_throw()
+{
+    auto ttk = tkz.token_type();
+    if (ttk == TokenType::SYMB && tkz.symbol() == ']')
+        write_xml_symb(tkz.symbol());
+    else {
+        throw std::logic_error("JCLEngine: must be ']'");
+    }
+    tkz.advance();
+}
+
+void JCLEngine::compile_if()
+{
+    // Handle ifStmt: if '('expr')' '{'stmts'}' ('else' '{'stmts'}')?
+    write_xml_kwd("if");
+    tkz.advance();
+
+    write_left_paren_or_throw();
+    compile_expr();
+    write_right_paren_or_throw();
+
+    write_left_curl_or_throw();
+    compile_stmts();
+    write_right_curl_or_throw();
+
+    // Handle 'else'.
+    auto ttk = tkz.token_type();
+    if (ttk == TokenType::KWD && tkz.keyword() == Kwd::ELSE) {
+        write_xml_kwd("else");
+        write_left_curl_or_throw();
+        compile_stmts();
+        write_right_curl_or_throw();
+    }
+}
+
+void JCLEngine::compile_while()
+{
+    // Handle whileStmt: 'while' '('expr')' '{'stmts'}'
+    write_xml_kwd("while");
+    tkz.advance();
+
+    write_left_paren_or_throw();
+    compile_expr();
+    write_right_paren_or_throw();
+
+    write_left_curl_or_throw();
+    compile_stmts();
+    write_right_curl_or_throw();
+}
+
+void JCLEngine::compile_do()
+{
+    // Handle doStmt: 'do' subroutineCall ';'
+    write_xml_kwd("do");
+    tkz.advance();
+
+    // Handle subroutineCall: subroutineName'('exprLst')'|(clsName|varName)'.'
+    // subroutineName'('exprLst')'
+    // TODO: need to look ahead.
+    auto ttk = tkz.token_type();
+
+    write_semicolon_or_throw();
+}
 
 void JCLEngine::compile_ret() { }
 
