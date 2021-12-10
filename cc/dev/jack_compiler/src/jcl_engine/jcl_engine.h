@@ -83,6 +83,8 @@ private:
     void write_semicolon_or_throw();   // ';'
     void write_left_paren_or_throw();  // '('
     void write_right_paren_or_throw(); // ')'
+    void write_left_bra_or_throw();    // '{'
+    void write_right_bra_or_throw();   // '}'
 
     std::string indent_lvl();
 
