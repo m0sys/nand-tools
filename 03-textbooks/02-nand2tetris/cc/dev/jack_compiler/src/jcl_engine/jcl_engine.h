@@ -73,6 +73,17 @@ private:
     void write_xml_sc(std::string str_val);
     void write_xml_id(std::string id);
 
+    // Structure checkers.
+    bool is_type();
+
+    // Structure writters.
+    void write_type_or_throw();        // type
+    void write_vname_or_throw();       // varName
+    void write_star_vdec_or_throw();   // (',' varName)*
+    void write_semicolon_or_throw();   // ';'
+    void write_left_paren_or_throw();  // '('
+    void write_right_paren_or_throw(); // ')'
+
     std::string indent_lvl();
 
 private:
