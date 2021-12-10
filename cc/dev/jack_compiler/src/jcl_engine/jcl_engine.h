@@ -3,15 +3,18 @@
 // Author: m0sys
 
 #pragma once
+#include "../tokenizer/tokenizer.h"
+#include <fstream>
 #include <string>
 
 class JCLEngine {
 public:
-    JCLEngine(std::string jack_path, std::string vm_path);
+    JCLEngine(std::string jack_fname, std::string out_fname);
 
     // Compiles a complete class.
     void compile_class();
 
+private:
     // Compiles a static var declaration, or a field declaration.
     void compile_cls_var_dec();
 
@@ -62,4 +65,13 @@ public:
      * Returns the number of expressions in the list.
      */
     int compile_expr_lst();
+
+    std::string indent_lvl();
+
+private:
+    Tokenizer tkz;
+    std::ofstream outfile;
+    int indent = 0;
+
+    const int indent_amt = 4;
 };

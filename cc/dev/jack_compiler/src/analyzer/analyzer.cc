@@ -1,5 +1,6 @@
 #include "analyzer.h"
 #include "../common/log.h"
+#include "../jcl_engine/jcl_engine.h"
 #include "../tokenizer/tokenizer.h"
 #include <filesystem>
 #include <fstream>
@@ -148,7 +149,15 @@ void Analyzer::tokenize()
         out.close();
     }
 }
-void Analyzer::compile() { }
+void Analyzer::compile()
+{
+
+    for (const auto& f : paths) {
+        auto xml_fname = create_ext_fname(f, ".xml");
+        JCLEngine je(f, xml_fname);
+        je.compile_class();
+    }
+}
 
 std::string Analyzer::create_ext_fname(const std::string& jack_fname, const std::string& ext, bool T)
 {
