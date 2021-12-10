@@ -22,7 +22,7 @@ void JCLEngine::compile_class()
 
     outfile << indent_lvl() << "<class>\n";
     indent += indent_amt;
-    outfile << indent_lvl() << "<keyword> class </keyword>\n";
+    write_xml_kwd("class");
 
     // Handle className.
     if (tkz.has_more_tokens())
@@ -33,7 +33,7 @@ void JCLEngine::compile_class()
     ttk = tkz.token_type();
     if (ttk != TokenType::ID)
         throw logic_error("JCLEngine: 'class' must be followed by className");
-    outfile << indent_lvl() << "<identifier> " << tkz.id() << " </identifier>\n";
+    write_xml_id(tkz.id());
 
     // Handle class '{'.
     if (tkz.has_more_tokens())
@@ -42,18 +42,115 @@ void JCLEngine::compile_class()
         throw logic_error("JCLEngine: 'className' must be followed by '{'");
 
     ttk = tkz.token_type();
-    if (ttk != TokenType::SYMB)
+    if (ttk != TokenType::SYMB && tkz.symbol() != '{')
         throw logic_error("JCLEngine: 'className' must be followed by '{'");
-    outfile << indent_lvl() << "<symbol> " << tkz.symbol() << " </symbol>\n";
+    write_xml_symb(tkz.symbol());
 
-    // Handle classVarDec*.
+    // Handle class content.
+    while (tkz.has_more_tokens()) {
+        ttk = tkz.token_type();
+        if (ttk != TokenType::KWD || (ttk == TokenType::SYMB && tkz.symbol() != '}'))
+            throw logic_error("JCLEngine: 'classVarDec*' || 'subroutineDec*' must begin with keyword");
+
+        if (ttk == TokenType::SYMB && tkz.symbol() == '}') {
+            write_xml_symb('}');
+            tkz.advance();
+            continue;
+        }
+
+        auto kwd = tkz.keyword();
+
+        // Handle classVarDec*.
+        if (kwd == Kwd::FIELD || kwd == Kwd::STATIC)
+            compile_var_dec();
+        // Handle subroutineDec*.
+        else if (kwd == Kwd::CONSTR || kwd == Kwd::FUNC || kwd == Kwd::METH)
+            compile_subroutine();
+
+        // TODO: remove after impls.
+        tkz.advance();
+    }
 
     indent -= indent_amt;
     outfile << indent_lvl() << "</class>";
     outfile.close();
 }
 
-void JCLEngine::compile_cls_var_dec() { }
+void JCLEngine::compile_cls_var_dec()
+{
+    using std::logic_error;
+
+    // Handle ('static'|'field')
+    auto kwd = tkz.keyword();
+    if (kwd == Kwd::FIELD)
+        write_xml_kwd("field");
+    else
+        write_xml_kwd("static");
+    tkz.advance();
+
+    // Handle type.
+    auto ttk = tkz.token_type();
+
+    // type: 'int'|'char'|'boolean'|className
+    if (ttk == TokenType::KWD) {
+        kwd = tkz.keyword();
+        switch (kwd) {
+        case Kwd::INT:
+            write_xml_kwd("int");
+            break;
+        case Kwd::CHAR:
+            write_xml_kwd("char");
+            break;
+        case Kwd::BOOL:
+            write_xml_kwd("boolean");
+            break;
+        default:
+            throw logic_error("JCLEngine: type: 'int'|'char'|'boolean'");
+        }
+
+    } else if (ttk == TokenType::ID)
+        write_xml_id(tkz.id());
+
+    else {
+        throw logic_error("JCLEngine: type: 'int'|'char'|'boolean'|className");
+    }
+    tkz.advance();
+
+    // Handle varName
+    ttk = tkz.token_type();
+    if (ttk == TokenType::ID)
+        write_xml_id(tkz.id());
+    tkz.advance();
+
+    // Handle (',' varName)*
+    ttk = tkz.token_type();
+    if (ttk == TokenType::SYMB && tkz.symbol() == ',') {
+        while (tkz.has_more_tokens() && ttk == TokenType::SYMB && tkz.symbol() == ',') {
+            write_xml_symb(tkz.symbol());
+            tkz.advance();
+            ttk = tkz.token_type();
+            if (ttk == TokenType::ID)
+                write_xml_id(tkz.id());
+            else {
+                throw logic_error("JCLEngine: (',' varName)");
+            }
+            if (tkz.has_more_tokens()) {
+                tkz.advance();
+                ttk = tkz.token_type();
+            } else {
+                throw logic_error("JCLEngine: (',' varName) end");
+            }
+        }
+    }
+
+    // Handle ';'
+    if (ttk == TokenType::SYMB && tkz.symbol() == ';')
+        write_xml_symb(';');
+    else {
+        throw logic_error("JCLEngine: ';'");
+    }
+    tkz.advance();
+}
 
 void JCLEngine::compile_subroutine() { }
 
@@ -85,4 +182,35 @@ std::string JCLEngine::indent_lvl()
     for (int i = 0; i < indent; i++)
         lvl += " ";
     return lvl;
+}
+
+// XML methods.
+void JCLEngine::write_xml_kwd(std::string kwd)
+{
+    //
+    outfile << indent_lvl() << "<keyword> " << kwd << " </keyword>\n";
+}
+
+void JCLEngine::write_xml_symb(char symb)
+{
+    //
+    outfile << indent_lvl() << "<symbol> " << std::string(1, symb) << " </symbol>\n";
+}
+
+void JCLEngine::write_xml_ic(int int_val)
+{
+    //
+    outfile << indent_lvl() << "<intConst> " << std::to_string(int_val) << " </intConst>\n";
+}
+
+void JCLEngine::write_xml_sc(std::string str_val)
+{
+    //
+    outfile << indent_lvl() << "<stringConst> " << str_val << " </stringConst>\n";
+}
+
+void JCLEngine::write_xml_id(std::string id)
+{
+    //
+    outfile << indent_lvl() << "<identifier> " << id << " </identifier>\n";
 }
