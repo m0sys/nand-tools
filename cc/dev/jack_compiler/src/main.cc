@@ -1,10 +1,15 @@
+#include "analyzer/analyzer.h"
 #include "common/log.h"
-#include "tokenizer/tokenizer.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-    LOG("HELLO, WORLD");
-    // Tokenizer t("../../../projects/10/ExpressionLessSquare/Square.jack");
-    Tokenizer t("../../../projects/10/ArrayTest/Main.jack");
-    DEBUG_LOG("HELLO, WORLD; DEBUG");
+    if (argc < 1)
+        throw std::logic_error("must provide fname as arg");
+
+    LOG("Hello, JACK Compiler!");
+
+    Analyzer a(argv[1]);
+    a.tokenize();
+
+    LOG("Done JACK Compilation");
 }

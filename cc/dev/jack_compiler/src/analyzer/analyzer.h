@@ -9,8 +9,15 @@
 class Analyzer {
 public:
     Analyzer(std::string fname);
+
+    // Generates tokens for each .jack file and stores them in individual XML files.
     void tokenize();
+
+    // Generates program structured XML for each .jack file.
     void compile();
+
+private:
+    std::string create_ext_fname(const std::string& jack_fname, const std::string& ext, bool T = false);
 
 private:
     std::string fname;
