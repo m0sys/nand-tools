@@ -454,6 +454,8 @@ void JCLEngine::compile_while()
 
 void JCLEngine::compile_do()
 {
+    using std::logic_error;
+
     // Handle doStmt: 'do' subroutineCall ';'
     write_xml_kwd("do");
     tkz.advance();
@@ -462,6 +464,32 @@ void JCLEngine::compile_do()
     // subroutineName'('exprLst')'
     // TODO: need to look ahead.
     auto ttk = tkz.token_type();
+    // Handle subroutineName|(clsName|varName).
+    if (ttk == TokenType::ID) {
+        write_xml_id(tkz.id());
+        tkz.advance();
+    } else {
+        throw logic_error("JCLEngine: must be subroutineName|(clsName|varName)");
+    }
+
+    if (ttk == TokenType::SYMB && tkz.symbol() == '.') {
+        // Handle (clsName|varName)'.'subroutineName'('exprLst')'
+        write_xml_symb(tkz.symbol());
+        tkz.advance();
+
+        ttk = tkz.token_type();
+        if (ttk == TokenType::ID) {
+            write_xml_id(tkz.id());
+            tkz.advance();
+        } else {
+            throw logic_error("JCLEngine: must be subroutineName");
+        }
+    }
+
+    // Handle ('exprLst')'
+    write_left_paren_or_throw();
+    compile_expr_lst();
+    write_right_paren_or_throw();
 
     write_semicolon_or_throw();
 }
