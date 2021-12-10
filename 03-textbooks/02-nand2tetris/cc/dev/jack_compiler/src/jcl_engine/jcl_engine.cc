@@ -263,27 +263,104 @@ void JCLEngine::compile_subroutine()
 void JCLEngine::write_left_paren_or_throw()
 {
     auto ttk = tkz.token_type();
-
-    if (ttk != TokenType::SYMB)
-        throw std::logic_error("JCLEngine: must be  '('");
-    write_xml_symb(tkz.symbol());
+    if (ttk == TokenType::SYMB && tkz.symbol() == '(')
+        write_xml_symb(tkz.symbol());
+    else {
+        throw std::logic_error("JCLEngine: must be '('");
+    }
     tkz.advance();
 }
 
 void JCLEngine::write_right_paren_or_throw()
 {
     auto ttk = tkz.token_type();
-
-    if (ttk != TokenType::SYMB)
-        throw std::logic_error("JCLEngine: must be  ')'");
-    write_xml_symb(tkz.symbol());
+    if (ttk == TokenType::SYMB && tkz.symbol() == ')')
+        write_xml_symb(tkz.symbol());
+    else {
+        throw std::logic_error("JCLEngine: must be ')'");
+    }
     tkz.advance();
 }
-void JCLEngine::compile_subroutine_body() { }
+void JCLEngine::compile_subroutine_body()
+{
+    using std::logic_error;
 
-void JCLEngine::compile_var_dec() { }
+    // Handle '{'.
+    write_left_bra_or_throw();
 
-void JCLEngine::compile_stmts() { }
+    // Handle varDec*: 'var' type varName (',' varName)*';'
+    // FIXME: *
+    auto ttk = tkz.token_type();
+    if (ttk == TokenType::KWD && tkz.keyword() == Kwd::VAR) {
+        compile_var_dec();
+    }
+
+    compile_stmts();
+    write_right_bra_or_throw();
+}
+void write_left_bra_or_throw()
+{
+    auto ttk = tkz.token_type();
+    if (ttk == TokenType::SYMB && tkz.symbol() == '{')
+        write_xml_symb(tkz.symbol());
+    else {
+        throw std::logic_error("JCLEngine: must be '{'");
+    }
+    tkz.advance();
+}
+void write_right_bra_or_throw()
+{
+    auto ttk = tkz.token_type();
+    if (ttk == TokenType::SYMB && tkz.symbol() == '}')
+        write_xml_symb(tkz.symbol());
+    else {
+        throw std::logic_error("JCLEngine: must be '}'");
+    }
+    tkz.advance();
+}
+
+void JCLEngine::compile_var_dec()
+{
+    write_xml_kwd("var");
+    tkz.advance();
+    write_type_or_throw();
+    write_vname_or_throw();
+    write_star_vdec_or_throw();
+    write_semicolon_or_throw();
+}
+
+void JCLEngine::compile_stmts()
+{
+    // Handle statement*
+    auto ttk = tkz.token_type();
+    if (ttk == TokenType::KWD) {
+        // Handle statement: letStmt|ifStmt|whileStmt|doStmt|returnStmt
+        auto kwd = tkz.keyword();
+        bool done = false;
+        do {
+            switch (kwd) {
+            case Kwd::LET:
+                compile_let();
+                break;
+            case Kwd::IF:
+                compile_if();
+                break;
+            case Kwd::WHILE:
+                compile_while();
+                break;
+            case Kwd::DO:
+                compile_do();
+                break;
+            case Kwd::RET:
+                compile_ret();
+                break;
+            default:
+                done = true;
+                break;
+            }
+        } while (!done && tkz.has_more_tokens() && tkz.token_type() == TokenType::KWD);
+    }
+}
 
 void JCLEngine::compile_let() { }
 
