@@ -66,6 +66,13 @@ private:
      */
     int compile_expr_lst();
 
+    // XML methods.
+    void write_xml_kwd(std::string kwd);
+    void write_xml_symb(char symb);
+    void write_xml_ic(int int_val);
+    void write_xml_sc(std::string str_val);
+    void write_xml_id(std::string id);
+
     std::string indent_lvl();
 
 private:
