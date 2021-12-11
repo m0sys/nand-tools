@@ -560,7 +560,7 @@ void JCLEngine::compile_do()
     tkz.advance();
 
     // Assume do subroutineCall === do expr.
-    compile_expr();
+    compile_expr(false);
 
     write_semicolon_or_throw();
 
@@ -581,7 +581,7 @@ void JCLEngine::compile_ret()
 
     // Handle expr?
     auto ttk = tkz.token_type();
-    if (ttk == TokenType::ID || ttk == TokenType::KWD || ttk == TokenType::SYMB) {
+    if (ttk == TokenType::ID || ttk == TokenType::KWD) {
         compile_expr();
     }
 
@@ -593,7 +593,7 @@ void JCLEngine::compile_ret()
     outfile << indent_lvl() << "</returnStatement>\n";
 }
 
-void JCLEngine::compile_expr()
+void JCLEngine::compile_expr(bool to_indent)
 {
     // Handle expr
     //
@@ -602,10 +602,12 @@ void JCLEngine::compile_expr()
     // op: '+'|'-'|'*'|'/'|'&'|'|'|'<'|'>'|'='
 
     // Indent.
-    outfile << indent_lvl() << "<expression>\n";
-    indent += indent_amt;
+    if (to_indent) {
+        outfile << indent_lvl() << "<expression>\n";
+        indent += indent_amt;
+    }
 
-    compile_term();
+    compile_term(to_indent);
 
     // Handle (op term)*.
     auto ttk = tkz.token_type();
@@ -617,16 +619,20 @@ void JCLEngine::compile_expr()
         ttk = tkz.token_type();
     }
     // Unindent.
-    indent -= indent_amt;
-    outfile << indent_lvl() << "</expression>\n";
+    if (to_indent) {
+        indent -= indent_amt;
+        outfile << indent_lvl() << "</expression>\n";
+    }
 }
 
-void JCLEngine::compile_term()
+void JCLEngine::compile_term(bool to_indent)
 {
     using std::logic_error;
     // Indent.
-    outfile << indent_lvl() << "<term>\n";
-    indent += indent_amt;
+    if (to_indent) {
+        outfile << indent_lvl() << "<term>\n";
+        indent += indent_amt;
+    }
 
     // Handle term.
     //
@@ -736,8 +742,10 @@ void JCLEngine::compile_term()
     }
 
     // Unindent.
-    indent -= indent_amt;
-    outfile << indent_lvl() << "</term>\n";
+    if (to_indent) {
+        indent -= indent_amt;
+        outfile << indent_lvl() << "</term>\n";
+    }
 }
 
 int JCLEngine::compile_expr_lst()
@@ -749,23 +757,29 @@ int JCLEngine::compile_expr_lst()
 
     // Handle (expr (',' expr)*)?
     auto ttk = tkz.token_type();
-    // if (ttk == TokenType::ID || ttk == TokenType::KWD || ttk == TokenType::SYMB) { }
-    LOG("compile_expr: curtk" << tkz.__debug_current_token__());
-    compile_expr();
+    if (ttk == TokenType::SYMB && tkz.symbol() == ')') {
+        // Unindent.
+        indent -= indent_amt;
+        outfile << indent_lvl() << "</expressionList>\n";
+        return -1;
+    } else {
 
-    ttk = tkz.token_type();
-    while (ttk == TokenType::SYMB && tkz.symbol() == ',') {
-        write_xml_symb(tkz.symbol());
-        tkz.advance();
-        LOG("while -> compile_expr: curtk" << tkz.__debug_current_token__());
+        LOG("compile_expr: curtk" << tkz.__debug_current_token__());
         compile_expr();
-        ttk = tkz.token_type();
-    }
 
-    // Unindent.
-    indent -= indent_amt;
-    outfile << indent_lvl() << "</expressionList>\n";
-    return -1;
+        ttk = tkz.token_type();
+        while (ttk == TokenType::SYMB && tkz.symbol() == ',') {
+            write_xml_symb(tkz.symbol());
+            tkz.advance();
+            LOG("while -> compile_expr: curtk" << tkz.__debug_current_token__());
+            compile_expr();
+            ttk = tkz.token_type();
+        }
+        // Unindent.
+        indent -= indent_amt;
+        outfile << indent_lvl() << "</expressionList>\n";
+        return -1;
+    }
 }
 
 std::string JCLEngine::indent_lvl()
@@ -785,20 +799,31 @@ void JCLEngine::write_xml_kwd(std::string kwd)
 
 void JCLEngine::write_xml_symb(char symb)
 {
-    //
-    outfile << indent_lvl() << "<symbol> " << std::string(1, symb) << " </symbol>\n";
+    using std::string;
+    auto ssymb = tkz.symbol();
+    string symb_str = "";
+    if (ssymb == '<')
+        symb_str = "&lt;";
+    else if (ssymb == '&')
+        symb_str = "&amp;";
+    else if (ssymb == '>')
+        symb_str = "&gt;";
+    else {
+        symb_str = string(1, symb);
+    }
+    outfile << indent_lvl() << "<symbol> " << symb_str << " </symbol>\n";
 }
 
 void JCLEngine::write_xml_ic(int int_val)
 {
     //
-    outfile << indent_lvl() << "<intConst> " << std::to_string(int_val) << " </intConst>\n";
+    outfile << indent_lvl() << "<integerConstant> " << std::to_string(int_val) << " </integerConstant>\n";
 }
 
 void JCLEngine::write_xml_sc(std::string str_val)
 {
     //
-    outfile << indent_lvl() << "<stringConst> " << str_val << " </stringConst>\n";
+    outfile << indent_lvl() << "<stringConstant> " << str_val << " </stringConstant>\n";
 }
 
 void JCLEngine::write_xml_id(std::string id)
