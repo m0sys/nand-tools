@@ -33,10 +33,10 @@ Tokenizer::Tokenizer(std::string jack_file)
         lines.push_back(line);
     }
 
-    LOG("JACK CONTENT");
-    for (const auto& l : lines) {
-        LOG(l);
-    }
+    // LOG("JACK CONTENT");
+    // for (const auto& l : lines) {
+    //    LOG(l);
+    //}
 
     string tokn;
     for (const auto& l : lines) {
