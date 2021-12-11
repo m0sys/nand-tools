@@ -716,10 +716,13 @@ void JCLEngine::compile_term()
                 }
 
                 // Handle ('exprLst')'
+                LOG("write_left_paren_or_throw: curtk = " << tkz.__debug_current_token__());
                 write_left_paren_or_throw();
-                LOG("compile_expr_lst");
+                LOG("compile_expr_lst: curtk = " << tkz.__debug_current_token__());
                 compile_expr_lst();
+                LOG("write_right_paren_or_throw: curtk = " << tkz.__debug_current_token__());
                 write_right_paren_or_throw();
+                LOG("DONE RIGHT PAREN ");
             }
             // Handle arr elem '['expr']'
             else if (tkz.symbol() == '[') {
@@ -743,18 +746,20 @@ int JCLEngine::compile_expr_lst()
     // Indent.
     outfile << indent_lvl() << "<expressionList>\n";
     indent += indent_amt;
+
     // Handle (expr (',' expr)*)?
     auto ttk = tkz.token_type();
-    if (ttk == TokenType::ID || ttk == TokenType::KWD) {
-        compile_expr();
+    // if (ttk == TokenType::ID || ttk == TokenType::KWD || ttk == TokenType::SYMB) { }
+    LOG("compile_expr: curtk" << tkz.__debug_current_token__());
+    compile_expr();
 
+    ttk = tkz.token_type();
+    while (ttk == TokenType::SYMB && tkz.symbol() == ',') {
+        write_xml_symb(tkz.symbol());
+        tkz.advance();
+        LOG("while -> compile_expr: curtk" << tkz.__debug_current_token__());
+        compile_expr();
         ttk = tkz.token_type();
-        while (ttk == TokenType::SYMB && tkz.symbol() == ',') {
-            write_xml_symb(tkz.symbol());
-            tkz.advance();
-            compile_expr();
-            ttk = tkz.token_type();
-        }
     }
 
     // Unindent.
