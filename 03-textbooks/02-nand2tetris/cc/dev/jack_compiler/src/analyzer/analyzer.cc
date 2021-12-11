@@ -120,7 +120,19 @@ void Analyzer::tokenize()
 
             if (tt == TokenType::SYMB) {
                 DEBUG_LOG("SYMB!");
-                string ostr = "<symbol> " + std::string(1, t.symbol()) + " </symbol>\n";
+                auto symb = t.symbol();
+                string symb_str = "";
+                if (symb == '<')
+                    symb_str = "&lt;";
+                else if (symb == '&')
+                    symb_str = "&amp;";
+                else if (symb == '>')
+                    symb_str = "&gt;";
+                else {
+                    symb_str = std::string(1, symb);
+                }
+
+                string ostr = "<symbol> " + symb_str + " </symbol>\n";
                 out << ostr;
             }
 

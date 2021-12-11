@@ -55,6 +55,7 @@ Tokenizer::Tokenizer(std::string jack_file)
             bool has_comma = tokn.find(',') != string::npos;
             bool has_semi = tokn.find(';') != string::npos;
             bool has_not = tokn.find('~') != string::npos;
+            bool has_neg = tokn.find('-') != string::npos;
 
             // clang-format off
             bool is_exception = is_meth_call ||
@@ -64,7 +65,8 @@ Tokenizer::Tokenizer(std::string jack_file)
                                 has_right_bra ||
                                 has_comma ||
                                 has_semi || 
-                                has_not;
+                                has_not ||
+                                has_neg;
             // clang-format on
 
             if (is_exception) {
@@ -82,39 +84,55 @@ Tokenizer::Tokenizer(std::string jack_file)
 
                 // Handle left paren.
                 has_left_paren = rest.find('(') != string::npos;
-                if (has_left_paren) {
-                    int p_pos = rest.find('(');
-                    string lhs = rest.substr(0, p_pos);
-                    string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
-                    if (lhs.size() != 0)
-                        tokns.push_back(lhs);
-                    tokns.push_back(string(1, '('));
-                    rest = rhs;
-                }
+                do {
+                    if (has_left_paren) {
+                        int p_pos = rest.find('(');
+                        string lhs = rest.substr(0, p_pos);
+                        string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
+                        if (lhs.size() != 0)
+                            tokns.push_back(lhs);
+                        tokns.push_back(string(1, '('));
+                        rest = rhs;
+                    }
+                    has_left_paren = rest.find('(') != string::npos;
 
-                // Handle not (~).
-                has_not = rest.find('~') != string::npos;
-                if (has_not) {
-                    int p_pos = rest.find('~');
-                    string lhs = rest.substr(0, p_pos);
-                    string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
-                    if (lhs.size() != 0)
-                        tokns.push_back(lhs);
-                    tokns.push_back(string(1, '~'));
-                    rest = rhs;
-                }
+                    // Handle not (~).
+                    has_not = rest.find('~') != string::npos;
+                    if (has_not) {
+                        int p_pos = rest.find('~');
+                        string lhs = rest.substr(0, p_pos);
+                        string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
+                        if (lhs.size() != 0)
+                            tokns.push_back(lhs);
+                        tokns.push_back(string(1, '~'));
+                        rest = rhs;
+                    }
+
+                    // Handle neg (-).
+                    has_neg = rest.find('-') != string::npos;
+                    if (has_neg) {
+                        int p_pos = rest.find('-');
+                        string lhs = rest.substr(0, p_pos);
+                        string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
+                        if (lhs.size() != 0)
+                            tokns.push_back(lhs);
+                        tokns.push_back(string(1, '-'));
+                        rest = rhs;
+                    }
+
+                } while (has_left_paren);
 
                 // Handle left paren. (YEAH I know. We cheating! XD)
-                has_left_paren = rest.find('(') != string::npos;
-                if (has_left_paren) {
-                    int p_pos = rest.find('(');
-                    string lhs = rest.substr(0, p_pos);
-                    string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
-                    if (lhs.size() != 0)
-                        tokns.push_back(lhs);
-                    tokns.push_back(string(1, '('));
-                    rest = rhs;
-                }
+                // has_left_paren = rest.find('(') != string::npos;
+                // if (has_left_paren) {
+                //    int p_pos = rest.find('(');
+                //    string lhs = rest.substr(0, p_pos);
+                //    string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
+                //    if (lhs.size() != 0)
+                //        tokns.push_back(lhs);
+                //    tokns.push_back(string(1, '('));
+                //    rest = rhs;
+                //}
 
                 // Handle comma.
                 has_comma = rest.find(',') != string::npos;
