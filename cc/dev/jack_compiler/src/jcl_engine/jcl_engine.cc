@@ -75,7 +75,7 @@ void JCLEngine::compile_class()
         // Handle classVarDec*.
         if (kwd == Kwd::FIELD || kwd == Kwd::STATIC) {
             LOG("var_dec*");
-            compile_var_dec();
+            compile_cls_var_dec();
         }
         // Handle subroutineDec*.
         else if (kwd == Kwd::CONSTR || kwd == Kwd::FUNC || kwd == Kwd::METH) {
@@ -95,6 +95,9 @@ void JCLEngine::compile_class()
 void JCLEngine::compile_cls_var_dec()
 {
     using std::logic_error;
+    // Indent.
+    outfile << indent_lvl() << "<classVarDec>\n";
+    indent += indent_amt;
 
     // Handle ('static'|'field')
     auto kwd = tkz.keyword();
@@ -115,6 +118,10 @@ void JCLEngine::compile_cls_var_dec()
 
     // Handle ';'
     write_semicolon_or_throw();
+
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</classVarDec>\n";
 }
 
 void JCLEngine::write_type_or_throw()
@@ -194,6 +201,9 @@ void JCLEngine::write_semicolon_or_throw()
 void JCLEngine::compile_subroutine()
 {
     using std::logic_error;
+    // Indent.
+    outfile << indent_lvl() << "<subroutineDec>\n";
+    indent += indent_amt;
 
     // Handle ('constructor'|'function'|'method')
     auto kwd = tkz.keyword();
@@ -266,6 +276,10 @@ void JCLEngine::compile_subroutine()
 
     LOG("compile_subroutine_body");
     compile_subroutine_body();
+
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</subroutineDec>\n";
 }
 
 void JCLEngine::write_left_paren_or_throw()
@@ -292,6 +306,9 @@ void JCLEngine::write_right_paren_or_throw()
 void JCLEngine::compile_subroutine_body()
 {
     using std::logic_error;
+    // Indent.
+    outfile << indent_lvl() << "<subroutineBody>\n";
+    indent += indent_amt;
 
     // Handle '{'.
     write_left_curl_or_throw();
@@ -307,6 +324,10 @@ void JCLEngine::compile_subroutine_body()
     LOG("compile_stmts");
     compile_stmts();
     write_right_curl_or_throw();
+
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</subroutineBody>\n";
 }
 
 void JCLEngine::write_left_curl_or_throw()
@@ -334,16 +355,28 @@ void JCLEngine::write_right_curl_or_throw()
 
 void JCLEngine::compile_var_dec()
 {
+    // Indent.
+    outfile << indent_lvl() << "<varDec>\n";
+    indent += indent_amt;
+
     write_xml_kwd("var");
     tkz.advance();
     write_type_or_throw();
     write_vname_or_throw();
     write_star_vdec_or_throw();
     write_semicolon_or_throw();
+
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</varDec>\n";
 }
 
 void JCLEngine::compile_stmts()
 {
+    // Indent.
+    outfile << indent_lvl() << "<statements>\n";
+    indent += indent_amt;
+
     // Handle statement*
     auto ttk = tkz.token_type();
     if (ttk == TokenType::KWD) {
@@ -383,10 +416,18 @@ void JCLEngine::compile_stmts()
             }
         } while (!done && tkz.has_more_tokens() && tkz.token_type() == TokenType::KWD);
     }
+
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</statements>\n";
 }
 
 void JCLEngine::compile_let()
 {
+    // Indent.
+    outfile << indent_lvl() << "<letStatement>\n";
+    indent += indent_amt;
+
     // Handle letStmt: 'let' varName ('['expr']')? '=' expr;
     write_xml_kwd("let");
     tkz.advance();
@@ -417,6 +458,10 @@ void JCLEngine::compile_let()
     compile_expr();
     LOG("write_semicolon_or_throw");
     write_semicolon_or_throw();
+
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</letStatement>\n";
 }
 
 void JCLEngine::write_left_bra_or_throw()
@@ -443,6 +488,10 @@ void JCLEngine::write_right_bra_or_throw()
 
 void JCLEngine::compile_if()
 {
+    // Indent.
+    outfile << indent_lvl() << "<ifStatement>\n";
+    indent += indent_amt;
+
     // Handle ifStmt: if '('expr')' '{'stmts'}' ('else' '{'stmts'}')?
     write_xml_kwd("if");
     tkz.advance();
@@ -465,10 +514,18 @@ void JCLEngine::compile_if()
         compile_stmts();
         write_right_curl_or_throw();
     }
+
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</ifStatement>\n";
 }
 
 void JCLEngine::compile_while()
 {
+    // Indent.
+    outfile << indent_lvl() << "<whileStatement>\n";
+    indent += indent_amt;
+
     // Handle whileStmt: 'while' '('expr')' '{'stmts'}'
     write_xml_kwd("while");
     tkz.advance();
@@ -480,11 +537,18 @@ void JCLEngine::compile_while()
     write_left_curl_or_throw();
     compile_stmts();
     write_right_curl_or_throw();
+
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</whileStatement>\n";
 }
 
 void JCLEngine::compile_do()
 {
     using std::logic_error;
+    // Indent.
+    outfile << indent_lvl() << "<doStatement>\n";
+    indent += indent_amt;
 
     // Handle doStmt: 'do' subroutineCall ';'
     LOG("write_xml_kwd: curtk = " << tkz.__debug_current_token__());
@@ -529,10 +593,18 @@ void JCLEngine::compile_do()
     write_right_paren_or_throw();
 
     write_semicolon_or_throw();
+
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</doStatement>\n";
 }
 
 void JCLEngine::compile_ret()
 {
+    // Indent.
+    outfile << indent_lvl() << "<retStatement>\n";
+    indent += indent_amt;
+
     // Handle return;
     write_xml_kwd("return");
     tkz.advance();
@@ -544,6 +616,10 @@ void JCLEngine::compile_ret()
     }
 
     write_semicolon_or_throw();
+
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</retStatement>\n";
 }
 
 void JCLEngine::compile_expr()
