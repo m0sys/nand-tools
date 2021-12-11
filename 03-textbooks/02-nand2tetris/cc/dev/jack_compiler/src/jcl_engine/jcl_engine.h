@@ -49,7 +49,7 @@ private:
     void compile_ret();
 
     // Compiles an expression.
-    void compile_expr();
+    void compile_expr(bool to_indent = true);
 
     /*
      * Compiles a term.
@@ -57,7 +57,7 @@ private:
      * If the current token is an ID, the routine will resolve it into a
      * variable, an array element, or a subroutine call.
      */
-    void compile_term();
+    void compile_term(bool to_indent = true);
 
     /*
      * Compiles a (possibly empty) comma separated list of expressions.
