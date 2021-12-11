@@ -9,6 +9,7 @@ int main(int argc, char* argv[])
     LOG("Hello, JACK Compiler!");
 
     Analyzer a(argv[1]);
+    a.tokenize();
     a.compile();
 
     LOG("Done JACK Compilation");

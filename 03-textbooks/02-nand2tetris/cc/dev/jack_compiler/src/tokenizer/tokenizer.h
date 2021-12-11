@@ -67,6 +67,9 @@ public:
     // Returns the current token's string value if token is of type STR_CONST.
     std::string str_val();
 
+    // FIXME: remove.
+    std::string __debug_current_token__();
+
 private:
     bool is_comment(const std::string& line);
     bool is_white_space(const std::string& line);
