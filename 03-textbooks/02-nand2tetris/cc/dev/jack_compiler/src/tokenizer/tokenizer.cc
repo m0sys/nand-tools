@@ -122,18 +122,6 @@ Tokenizer::Tokenizer(std::string jack_file)
 
                 } while (has_left_paren);
 
-                // Handle left paren. (YEAH I know. We cheating! XD)
-                // has_left_paren = rest.find('(') != string::npos;
-                // if (has_left_paren) {
-                //    int p_pos = rest.find('(');
-                //    string lhs = rest.substr(0, p_pos);
-                //    string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
-                //    if (lhs.size() != 0)
-                //        tokns.push_back(lhs);
-                //    tokns.push_back(string(1, '('));
-                //    rest = rhs;
-                //}
-
                 // Handle comma.
                 has_comma = rest.find(',') != string::npos;
                 if (has_comma) {
