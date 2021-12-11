@@ -24,13 +24,18 @@ Tokenizer::Tokenizer(std::string jack_file)
     std::vector<string> lines;
 
     while (std::getline(infile, line)) {
+        line = common::trim(line);
         if (is_comment(line) || is_white_space(line))
             continue;
 
         // remove_backslash_r(line);
         remove_line_comment(line);
-        line = common::trim(line);
         lines.push_back(line);
+    }
+
+    LOG("JACK CONTENT");
+    for (const auto& l : lines) {
+        LOG(l);
     }
 
     string tokn;
@@ -49,6 +54,7 @@ Tokenizer::Tokenizer(std::string jack_file)
             bool has_right_bra = tokn.find(']') != string::npos;
             bool has_comma = tokn.find(',') != string::npos;
             bool has_semi = tokn.find(';') != string::npos;
+            bool has_not = tokn.find('~') != string::npos;
 
             // clang-format off
             bool is_exception = is_meth_call ||
@@ -57,7 +63,8 @@ Tokenizer::Tokenizer(std::string jack_file)
                                 has_left_bra ||
                                 has_right_bra ||
                                 has_comma ||
-                                has_semi;
+                                has_semi || 
+                                has_not;
             // clang-format on
 
             if (is_exception) {
@@ -85,28 +92,29 @@ Tokenizer::Tokenizer(std::string jack_file)
                     rest = rhs;
                 }
 
-                // Handle string.
-                // is_string_const = rest.find('"') != string::npos;
-                // if (is_string_const) {
-                //    string quote = "";
+                // Handle not (~).
+                has_not = rest.find('~') != string::npos;
+                if (has_not) {
+                    int p_pos = rest.find('~');
+                    string lhs = rest.substr(0, p_pos);
+                    string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
+                    if (lhs.size() != 0)
+                        tokns.push_back(lhs);
+                    tokns.push_back(string(1, '~'));
+                    rest = rhs;
+                }
 
-                //    // Handle case where str is a single word string.
-                //    if (rest.rfind('"') != 0 && rest.rfind('"') != string::npos) {
-                //        int p_pos = rest.rfind('"');
-                //        string lhs = rest.substr(0, p_pos + 1);
-                //        string rhs = rest.substr(p_pos + 2, rest.size() - (p_pos + 1));
-                //        if (lhs.size() != 0)
-                //            tokns.push_back(lhs);
-                //        rest = rhs;
-                //    } else {
-                //        bool quote_not_ended = true;
-                //        while (quote_not_ended) {
-                //            quote += rest + " ";
-                //            std::getline(ss, rest);
-                //            if (rest.rfind())
-                //        }
-                //    }
-                //}
+                // Handle left paren. (YEAH I know. We cheating! XD)
+                has_left_paren = rest.find('(') != string::npos;
+                if (has_left_paren) {
+                    int p_pos = rest.find('(');
+                    string lhs = rest.substr(0, p_pos);
+                    string rhs = rest.substr(p_pos + 1, rest.size() - p_pos);
+                    if (lhs.size() != 0)
+                        tokns.push_back(lhs);
+                    tokns.push_back(string(1, '('));
+                    rest = rhs;
+                }
 
                 // Handle comma.
                 has_comma = rest.find(',') != string::npos;
@@ -190,7 +198,9 @@ bool Tokenizer::is_comment(const std::string& line)
     return line.substr(0, 2) == "//"  || 
            line.substr(0, 2) == "/*"  || 
            line.substr(0, 3) == "/**" ||
-           line.substr(0,2)  == "*/";
+           line.substr(0,2)  == "*/"  ||
+           line.substr(0,1)  == "*";
+
     // clang-format on
 }
 

@@ -44,7 +44,7 @@ void Analyzer::tokenize()
 
             auto tt = t.token_type();
             if (tt == TokenType::KWD) {
-                LOG("KWD!");
+                DEBUG_LOG("KWD!");
                 auto kt = t.keyword();
                 string ostr = "<keyword> ";
                 if (kt == Kwd::CLS)
@@ -119,26 +119,26 @@ void Analyzer::tokenize()
             }
 
             if (tt == TokenType::SYMB) {
-                LOG("SYMB!");
+                DEBUG_LOG("SYMB!");
                 string ostr = "<symbol> " + std::string(1, t.symbol()) + " </symbol>\n";
                 out << ostr;
             }
 
             if (tt == TokenType::ID) {
-                LOG("ID!");
+                DEBUG_LOG("ID!");
                 string ostr = "<identifier> " + t.id() + " </identifier>\n";
                 out << ostr;
             }
 
             if (tt == TokenType::INT_CONST) {
-                LOG("INT_CONST!");
-                string ostr = "<intConst> " + std::to_string(t.int_val()) + " </intConst>\n";
+                DEBUG_LOG("INT_CONST!");
+                string ostr = "<integerConstant> " + std::to_string(t.int_val()) + " </integerConstant>\n";
                 out << ostr;
             }
 
             if (tt == TokenType::STR_CONST) {
-                LOG("STR_CONST!");
-                string ostr = "<stringConst> " + t.str_val() + " </stringConst>\n";
+                DEBUG_LOG("STR_CONST!");
+                string ostr = "<stringConstant> " + t.str_val() + " </stringConstant>\n";
                 out << ostr;
             }
 
