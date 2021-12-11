@@ -28,7 +28,7 @@ Tokenizer::Tokenizer(std::string jack_file)
             continue;
 
         // remove_backslash_r(line);
-        // remove_line_comment(line);
+        remove_line_comment(line);
         line = common::trim(line);
         lines.push_back(line);
     }
@@ -414,3 +414,5 @@ void Tokenizer::advance_str_const()
     } while (curtk.rfind('"') == string::npos);
     curr_token_idx++;
 }
+
+std::string Tokenizer::__debug_current_token__() { return curr_token(); }
