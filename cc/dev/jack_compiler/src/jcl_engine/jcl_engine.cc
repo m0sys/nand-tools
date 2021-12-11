@@ -82,9 +82,6 @@ void JCLEngine::compile_class()
             LOG("subroutine_dec");
             compile_subroutine();
         }
-
-        // TODO: remove after impls.
-        // tkz.advance();
     }
 
     indent -= indent_amt;
@@ -248,6 +245,10 @@ void JCLEngine::compile_subroutine()
     // Handle '('.
     write_left_paren_or_throw();
 
+    // Indent.
+    outfile << indent_lvl() << "<parameterList>\n";
+    indent += indent_amt;
+
     // Handle parameterList: ((type varName) (',' type varName)*)?
     ttk = tkz.token_type();
     if (ttk == TokenType::KWD || ttk == TokenType::ID) {
@@ -271,6 +272,9 @@ void JCLEngine::compile_subroutine()
         }
     }
 
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</parameterList>\n";
     // Handle ')'.
     write_right_paren_or_throw();
 
@@ -314,7 +318,6 @@ void JCLEngine::compile_subroutine_body()
     write_left_curl_or_throw();
 
     // Handle varDec*: 'var' type varName (',' varName)*';'
-    // FIXME: *
     auto ttk = tkz.token_type();
     while (ttk == TokenType::KWD && tkz.keyword() == Kwd::VAR) {
         compile_var_dec();
@@ -546,6 +549,7 @@ void JCLEngine::compile_while()
 void JCLEngine::compile_do()
 {
     using std::logic_error;
+
     // Indent.
     outfile << indent_lvl() << "<doStatement>\n";
     indent += indent_amt;
@@ -555,42 +559,8 @@ void JCLEngine::compile_do()
     write_xml_kwd("do");
     tkz.advance();
 
-    // Handle subroutineCall: subroutineName'('exprLst')'|(clsName|varName)'.'
-    // subroutineName'('exprLst')'
-    auto ttk = tkz.token_type();
-    // Handle subroutineName|(clsName|varName).
-    if (ttk == TokenType::ID) {
-        LOG("write_xml_id: curtk = " << tkz.__debug_current_token__());
-        write_xml_id(tkz.id());
-        tkz.advance();
-    } else {
-        throw logic_error(THROW_MSG("JCLEngine: must be subroutineName|(clsName|varName)"));
-    }
-
-    ttk = tkz.token_type();
-    if (ttk == TokenType::SYMB && tkz.symbol() == '.') {
-        // Handle (clsName|varName)'.'subroutineName'('exprLst')'
-        LOG("write_xml_symb: curtk = " << tkz.__debug_current_token__());
-        write_xml_symb(tkz.symbol());
-        tkz.advance();
-
-        ttk = tkz.token_type();
-        if (ttk == TokenType::ID) {
-            LOG("write_xml_id: curtk = " << tkz.__debug_current_token__());
-            write_xml_id(tkz.id());
-            tkz.advance();
-        } else {
-            throw logic_error(THROW_MSG("JCLEngine: must be subroutineName"));
-        }
-    }
-
-    // Handle ('exprLst')'
-    LOG("write_left_paren_or_throw: curtk = " << tkz.__debug_current_token__());
-    write_left_paren_or_throw();
-    LOG("compile_expr_lst");
-    compile_expr_lst();
-    LOG("write_right_paren_or_throw: curtk = " << tkz.__debug_current_token__());
-    write_right_paren_or_throw();
+    // Assume do subroutineCall === do expr.
+    compile_expr();
 
     write_semicolon_or_throw();
 
@@ -602,62 +572,194 @@ void JCLEngine::compile_do()
 void JCLEngine::compile_ret()
 {
     // Indent.
-    outfile << indent_lvl() << "<retStatement>\n";
+    outfile << indent_lvl() << "<returnStatement>\n";
     indent += indent_amt;
 
     // Handle return;
     write_xml_kwd("return");
     tkz.advance();
 
-    // TODO: assume possible id only.
-    if (tkz.token_type() == TokenType::ID) {
-        write_xml_id(tkz.id());
-        tkz.advance();
+    // Handle expr?
+    auto ttk = tkz.token_type();
+    if (ttk == TokenType::ID || ttk == TokenType::KWD || ttk == TokenType::SYMB) {
+        compile_expr();
     }
 
+    LOG("write_semicolon_or_throw: curtk = " << tkz.__debug_current_token__());
     write_semicolon_or_throw();
 
     // Unindent.
     indent -= indent_amt;
-    outfile << indent_lvl() << "</retStatement>\n";
+    outfile << indent_lvl() << "</returnStatement>\n";
 }
 
 void JCLEngine::compile_expr()
 {
-    // TODO: assume that its and id until we add expressions.
+    // Handle expr
+    //
+    // expr: term (op term)*.
+    //
+    // op: '+'|'-'|'*'|'/'|'&'|'|'|'<'|'>'|'='
+
+    // Indent.
+    outfile << indent_lvl() << "<expression>\n";
+    indent += indent_amt;
+
+    compile_term();
+
+    // Handle (op term)*.
     auto ttk = tkz.token_type();
-    if (ttk == TokenType::ID) {
-        write_xml_id(tkz.id());
+    constexpr char ops[10] = { '+', '-', '*', '/', '&', '|', '<', '>', '=', '\0' };
+    while (ttk == TokenType::SYMB && strchr(ops, tkz.symbol())) {
+        write_xml_symb(tkz.symbol());
         tkz.advance();
-    } else if (ttk == TokenType::KWD) {
-        auto kwd = tkz.keyword();
-        if (kwd == Kwd::THIS)
-            write_xml_kwd("this");
-        else
-            throw std::logic_error(THROW_MSG("JCLEngine: must be 'this'"));
-        tkz.advance();
+        compile_term();
+        ttk = tkz.token_type();
     }
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</expression>\n";
 }
 
-void JCLEngine::compile_term() { }
+void JCLEngine::compile_term()
+{
+    using std::logic_error;
+    // Indent.
+    outfile << indent_lvl() << "<term>\n";
+    indent += indent_amt;
+
+    // Handle term.
+    //
+    // term: intConst|strConst|kwdConst|varName|varName'['expr']|
+    //       '('expr')'|(unaryOp term)|subroutineCall
+    //
+    // subroutineCall: subroutineName'('exprLst')'|(clsName|varName)'.'
+    //                 subroutineName'('exprLst')'
+
+    auto ttk = tkz.token_type();
+
+    // Handle '('expr')'|(unaryOp term)
+    if (ttk == TokenType::SYMB) {
+        if (tkz.symbol() == '(') {
+            write_left_paren_or_throw();
+            compile_expr();
+            write_right_paren_or_throw();
+
+        } else if (tkz.symbol() == '-' || tkz.symbol() == '~') {
+            write_xml_symb(tkz.symbol());
+            tkz.advance();
+            compile_term();
+        }
+    }
+
+    // Handle intConst.
+    else if (ttk == TokenType::INT_CONST) {
+        write_xml_ic(tkz.int_val());
+        tkz.advance();
+
+    }
+
+    // Handle strConst.
+    else if (ttk == TokenType::STR_CONST) {
+        write_xml_sc(tkz.str_val());
+        tkz.advance();
+    }
+
+    // Handle kwdConst: 'true'|'false'|'null'|'this'
+    else if (ttk == TokenType::KWD) {
+        auto kwd = tkz.keyword();
+        switch (kwd) {
+        case Kwd::THIS:
+            write_xml_kwd("this");
+            break;
+        case Kwd::T:
+            write_xml_kwd("true");
+            break;
+        case Kwd::F:
+            write_xml_kwd("false");
+            break;
+        case Kwd::N:
+            write_xml_kwd("null");
+            break;
+        default:
+            throw std::logic_error(THROW_MSG("JCLEngine: must be 'this'"));
+        }
+        tkz.advance();
+    }
+
+    // Handle varName|varName'['expr']'|subroutineCall
+    else if (ttk == TokenType::ID) {
+        // Must resolve to var, an arr elem, or subroutine call.
+        write_xml_id(tkz.id());
+        tkz.advance();
+
+        ttk = tkz.token_type();
+        if (ttk == TokenType::SYMB) {
+
+            // Handle subroutine call.
+            if (tkz.symbol() == '.' || tkz.symbol() == '(') {
+                // Handle (clsName|varName)'.'subroutineName'('exprLst')'
+                if (tkz.symbol() == '.') {
+
+                    LOG("write_xml_symb: curtk = " << tkz.__debug_current_token__());
+                    write_xml_symb(tkz.symbol());
+                    tkz.advance();
+
+                    ttk = tkz.token_type();
+                    if (ttk == TokenType::ID) {
+                        LOG("write_xml_id: curtk = " << tkz.__debug_current_token__());
+                        write_xml_id(tkz.id());
+                        tkz.advance();
+                    } else {
+                        throw logic_error(THROW_MSG("JCLEngine: must be subroutineName"));
+                    }
+                }
+
+                // Handle ('exprLst')'
+                write_left_paren_or_throw();
+                LOG("compile_expr_lst");
+                compile_expr_lst();
+                write_right_paren_or_throw();
+            }
+            // Handle arr elem '['expr']'
+            else if (tkz.symbol() == '[') {
+                write_left_bra_or_throw();
+                compile_expr();
+                write_right_bra_or_throw();
+            }
+        }
+    } else {
+        throw logic_error(THROW_MSG("JCLEngine: invalid term"));
+    }
+
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</term>\n";
+}
 
 int JCLEngine::compile_expr_lst()
 {
-    // TODO: assume that only id possible.
+
+    // Indent.
+    outfile << indent_lvl() << "<expressionList>\n";
+    indent += indent_amt;
     // Handle (expr (',' expr)*)?
     auto ttk = tkz.token_type();
     if (ttk == TokenType::ID || ttk == TokenType::KWD) {
         compile_expr();
-    }
 
-    ttk = tkz.token_type();
-    while (ttk == TokenType::SYMB && tkz.symbol() == ',') {
-        write_xml_symb(tkz.symbol());
-        tkz.advance();
-        compile_expr();
         ttk = tkz.token_type();
+        while (ttk == TokenType::SYMB && tkz.symbol() == ',') {
+            write_xml_symb(tkz.symbol());
+            tkz.advance();
+            compile_expr();
+            ttk = tkz.token_type();
+        }
     }
 
+    // Unindent.
+    indent -= indent_amt;
+    outfile << indent_lvl() << "</expressionList>\n";
     return -1;
 }
 
