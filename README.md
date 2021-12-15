@@ -112,6 +112,12 @@
 
 > A language that doesn't affect the way you think about programming, is not worth knowing. - [Alan Perlis](https://norvig.com/21-days.html)
 
+> the lyf so short, the craft so long to lerne. - Chaucer (1340 - 1400)
+
+> Everyone can be taught to sculpt: Michelangelo would have had to be taught how not to. So it is with the great programmers. - [Alan Perlis](https://norvig.com/21-days.html)
+
+> How about working hard to continually improve over 24 months? Well, now you're starting to get somewhere... - [Peter Norvig](https://norvig.com/21-days.html)
+
 <!-- CAP -->
 
 ## Computer Architecture Principles
