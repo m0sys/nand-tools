@@ -110,6 +110,8 @@
 
 > If Elon can build Starship I can build Robochip. - M0 (2021/11/19)
 
+> A language that doesn't affect the way you think about programming, is not worth knowing. - [Alan Perlis](https://norvig.com/21-days.html)
+
 <!-- CAP -->
 
 ## Computer Architecture Principles
