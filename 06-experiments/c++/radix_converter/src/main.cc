@@ -1,15 +1,19 @@
 #include "code_maps.h"
+#include "common/prompt_input.h"
 
 #include <iostream>
 #include <map>
 #include <math.h>
+#include <stdexcept>
 #include <string.h>
 
 #define LOG(msg) std::cout << msg << std::endl
 
-void bin_to_dec(float val);
-void oct_to_dec(float val);
-void hex_to_dec(float val);
+void dec2bin(float val);
+void dec2oct(float val);
+void dec2hex(float val);
+void dec2radix(float val, int rad, std::map<int, char> m);
+void ask_double(double& num, std::string msg);
 
 struct IntFrac {
     double int_part;
@@ -23,22 +27,43 @@ int main()
 {
     //
     LOG("Hello, World!");
-    LOG("n = 3.14");
-    bin_to_dec(3.14);
-    oct_to_dec(3.14);
-    hex_to_dec(3.14);
+    bool act_prompt = true;
 
-    LOG("n = 2.71828");
-    bin_to_dec(2.71828);
-    oct_to_dec(2.71828);
-    hex_to_dec(2.71828);
+    if (act_prompt) {
+        LOG("Hello, and Welcome!\n");
+        LOG("1) Decimal to Binary");
+        LOG("2) Decimal to Octal");
+        LOG("3) Decimal to Hexadecimal");
+
+        int rad;
+        prompt::ask_int(rad, "Please choose the Radix you want to convert to: ");
+        LOG("");
+
+        double decimal;
+        prompt::ask_double(decimal, "Enter your decimal number: ");
+
+        switch (rad) {
+        case 1:
+            dec2bin(decimal);
+            break;
+        case 2:
+            dec2oct(decimal);
+            break;
+        case 3:
+            dec2hex(decimal);
+            break;
+        default:
+            LOG("Error: your choice is not valid.");
+            LOG("Goodbye");
+        }
+    }
 }
 
-void bin_to_dec(float val) { radix_to_dec(val, 2, bin_map); };
-void oct_to_dec(float val) { radix_to_dec(val, 8, oct_map); };
-void hex_to_dec(float val) { radix_to_dec(val, 16, hex_map); };
+void dec2bin(float val) { dec2radix(val, 2, bin_map); };
+void dec2oct(float val) { dec2radix(val, 8, oct_map); };
+void dec2hex(float val) { dec2radix(val, 16, hex_map); };
 
-void radix_to_dec(float val, int rad, std::map<int, char> m)
+void dec2radix(float val, int rad, std::map<int, char> m)
 {
     using std::string;
     string int_str = "";
