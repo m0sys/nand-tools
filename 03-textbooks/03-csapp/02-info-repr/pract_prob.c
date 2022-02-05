@@ -6,11 +6,29 @@
 
 // Decls
 void tadd_ok_test();
+void test_212();
 
 int main()
 {
+    // tadd_ok_test();
+    test_212();
+}
+
+// PP 2.12
+
+int get_lsbyte(int val) { return val & 0xff; }
+
+int comp_but_lsbyte(int val) { return (~val & ~0xff) | get_lsbyte(val); }
+
+int ff_lsbyte(int val) { return (val & ~0xff) | 0xff; }
+
+void test_212()
+{
     //
-    tadd_ok_test();
+    int val = 0x87654321;
+    printf("LSB: %x\n", get_lsbyte(val));
+    printf("COMP BUT LSB: %x\n", comp_but_lsbyte(val));
+    printf("FF LSB: %x\n", ff_lsbyte(val));
 }
 
 // S2.3.2 - Two's-Complement Addition
