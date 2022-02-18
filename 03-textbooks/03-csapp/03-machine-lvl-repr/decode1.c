@@ -15,5 +15,5 @@ void decode1(long* xp, long* yp, long* zp)
 
     *yp = x; // movq %r8, (%rsi)
     *zp = y; // movq %rcx, (%rdx)
-    *xp = z; // movq %rax, (%rdi)
+    *xp = z; // movq %rax, (%rdxi)
 }
