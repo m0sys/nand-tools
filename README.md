@@ -118,6 +118,8 @@
 
 > How about working hard to continually improve over 24 months? Well, now you're starting to get somewhere... - [Peter Norvig](https://norvig.com/21-days.html)
 
+> Chances are you will never design your own processor. This is a task for experts working at fewer than 100 companies worldwide. Why, then, should you learn about processor design?  It is intellectually interesting and important. There is an intrinsic value in learning how things work. - Randal Bryan (CSAPP 2016)
+
 <!-- CAP -->
 
 ## Computer Architecture Principles
