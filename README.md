@@ -120,6 +120,8 @@
 
 > Chances are you will never design your own processor. This is a task for experts working at fewer than 100 companies worldwide. Why, then, should you learn about processor design?  It is intellectually interesting and important. There is an intrinsic value in learning how things work. - Randal Bryan (CSAPP 2016)
 
+> Computer Programming is an art, because it applies accumulated knowledge to the world, because it requires skill and ingeniuity, and especially because it produces objects of beauty. A programmer who subconsciously views himself as an artist will enjoy what he does and will do it better. - Donald Knuth
+
 <!-- CAP -->
 
 ## Computer Architecture Principles
