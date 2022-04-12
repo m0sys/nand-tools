@@ -1,0 +1,4 @@
+intro_hdl/
+vivado*
+.Xil/
+xsim.dir/
