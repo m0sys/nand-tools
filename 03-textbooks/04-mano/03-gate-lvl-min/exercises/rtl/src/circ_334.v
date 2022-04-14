@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 04/11/2022 05:00:07 AM
+// Create Date: 04/14/2022 07:05:19 AM
 // Design Name: 
-// Module Name: t_circ335_prop_delay
+// Module Name: circ_334
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,19 +20,20 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module t_circ335_prop_delay(
-    );
+module circ_334(
     // OUTPUTS
-    wire D, E;
+    output Out1
+    ,output Out2
+    ,output Out3
+
     // INPUTS
-    reg A, B, C;
+    ,input A
+    ,input B
+    ,input C
+    ,input D
+    );
 
-    circ335_prop_delay M1(A, B, C, D, E); // instance name req
-    initial
-        begin
-            A = 1'b0; B = 1'b0; C=1'b0;
-            #100 A = 1'b1; B = 1'b1; C = 1'b1;
-        end
-
-    initial #200 $finish;
+    assign Out1 = (A || (!B)) && (!C) && (C || D);
+    assign Out2 = ((!C) && D || B && C && D || C && (!D)) && ((!A) || B);
+    assign Out3 = (A && B || C) && D || (!B) && C;
 endmodule

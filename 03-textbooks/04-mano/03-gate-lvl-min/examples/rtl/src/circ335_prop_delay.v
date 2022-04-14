@@ -21,9 +21,11 @@
 
 
 module circ335_prop_delay(
+    // INPUTS
     A
     ,B
     ,C
+    // OUTPUTS
     ,D
     ,E
     );
