@@ -1,0 +1,4 @@
+comb_logic/
+vivado*
+.Xil/
+xsim.dir/
