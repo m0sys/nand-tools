@@ -3,6 +3,7 @@
 #include <cstdlib>
 
 template <class MODULE> class TESTBENCH {
+public:
     unsigned long m_tickcount;
     MODULE* m_core;
 
@@ -47,4 +48,6 @@ template <class MODULE> class TESTBENCH {
         m_core->i_clk = 0;
         m_core->eval();
     }
+
+    virtual bool done(void) { return (Verilated::gotFinish()); }
 };
