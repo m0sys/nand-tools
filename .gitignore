@@ -141,3 +141,6 @@ ipshared
 
 # Cmake
 CMakeFiles/
+
+# Verilator
+obj_dir/
