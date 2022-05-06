@@ -1,34 +1,22 @@
-edit: main.o kbd.o command.o display.o \
-	insert.o search.o files.o utils.o
-	cc -o edit main.o kbd.o command.o display.o \
+objs = main.o kbd.o command.o display.o \
 	insert.o search.o files.o utils.o
 
+# This is the default goal.
+edit: $(objs)
+	cc -o edit $(objs)
 
-main.o: main.c defs.h
-	cc -c main.c
-
-kbd.o: kbd.c defs.h command.h
-	cc -c kbd.c
-
-command.o: command.c defs.h command.h
-	cc -c command.c
-
-display.o: display.c defs.h buffer.h
-	cc -c display.c
-
-insert.o: insert.c defs.h buffer.h
-	cc -c insert.c
-
-search.o: search.c defs.h buffer.h
-	cc -c search.c
-
-files.o: files.c defs.h buffer.h command.h
-	cc -c files.c
-
-utils.o: utils.c defs.h
-	cc -c utils.c
+# NOTE: make has an implicit rule that runs cc -c x.c and also adds the .c file
+# 		as a depdency. hence, such commands can be omitted to simplify the rules.
+main.o: defs.h
+kbd.o: defs.h command.h
+command.o: defs.h command.h
+display.o: defs.h buffer.h
+insert.o: defs.h buffer.h
+search.o: defs.h buffer.h
+files.o: defs.h buffer.h command.h
+utils.o: defs.h
 
 # This is a PHONY target since it has not target nor depedencies - it is an action
+.PHONY: clean
 clean:
-	rm edit main.o kbd.o command.o display.o insert.o search.o \
-		files.o utils.o
+	rm edit $(objs)
