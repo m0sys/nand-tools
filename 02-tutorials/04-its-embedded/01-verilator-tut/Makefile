@@ -7,7 +7,7 @@ sim: waveform.vcd
 verilate: .stamp.verilate
 
 .PHONY:build
-build: rtl/src/obj/Valu
+build: obj_dir/Valu
 
 .PHONY:waves
 waves: waveform.vcd
@@ -15,23 +15,31 @@ waves: waveform.vcd
 		@echo "### WAVES ###"
 		gtkwave waveform.vcd
 
-waveform.vcd: ./rtl/src/obj_dir/V$(MODULE)
+waveform.vcd: ./obj_dir/V$(MODULE)
 	@echo
 	@echo "### SIMULATING ###"
-	@./rtl/src/obj_dir/V$(MODULE)
+	@./obj_dir/V$(MODULE)
 
 
-./rtl/src/V$(MODULE): .stamp.verilate
+./obj_dir/V$(MODULE): .stamp.verilate
 	@echo
 	@echo "### BUILDING SIM ###"
-	make -C rtl/src/obj_dir -f V$(MODULE).mk V$(MODULE)
+	make -C obj_dir -f V$(MODULE).mk V$(MODULE)
 
-.stamp.verilate: $(MODULE).sv tb_$(MODULE).cc
+.stamp.verilate: rtl/src/$(MODULE).sv cc/tb_$(MODULE).cc
 	@echo
 	@echo "### VERILATING ###"
 	verilator -Wall --trace -cc rtl/src/$(MODULE).sv --exe cc/tb_$(MODULE).cc
 	@touch .stamp.verilate
 
 .PHONY:lint
-lint: $(MODULE).sv
+lint: rtl/src/$(MODULE).sv
+	verilator --lint-only rtl/src/$(MODULE).sv
+
+.PHONY:clean
+clean:
+	rm -rf .stamp.*;
+	rm -rf obj_dir
+	rm -rf waveform.vcd
+
 
