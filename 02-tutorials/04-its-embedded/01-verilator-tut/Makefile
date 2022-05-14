@@ -18,7 +18,7 @@ waves: waveform.vcd
 waveform.vcd: ./obj_dir/V$(MODULE)
 	@echo
 	@echo "### SIMULATING ###"
-	@./obj_dir/V$(MODULE)
+	@./obj_dir/V$(MODULE) +verilator+rand+reset+2
 
 
 ./obj_dir/V$(MODULE): .stamp.verilate
@@ -29,7 +29,7 @@ waveform.vcd: ./obj_dir/V$(MODULE)
 .stamp.verilate: rtl/src/$(MODULE).sv cc/tb_$(MODULE).cc
 	@echo
 	@echo "### VERILATING ###"
-	verilator -Wall --trace -cc rtl/src/$(MODULE).sv --exe cc/tb_$(MODULE).cc
+	verilator -Wall --trace --x-assign unique --x-initial unique -cc rtl/src/$(MODULE).sv --exe cc/tb_$(MODULE).cc
 	@touch .stamp.verilate
 
 .PHONY:lint
