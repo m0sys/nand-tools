@@ -1,8 +1,8 @@
 #include "Vblinky.h"
-#include "verilated.h"
-#include "verilated_vcd_c.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <verilated.h>
+#include <verilated_vcd_c.h>
 
 void tick(int tcnt, Vblinky* tb, VerilatedVcdC* tfp)
 {
