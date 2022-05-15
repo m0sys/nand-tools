@@ -34,9 +34,36 @@ int main(int argc, char** argv, char** env)
 
         dut->clk ^= 1;
         dut->eval();
+
         if (dut->clk == 1) {
             posedge_cnt++;
-            set_rnd_out_valid(dut, sim_time);
+            switch (posedge_cnt) {
+            case 10:
+                dut->in_valid = 1;
+                ;
+                dut->a_in = 5;
+                dut->b_in = 3;
+                dut->op_in = Valu___024unit::operation_t::add;
+                break;
+
+            case 12:
+                if (dut->out != 8)
+                    LOG("Addition failed @ " << sim_time);
+                break;
+
+            case 20:
+                dut->in_valid = 1;
+                ;
+                dut->a_in = 5;
+                dut->b_in = 3;
+                dut->op_in = Valu___024unit::operation_t::sub;
+                break;
+
+            case 22:
+                if (dut->out != 2)
+                    LOG("Substration failed @ " << sim_time);
+                break;
+            }
             check_out_valid(dut, sim_time);
         }
         m_trace->dump(sim_time);
