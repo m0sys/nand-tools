@@ -141,3 +141,8 @@ ipshared
 
 # Cmake
 CMakeFiles/
+
+# Verilator
+obj_dir/
+
+.DS_STORE
