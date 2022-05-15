@@ -1,14 +1,19 @@
 #include "Valu.h"
 #include "Valu___024unit.h"
+#include "alu_in_drv.h"
+#include "alu_in_mon.h"
+#include "alu_in_tx.h"
+#include "alu_out_mon.h"
+#include "alu_scb.h"
+#include "log.h"
 #include <cstdlib>
 #include <iostream>
 #include <stdlib.h>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
 
-#define LOG(x) std::cout << x << "\n"
-
 #define MAX_SIM_TIME 300
+#define VERIF_START_TIME 7
 vluint64_t sim_time = 0;
 vluint64_t posedge_cnt = 0;
 
@@ -29,42 +34,23 @@ int main(int argc, char** argv, char** env)
     dut->trace(m_trace, 5);
     m_trace->open("waveform.vcd");
 
+    AluInTx* tx;
+    AluInDrv* drv = new AluInDrv(dut);
+    AluScb* scb = new AluScb();
+    AluInMon* in_mon = new AluInMon(dut, scb);
+    AluOutMon* out_mon = new AluOutMon(dut, scb);
     while (sim_time < MAX_SIM_TIME) {
         dut_rst(dut, sim_time);
-
         dut->clk ^= 1;
         dut->eval();
 
         if (dut->clk == 1) {
-            posedge_cnt++;
-            switch (posedge_cnt) {
-            case 10:
-                dut->in_valid = 1;
-                ;
-                dut->a_in = 5;
-                dut->b_in = 3;
-                dut->op_in = Valu___024unit::operation_t::add;
-                break;
-
-            case 12:
-                if (dut->out != 8)
-                    LOG("Addition failed @ " << sim_time);
-                break;
-
-            case 20:
-                dut->in_valid = 1;
-                ;
-                dut->a_in = 5;
-                dut->b_in = 3;
-                dut->op_in = Valu___024unit::operation_t::sub;
-                break;
-
-            case 22:
-                if (dut->out != 2)
-                    LOG("Substration failed @ " << sim_time);
-                break;
+            if (sim_time >= VERIF_START_TIME) {
+                tx = rnd_alu_in_tx();
+                drv->drive(tx);
+                in_mon->monitor();
+                out_mon->monitor(sim_time);
             }
-            check_out_valid(dut, sim_time);
         }
         m_trace->dump(sim_time);
         sim_time++;
@@ -72,6 +58,10 @@ int main(int argc, char** argv, char** env)
 
     m_trace->close();
     delete dut;
+    delete out_mon;
+    delete in_mon;
+    delete scb;
+    delete drv;
     exit(EXIT_SUCCESS);
 }
 
@@ -87,7 +77,6 @@ void dut_rst(Valu* dut, vluint64_t& sim_time)
     }
 }
 
-#define VERIF_START_TIME 7
 void check_out_valid(Valu* dut, vluint64_t& sim_time)
 {
     static unsigned char in_valid = 0;      // in_valid from cur cycle
