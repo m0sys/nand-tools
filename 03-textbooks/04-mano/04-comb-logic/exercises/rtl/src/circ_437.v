@@ -1,14 +1,16 @@
 // Gate-lvl desc of 4bit add-sub circuit (Fig. 4.13).
 
+`include "rtl/src/full_adder.v" 
+
 module circ_437(
     // OUTPUTS
-    output S[3:0]
-    ,output Cout
+    output [3:0] S
+    ,output      Cout
 
     // INPUTS
-    ,input A[3:0]
-    ,input B[3:0]
-    ,input M
+    ,input [3:0] A
+    ,input [3:0] B
+    ,input       M
     );
 
     wire w0, w1, w2, w3;
