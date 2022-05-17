@@ -25,7 +25,7 @@ module circ_437_tb;
     initial # stop_time $finish;
     
     initial begin
-        $dumpfile("waveform.vcd");
+        $dumpfile("waveform_circ437.vcd");
         $dumpvars(0, circ_437_tb);
 
         // Add 0 and 0 - should be 0.
