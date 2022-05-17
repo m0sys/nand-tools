@@ -47,4 +47,7 @@ module circ_437_tb;
         #10 t_A = 4'b0100; t_B = 4'b0101; t_M = 1;
     end
 
+    initial begin
+        $monitor ("time =", $time, ": A=%b, B=%b, M=%b, S=%b, Cout=%b", t_A, t_B, t_M, t_S, t_Cout);
+    end
 endmodule
