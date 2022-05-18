@@ -1,13 +1,13 @@
 // Gate-lvl desc of 4bit priority encoder (Fig. 4.23).
 
-module circ_436(
+module circ_436 (
     // OUTPUTS
     output y
     ,output x
     ,output V
 
     // INPUTS
-    ,input D[3:0]
+    ,input [3:0] D
     );
 
     wire D2_b;
