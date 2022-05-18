@@ -1,3 +1,13 @@
+run_circ_442_df: iver_circ_442_df
+	@echo
+	@echo "Running circ_442_df_tb"
+	./circ_442_df_tb
+
+iver_circ_442_df: rtl/src/circ_442_df.v rtl/test/circ_442_df_tb.v
+	@echo
+	@echo "IVerlog Circ442 DATAFLOW TB"
+	iverilog -o circ_442_df_tb rtl/test/circ_442_df_tb.v
+
 run_circ_442_gl: iver_circ_442_gl
 	@echo
 	@echo "Running circ_442_gl_tb"
@@ -39,3 +49,5 @@ clean:
 	# circ442
 	rm -rf circ_442_gl_tb
 	rm -rf waveform_circ442_gl.vcd
+	rm -rf circ_442_df_tb
+	rm -rf waveform_circ442_df.vcd

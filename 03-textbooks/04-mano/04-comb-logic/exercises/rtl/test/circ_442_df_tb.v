@@ -1,15 +1,15 @@
-// Test bench stimulus for circ_442_gl.
+// Test bench stimulus for circ_442_df.
 
 `timescale 1ns / 1ns
-`include "rtl/src/circ_442_gl.v"
+`include "rtl/src/circ_442_df.v"
 
-module circ_442_gl_tb;
+module circ_442_df_tb;
     wire [3:0] t_ex_o4;
     reg  [3:0] t_bcd_i4;
 
     parameter stop_time = 150;
 
-    circ_442_gl dut (
+    circ_442_df dut (
         // OUTPUTS
         .ex_o4(t_ex_o4)
 
@@ -24,8 +24,8 @@ module circ_442_gl_tb;
     integer i;
 
     initial begin
-        $dumpfile("waveform_circ442_gl.vcd");
-        $dumpvars(0, circ_442_gl_tb);
+        $dumpfile("waveform_circ442_df.vcd");
+        $dumpvars(0, circ_442_df_tb);
 
         for (i=0; i < 10; i++) begin
             #10 t_bcd_i4 = cnt_l4;
