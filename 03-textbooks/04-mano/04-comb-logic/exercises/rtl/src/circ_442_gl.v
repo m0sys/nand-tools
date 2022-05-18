@@ -10,7 +10,7 @@ module circ_442_gl (
     // --EX3--
     // A|B|C|D
     // 3|2|1|0
-
+    //
     // --BCD--
     // w|x|y|z
     // 3|2|1|0
@@ -45,5 +45,5 @@ module circ_442_gl (
         cout (ex_o4[1], cl1_l, cl2_l);
 
     assign ex_o4[0] = ~bcd_i4[0];
-    
+
 endmodule
