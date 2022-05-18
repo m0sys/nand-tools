@@ -1,3 +1,13 @@
+run_circ_442_gl: iver_circ_442_gl
+	@echo
+	@echo "Running circ_442_gl_tb"
+	./circ_442_gl_tb
+
+iver_circ_442_gl: rtl/src/circ_442_gl.v rtl/test/circ_442_gl_tb.v
+	@echo
+	@echo "IVerlog Circ442 GATE-LVL TB"
+	iverilog -o circ_442_gl_tb rtl/test/circ_442_gl_tb.v
+
 run_circ_438: iver_circ_438
 	@echo
 	@echo "Running circ_438_tb"
@@ -26,3 +36,6 @@ clean:
 	# circ438
 	rm -rf circ_438_tb
 	rm -rf waveform_circ438.vcd
+	# circ442
+	rm -rf circ_442_gl_tb
+	rm -rf waveform_circ442_gl.vcd
