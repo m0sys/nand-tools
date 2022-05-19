@@ -1,3 +1,13 @@
+run_circ_456: iver_circ_456
+	@echo
+	@echo "Running circ_456_tb"
+	./circ_456_tb
+
+iver_circ_456: rtl/src/circ_456.v rtl/test/circ_456_tb.v
+	@echo
+	@echo "IVerlog Circ456 TB"
+	iverilog -o circ_456_tb rtl/test/circ_456_tb.v
+
 run_circ_444: iver_circ_444
 	@echo
 	@echo "Running circ_444_tb"
@@ -76,3 +86,6 @@ clean:
 	# circ444
 	rm -rf circ_444_tb
 	rm -rf waveform_circ444.vcd
+	# circ456
+	rm -rf circ_456_tb
+	rm -rf waveform_circ456.vcd
