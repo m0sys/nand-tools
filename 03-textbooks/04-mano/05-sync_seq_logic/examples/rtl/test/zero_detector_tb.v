@@ -2,8 +2,7 @@
 
 `include "rtl/src/zero_detector.v"
 
-module zero_detector_tb (
-    );
+module zero_detector_tb;
 
     wire t_y_out;
     reg t_x_in, t_clk, t_rst;
