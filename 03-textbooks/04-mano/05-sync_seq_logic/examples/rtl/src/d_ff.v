@@ -1,4 +1,4 @@
-// Example 5.2: D-Flip-Flop (pp 221)
+// Example 5.2: D-Flip-Flop (pp 221).
 
 module d_ff (
     // OUTPUTS
