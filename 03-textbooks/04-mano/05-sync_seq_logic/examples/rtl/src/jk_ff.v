@@ -1,4 +1,4 @@
-// Example 5.3: T-Flip-Flop Built from dff (pp 223).
+// Example 5.3: JK-Flip-Flop Built from dff (pp 223).
 
 `include "d_ff.v"
 
