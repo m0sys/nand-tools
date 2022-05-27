@@ -1,3 +1,23 @@
+run_wave532: iver_wave532
+	@echo
+	@echo "Running wave532_tb"
+	./wave532_tb
+
+iver_wave532: rtl/test/wave532_tb.v
+	@echo
+	@echo "IVerlog wave532 TB"
+	iverilog -o wave532_tb rtl/test/wave532_tb.v
+
+run_scirc529: iver_scirc529
+	@echo
+	@echo "Running scirc529_tb"
+	./scirc529_tb
+
+iver_scirc529: rtl/src/scirc529_bh.v  rtl/test/scirc529_tb.v
+	@echo
+	@echo "IVerlog scirc529 BH & STRUCT TB"
+	iverilog -o scirc529_tb rtl/test/scirc529_tb.v
+
 run_scirc528: iver_scirc528
 	@echo
 	@echo "Running scirc528_tb"
@@ -26,3 +46,8 @@ clean:
 	# scirc528
 	rm -rf scirc528_tb
 	rm -rf waveform_scirc528.vcd
+	# scirc529
+	rm -rf scirc529_tb
+	rm -rf waveform_scirc529.vcd
+	# wave532
+	rm -rf waveform_wave532.vcd
