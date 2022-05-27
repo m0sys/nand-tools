@@ -1,3 +1,13 @@
+run_sr_latch: iver_sr_latch
+	@echo
+	@echo "Running sr_latch_tb"
+	./sr_latch_tb
+
+iver_sr_latch: rtl/src/sr_latch.v rtl/test/sr_latch_tb.v
+	@echo
+	@echo "IVerlog SR Latch TB"
+	iverilog -o sr_latch_tb rtl/test/sr_latch_tb.v
+
 run_wave532: iver_wave532
 	@echo
 	@echo "Running wave532_tb"
@@ -50,4 +60,8 @@ clean:
 	rm -rf scirc529_tb
 	rm -rf waveform_scirc529.vcd
 	# wave532
+	rm -rf wave532_tb
 	rm -rf waveform_wave532.vcd
+	# sr_latch
+	rm -rf sr_latch_tb
+	rm -rf waveform_sr_latch.vcd
