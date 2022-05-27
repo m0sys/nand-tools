@@ -12,6 +12,9 @@
 > You must be single-minded. Drive for the one thing on which you have decided. - George S. Patton
 
 
+<h2 align="center">⭐⭐⭐ - THE GAME PLAN - ⭐⭐⭐ </h2> 
+
+![Flowchart game plan](risc_v_plan.drawio.svg)
 
 <h2 align="center">There's Plenty of Room at the Bottom 🔥🔥🔥</h2> 
 <p>
