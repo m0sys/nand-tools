@@ -7,6 +7,7 @@ module scirc635a_struct (
     // OUTPUTS
     output [3:0] A_o4
 
+    // INPUTS
     ,input [3:0] I_i4
     ,input ld_i
     ,input clear_i
@@ -35,4 +36,3 @@ module scirc635a_struct (
 
     assign clear_b = ~clear_i;
 endmodule
-

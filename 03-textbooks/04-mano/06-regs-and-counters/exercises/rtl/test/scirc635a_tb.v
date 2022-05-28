@@ -1,9 +1,11 @@
 // Testbench for scirc635a_struct.
 
 `include "rtl/src/scirc635a_struct.v"
+`include "rtl/src/scirc635a_bh.v"
 
-module scirc635a_struct_tb;
+module scirc635a_tb;
     wire [3:0] t_A_o4;
+    wire [3:0] t_A_o4_2;
     reg [3:0] t_I_i4;
     reg t_ld_i;
     reg t_clear_i;
@@ -22,12 +24,23 @@ module scirc635a_struct_tb;
         ,.clk_i(t_clk_i)
     );
 
+    scirc635a_bh dut2 (
+        // OUTPUTS
+        .A_o4(t_A_o4_2)
+
+        // INPUTS
+        ,.I_i4(t_I_i4)
+        ,.ld_i(t_ld_i)
+        ,.clear_i(t_clear_i)
+        ,.clk_i(t_clk_i)
+    );
+
     initial #stop_time $finish;
     
     // Setup clk + vcd out.
     initial begin
-        $dumpfile("waveform_scirc635a_struct.vcd");
-        $dumpvars(0, scirc635a_struct_tb);
+        $dumpfile("waveform_scirc635a.vcd");
+        $dumpvars(0, scirc635a_tb);
         t_clk_i = 0; forever #5 t_clk_i = ~t_clk_i;
     end
 
