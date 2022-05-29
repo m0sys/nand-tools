@@ -1,5 +1,8 @@
 // Structural desc of Problem 6 reg.
 
+`include "rtl/src/dff.v"
+`include "rtl/src/mux4.v"
+
 module scirc635c_struct (
     // OUTPUTS
     output [3:0] A_o4
