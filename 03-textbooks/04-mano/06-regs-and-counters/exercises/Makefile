@@ -1,3 +1,13 @@
+run_scirc659: iver_scirc659
+	@echo
+	@echo "Running scirc659_tb"
+	./scirc659_tb
+
+iver_scirc659: rtl/src/scirc659_struct.v rtl/src/scirc659_bh.v rtl/test/scirc659_tb.v
+	@echo
+	@echo "IVerlog scirc659 TB"
+	iverilog -o scirc659_tb rtl/test/scirc659_tb.v
+
 run_scirc635c: iver_scirc635c
 	@echo
 	@echo "Running scirc635c_tb"
@@ -26,3 +36,6 @@ clean:
 	# scirc635c
 	rm -rf scirc635c_tb
 	rm -rf waveform_scirc635c.vcd
+	# scirc659
+	rm -rf scirc659_tb
+	rm -rf waveform_scirc659.vcd
