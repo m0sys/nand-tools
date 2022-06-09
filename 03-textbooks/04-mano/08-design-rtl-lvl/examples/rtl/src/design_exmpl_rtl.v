@@ -1,5 +1,8 @@
 // RTL desc of design example (see Fig. 8.11).
 
+`include "rtl/src/ctrl_rtl.v"
+`include "rtl/src/dp_rtl.v"
+
 // Top level module.
 module design_exmpl_rtl (
     // OUTPUTS
