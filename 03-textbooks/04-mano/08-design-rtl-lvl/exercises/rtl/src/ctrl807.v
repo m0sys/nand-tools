@@ -1,6 +1,6 @@
-// Controller module for design 607.
+// Controller module for design 807.
 
-module ctrl607 (
+module ctrl807 (
     // OUTPUTS
     output reg load_reg_o
     ,output reg sub_o
