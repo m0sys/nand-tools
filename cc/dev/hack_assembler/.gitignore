@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
+lo
 *.lo
 *.o
 *.obj
@@ -31,7 +26,20 @@
 *.exe
 *.out
 *.app
-=======
-tools/bin/Hardware Simulator.dat
-tools/bin/CPU Emulator.dat
->>>>>>> origin/move-nand
+
+.ccls-cache/
+.ccls
+
+# Cmake ignore.
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+build/
