@@ -1,2 +1,6 @@
 projects/* linguist-vendored
 tools/* linguist-vendored
+
+*.hack linguist-vendored
+*.asm linguist-vendored
+*.tst linguist-vendored
